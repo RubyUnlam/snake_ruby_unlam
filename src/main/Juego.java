@@ -1,7 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
 
 public class Juego {
