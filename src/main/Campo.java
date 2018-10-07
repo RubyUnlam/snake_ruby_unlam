@@ -41,9 +41,8 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	}
 	
 	private void pintarSerpiente(Graphics g) {
-		g.setColor(Color.BLUE);
+		g.setColor(Color.BLUE); //TODO VER SI USAMOS IMAGENES EN VEZ DE CIRCULOS
 		for(Ubicacion actual : jugador.getUbicaciones()) {
-			System.out.println(actual);
 			g.fillOval(actual.getX(), actual.getY(), 20, 20);
 		}
 	}
