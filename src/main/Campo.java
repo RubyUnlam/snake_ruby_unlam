@@ -18,6 +18,7 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	private ImageIcon fondoDefault;
 	private String fondoPath = "src/imagenes/fondo.png"; //TODO HACERLO VARIABLE
 	private Serpiente jugador;
+	private Comestible manzana;
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
@@ -37,6 +38,7 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 		fondoDefault = new ImageIcon(fondoPath);
 		fondoDefault.paintIcon(this, g, 0, 0);
 		pintarSerpiente(g);
+		pintarManzana(g);
 		g.dispose();
 	}
 	
@@ -45,6 +47,14 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 		for(Ubicacion actual : jugador.getUbicaciones()) {
 			g.fillOval(actual.getX(), actual.getY(), 20, 20);
 		}
+	}
+	
+	private void pintarManzana(Graphics g) {
+		g.setColor(Color.RED); //TODO VER SI USAMOS IMAGENES EN VEZ DE CIRCULOS
+		if (manzana == null) { //TODO AGREGAR VALIDACION PARA QUE NO SPAWNEE ENCIMA DE LA SERPIENTE
+			manzana = new Manzana();
+		}
+		g.fillOval(manzana.getUbicacion().getX(), manzana.getUbicacion().getY(), 20, 20);			
 	}
 
 	@Override
