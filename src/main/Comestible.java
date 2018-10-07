@@ -9,8 +9,10 @@ public abstract class Comestible {
 	}
 	
 	private Ubicacion generarUbicacionAleatoria() {
-		int posicionAleatoriaX = (int) (10 + Math.random() * 760);
-		int posicionAleatoriaY = (int) (10 + Math.random() * 550);
+		double randomX = Math.random() * 770;
+		double randomY = Math.random() * 550;
+		int posicionAleatoriaX = (int) (10 + (randomX - (randomX % 20)));
+		int posicionAleatoriaY = (int) (10 + (randomY - (randomY % 20)));
 		Ubicacion ubicacion = new Ubicacion(posicionAleatoriaX, posicionAleatoriaY);
 		return ubicacion;
 	}
