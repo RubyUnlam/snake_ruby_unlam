@@ -61,7 +61,7 @@ public class Serpiente {
 	}
 	
 	public void mirarAbajo() {
-		if(mirandoY != MIRAR_ARRIBA) {
+		if (mirandoY != MIRAR_ARRIBA) {
 			mirandoX = NO_MIRAR;
 			mirandoY = MIRAR_ABAJO;			
 		}
