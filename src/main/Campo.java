@@ -21,8 +21,8 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
-	private int keyEventLEFT = KeyEvent.VK_RIGHT;
-	private int keyEventRIGTH = KeyEvent.VK_LEFT;
+	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
+	private int keyEventLEFT = KeyEvent.VK_LEFT;
 	
 	Campo(Serpiente serpiente) {
 		jugador = serpiente;
@@ -60,9 +60,9 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 			jugador.mirarArriba();
 		} else if (teclaPresionada == keyEventDOWN) {
 			jugador.mirarAbajo();
-		} else if (teclaPresionada == keyEventLEFT) {
-			jugador.mirarDerecha();
 		} else if (teclaPresionada == keyEventRIGTH) {
+			jugador.mirarDerecha();
+		} else if (teclaPresionada == keyEventLEFT) {
 			jugador.mirarIzquierda();
 		}
 	}
