@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import static utilidades.Constantes.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -57,13 +56,13 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int teclaPresionada = e.getKeyCode();
-		if (teclaPresionada == keyEventUP && jugador.getMirandoY() != MIRAR_ABAJO) {
+		if (teclaPresionada == keyEventUP) {
 			jugador.mirarArriba();
-		} else if (teclaPresionada == keyEventDOWN && jugador.getMirandoY() != MIRAR_ARRIBA) {
+		} else if (teclaPresionada == keyEventDOWN) {
 			jugador.mirarAbajo();
-		} else if (teclaPresionada == keyEventRIGTH && jugador.getMirandoX() != MIRAR_IZQUIERDA) {
+		} else if (teclaPresionada == keyEventRIGTH) {
 			jugador.mirarDerecha();
-		} else if (teclaPresionada == keyEventLEFT && jugador.getMirandoX() != MIRAR_DERECHA) {
+		} else if (teclaPresionada == keyEventLEFT) {
 			jugador.mirarIzquierda();
 		}
 	}

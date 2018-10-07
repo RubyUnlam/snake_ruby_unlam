@@ -40,35 +40,35 @@ public class Serpiente {
 	}
 	
 	public void mirarDerecha() { //TODO VALIDAR LOS MOVIMIENTOS
-		mirandoX = MIRAR_DERECHA;
-		mirandoY = NO_MIRAR;
+		if (mirandoX != MIRAR_IZQUIERDA) {
+			mirandoX = MIRAR_DERECHA;
+			mirandoY = NO_MIRAR;
+		}
 	}
 	
 	public void mirarIzquierda() {
-		mirandoX = MIRAR_IZQUIERDA;
-		mirandoY = NO_MIRAR;
+		if (mirandoX != MIRAR_DERECHA) {
+			mirandoX = MIRAR_IZQUIERDA;
+			mirandoY = NO_MIRAR;			
+		}
 	}
 	
 	public void mirarArriba() {
-		mirandoX = NO_MIRAR;
-		mirandoY = MIRAR_ARRIBA;
+		if (mirandoY != MIRAR_ABAJO) {
+			mirandoX = NO_MIRAR;
+			mirandoY = MIRAR_ARRIBA;			
+		}
 	}
 	
 	public void mirarAbajo() {
-		mirandoX = NO_MIRAR;
-		mirandoY = MIRAR_ABAJO;
+		if(mirandoY != MIRAR_ARRIBA) {
+			mirandoX = NO_MIRAR;
+			mirandoY = MIRAR_ABAJO;			
+		}
 	}
 	
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
 	}
 	
-	public int getMirandoY() {
-		return mirandoY;
-	}
-
-	public int getMirandoX() {
-		return mirandoX;
-	}
-
 }
