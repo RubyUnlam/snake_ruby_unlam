@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import static utilidades.Constantes.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -21,8 +22,8 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
-	private int keyEventLEFT = KeyEvent.VK_RIGHT;
-	private int keyEventRIGTH = KeyEvent.VK_LEFT;
+	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
+	private int keyEventLEFT = KeyEvent.VK_LEFT;
 	
 	Campo(Serpiente serpiente) {
 		jugador = serpiente;
@@ -56,13 +57,13 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int teclaPresionada = e.getKeyCode();
-		if (teclaPresionada == keyEventUP) {
+		if (teclaPresionada == keyEventUP && jugador.getMirandoY() != MIRAR_ABAJO) {
 			jugador.mirarArriba();
-		} else if (teclaPresionada == keyEventDOWN) {
+		} else if (teclaPresionada == keyEventDOWN && jugador.getMirandoY() != MIRAR_ARRIBA) {
 			jugador.mirarAbajo();
-		} else if (teclaPresionada == keyEventLEFT) {
+		} else if (teclaPresionada == keyEventRIGTH && jugador.getMirandoX() != MIRAR_IZQUIERDA) {
 			jugador.mirarDerecha();
-		} else if (teclaPresionada == keyEventRIGTH) {
+		} else if (teclaPresionada == keyEventLEFT && jugador.getMirandoX() != MIRAR_DERECHA) {
 			jugador.mirarIzquierda();
 		}
 	}
