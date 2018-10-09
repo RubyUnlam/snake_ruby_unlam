@@ -36,10 +36,19 @@ public class Serpiente {
 	}
 	
 	public void crecer() {
-		
+		int cola = ubicaciones.size() - 1;
+		Ubicacion uCola = ubicaciones.get(cola);
+		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
+		int nuevoX = calcularPosicionAnterior(uCola.getX(), uAnteUltimo.getX());
+		int nuevoY = calcularPosicionAnterior(uCola.getY() ,uAnteUltimo.getY());
+		ubicaciones.add(new Ubicacion(nuevoX, nuevoY));
 	}
 	
-	public void mirarDerecha() { //TODO VALIDAR LOS MOVIMIENTOS
+	private int calcularPosicionAnterior(int ultimaPos, int anteUltimaPos) {
+		return ultimaPos + (ultimaPos - anteUltimaPos);
+	}
+	
+	public void mirarDerecha() { 
 		if (mirandoX != MIRAR_IZQUIERDA) {
 			mirandoX = MIRAR_DERECHA;
 			mirandoY = NO_MIRAR;

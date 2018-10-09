@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import static java.util.Objects.nonNull;
+
 public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private Timer timer;
@@ -60,7 +62,15 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		jugador.moverse();
+		checkearColision();
 		repaint();
+	}
+
+	private void checkearColision() {
+		if (nonNull(manzana) && manzana.getUbicacion().equals(jugador.getUbicaciones().get(0))){
+			jugador.crecer();
+			manzana = null;
+		}
 	}
 
 	@Override
