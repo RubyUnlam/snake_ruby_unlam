@@ -27,6 +27,10 @@ public class Serpiente {
 		ubicaciones.add(new Ubicacion(50, 10));
 		mirarAbajo();
 	}
+
+	private void matar() {
+		estado = estado.matar();
+	}
 	
 	public void moverse() {
 		estado = this.estado.moverse();
@@ -124,8 +128,7 @@ public class Serpiente {
 						serpiente.matar();
 					}
 					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
-						ubicaciones = new ArrayList<>();
-						return new Muerto();
+						matar();
 					} 
 					
 				}
@@ -140,6 +143,12 @@ public class Serpiente {
 				comestible.setComida(true);
 			}
 			return this;
+		}
+
+		@Override
+		public Estado matar() {
+			ubicaciones = new ArrayList<>();
+			return new Muerto();
 		}
 		
 	}
@@ -158,6 +167,11 @@ public class Serpiente {
 
 		@Override
 		public Estado checkearColision(Comestible comestible) {
+			return this;
+		}
+		
+		@Override
+		public Estado matar() {
 			return this;
 		}
 	}
