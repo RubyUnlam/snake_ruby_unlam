@@ -62,31 +62,43 @@ public class Serpiente {
 	}
 	
 	public void mirarDerecha() { 
-		if (mirandoX != MIRAR_IZQUIERDA) {
+		if (noEs180GradosEnX(MIRAR_DERECHA)) {
 			mirandoX = MIRAR_DERECHA;
 			mirandoY = NO_MIRAR;
 		}
 	}
 	
 	public void mirarIzquierda() {
-		if (mirandoX != MIRAR_DERECHA) {
+		if (noEs180GradosEnX(MIRAR_IZQUIERDA)) {
 			mirandoX = MIRAR_IZQUIERDA;
 			mirandoY = NO_MIRAR;			
 		}
 	}
 	
 	public void mirarArriba() {
-		if (mirandoY != MIRAR_ABAJO) {
+		if (noEs180GradosEnY(MIRAR_ARRIBA)) {
 			mirandoX = NO_MIRAR;
 			mirandoY = MIRAR_ARRIBA;			
 		}
 	}
 	
 	public void mirarAbajo() {
-		if (mirandoY != MIRAR_ARRIBA) {
+		if (noEs180GradosEnY(MIRAR_ABAJO)) {
 			mirandoX = NO_MIRAR;
 			mirandoY = MIRAR_ABAJO;			
 		}
+	}
+	
+	private boolean noEs180GradosEnX(int direccion) {
+		int cabeza = ubicaciones.get(0).getX();
+		int cuello = ubicaciones.get(1).getX();
+		return ((cabeza + (direccion * velocidad)) != cuello);
+	}
+	
+	private boolean noEs180GradosEnY(int direccion) {
+		int cabeza = ubicaciones.get(0).getY();
+		int cuello = ubicaciones.get(1).getY();
+		return ((cabeza + (direccion * velocidad)) != cuello);
 	}
 	
 	public List<Ubicacion> getUbicaciones() {
