@@ -84,7 +84,7 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
 		int teclaPresionada = e.getKeyCode();
 		if (teclaPresionada == keyEventUP) {
 			jugadores.get(0).mirarArriba();
