@@ -1,18 +1,25 @@
 package main;
 
 import java.util.ArrayList;
+
+import static java.util.Objects.nonNull;
 import java.util.List;
 import static utilidades.Constantes.*;
 
 public class Serpiente {
 	
+	private Integer id = 1;
+
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	private int mirandoX;
 	private int mirandoY;
+	
+	private boolean vivo;
 
 	private int velocidad = 20;
 	
 	Serpiente(){
+		vivo = true;
 		ubicaciones.add(new Ubicacion(50, 90)); //TODO ELIMINAR UBICACIONES DEFAULT
 		ubicaciones.add(new Ubicacion(50, 70));
 		ubicaciones.add(new Ubicacion(50, 50));
@@ -34,8 +41,8 @@ public class Serpiente {
 			}	
 		}
 	}
-	
-	public void crecer() {
+
+	private void crecer() {
 		int cola = ubicaciones.size() - 1;
 		Ubicacion uCola = ubicaciones.get(cola);
 		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
@@ -46,6 +53,45 @@ public class Serpiente {
 	
 	private int calcularPosicionAnterior(int ultimaPos, int anteUltimaPos) {
 		return ultimaPos + (ultimaPos - anteUltimaPos);
+	}
+	
+	public boolean checkearColision(Comestible comestible) {
+		if (nonNull(comestible))
+		System.out.println(ubicaciones.get(0) + " " + comestible.getUbicacion());
+		if(nonNull(comestible) && ubicaciones.get(0).equals(comestible.getUbicacion())) {
+			crecer();
+			return true;
+		}
+		return false;
+	}
+	
+	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
+		Ubicacion cabeza = ubicaciones.get(0);
+		List<Ubicacion> cuerpo = serpiente.getUbicaciones();
+		Integer idEnemigo = serpiente.getId();
+		for (int i = 0; i < cuerpo.size(); i++) {
+			Ubicacion actual = cuerpo.get(i);
+			if (cabeza.equals(actual)) {
+				if (i == 0  && !soyYo(idEnemigo)) {
+					serpiente.matar();
+				}
+				if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) { 
+					matar();
+				} 
+				
+			}
+		}
+		
+		
+	}
+	
+	private boolean soyYo(Integer id) {
+		return this.id.equals(id);
+	}
+	
+	public void matar() {
+		vivo = false;
+		ubicaciones = new ArrayList<>();
 	}
 	
 	public void mirarDerecha() { 
@@ -78,6 +124,10 @@ public class Serpiente {
 	
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 	
 }

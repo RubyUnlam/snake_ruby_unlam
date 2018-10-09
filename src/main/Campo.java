@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -19,7 +20,10 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	private int delay = 100;
 	private ImageIcon fondoDefault;
 	private String fondoPath = "src/imagenes/fondo.png"; //TODO HACERLO VARIABLE
-	private Serpiente jugador;
+	
+	
+	private List<Serpiente> jugadores;
+	private List<Serpiente> serpientesIA;
 	private Comestible manzana;
 	
 	private int keyEventUP = KeyEvent.VK_UP;
@@ -27,8 +31,9 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
 	private int keyEventLEFT = KeyEvent.VK_LEFT;
 	
-	Campo(Serpiente serpiente) {
-		jugador = serpiente;
+	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
+		this.jugadores = jugadores;
+		this.serpientesIA = serpientesIA;
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -46,8 +51,10 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private void pintarSerpiente(Graphics g) {
 		g.setColor(Color.BLUE); //TODO VER SI USAMOS IMAGENES EN VEZ DE CIRCULOS
-		for(Ubicacion actual : jugador.getUbicaciones()) {
-			g.fillOval(actual.getX(), actual.getY(), 20, 20);
+		for (Serpiente jugador : jugadores) {
+			for(Ubicacion actual : jugador.getUbicaciones()) {
+				g.fillOval(actual.getX(), actual.getY(), 20, 20);
+			}
 		}
 	}
 	
@@ -61,29 +68,32 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		jugador.moverse();
-		checkearColision();
-		repaint();
-	}
-
-	private void checkearColision() {
-		if (nonNull(manzana) && manzana.getUbicacion().equals(jugador.getUbicaciones().get(0))){
-			jugador.crecer();
-			manzana = null;
+		for (Serpiente jugador : jugadores) {
+			jugador.moverse();
 		}
+		
+		for (Serpiente jugador : jugadores) {
+			for (Serpiente jugador2 : jugadores) {
+				jugador.checkearColision(jugador2);
+				if (jugador.checkearColision(manzana)) {
+					manzana = null;
+				}
+			}
+		}
+		repaint();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int teclaPresionada = e.getKeyCode();
 		if (teclaPresionada == keyEventUP) {
-			jugador.mirarArriba();
+			jugadores.get(0).mirarArriba();
 		} else if (teclaPresionada == keyEventDOWN) {
-			jugador.mirarAbajo();
+			jugadores.get(0).mirarAbajo();
 		} else if (teclaPresionada == keyEventRIGTH) {
-			jugador.mirarDerecha();
+			jugadores.get(0).mirarDerecha();
 		} else if (teclaPresionada == keyEventLEFT) {
-			jugador.mirarIzquierda();
+			jugadores.get(0).mirarIzquierda();
 		}
 	}
 
