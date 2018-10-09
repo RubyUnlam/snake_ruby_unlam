@@ -57,10 +57,6 @@ public class Serpiente {
 		return this.id.equals(id);
 	}
 	
-	private void matar() {
-		ubicaciones = new ArrayList<>();
-	}
-	
 	public void mirarDerecha() { 
 		if (mirandoX != MIRAR_IZQUIERDA) {
 			mirandoX = MIRAR_DERECHA;
