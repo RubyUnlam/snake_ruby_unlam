@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -24,7 +27,7 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private List<Serpiente> jugadores;
 	private List<Serpiente> serpientesIA;
-	private Comestible manzana;
+	private Queue<Comestible> comestibles;
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
@@ -34,6 +37,7 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.jugadores = jugadores;
 		this.serpientesIA = serpientesIA;
+		this.comestibles = new ConcurrentLinkedQueue();
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -60,10 +64,12 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 	
 	private void pintarManzana(Graphics g) {
 		g.setColor(Color.RED); //TODO VER SI USAMOS IMAGENES EN VEZ DE CIRCULOS
-		if (manzana == null) { //TODO AGREGAR VALIDACION PARA QUE NO SPAWNEE ENCIMA DE LA SERPIENTE
-			manzana = new Manzana();
+		if (comestibles.isEmpty()) { //TODO AGREGAR VALIDACION PARA QUE NO SPAWNEE ENCIMA DE LA SERPIENTE
+			comestibles.add(new Manzana());
 		}
-		g.fillOval(manzana.getUbicacion().getX(), manzana.getUbicacion().getY(), 20, 20);			
+		for (Comestible comestibles : comestibles) {
+			g.fillOval(comestibles.getUbicacion().getX(), comestibles.getUbicacion().getY(), 20, 20);
+		}			
 	}
 
 	@Override
@@ -75,10 +81,14 @@ public class Campo extends JPanel implements KeyListener, ActionListener {
 		for (Serpiente jugador : jugadores) {
 			for (Serpiente jugador2 : jugadores) {
 				jugador.checkearColision(jugador2);
-				if (jugador.checkearColision(manzana)) {
-					manzana = null;
+			}
+			for (Comestible comestible : comestibles) {
+				jugador.checkearColision(comestible);
+				if (comestible.fueComida()) {
+					comestibles.remove(comestible);
 				}
 			}
+			
 		}
 		repaint();
 	}

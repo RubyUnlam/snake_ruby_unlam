@@ -10,16 +10,16 @@ public class Serpiente {
 	
 	private Integer id = 1;
 
+	private Estado estado;
+	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	private int mirandoX;
 	private int mirandoY;
-	
-	private boolean vivo;
 
 	private int velocidad = 20;
 	
 	Serpiente(){
-		vivo = true;
+		estado = new Normal(); 
 		ubicaciones.add(new Ubicacion(50, 90)); //TODO ELIMINAR UBICACIONES DEFAULT
 		ubicaciones.add(new Ubicacion(50, 70));
 		ubicaciones.add(new Ubicacion(50, 50));
@@ -27,19 +27,13 @@ public class Serpiente {
 		ubicaciones.add(new Ubicacion(50, 10));
 		mirarAbajo();
 	}
+
+	private void matar() {
+		estado = estado.matar();
+	}
 	
 	public void moverse() {
-		for(int i = ubicaciones.size() - 1 ; i >= 0 ; i--) {
-			if (i != 0) {
-				ubicaciones.set(i, ubicaciones.get(i-1));
-			} else {
-				Ubicacion cabeza = ubicaciones.get(i);
-				int x = mirandoX != 0 ? cabeza.getX() + (mirandoX * velocidad) : cabeza.getX();
-				int y = mirandoY != 0 ? cabeza.getY() + (mirandoY * velocidad) : cabeza.getY();
-				
-				ubicaciones.set(0, new Ubicacion(x,y));
-			}	
-		}
+		estado = this.estado.moverse();
 	}
 
 	private void crecer() {
@@ -55,43 +49,16 @@ public class Serpiente {
 		return ultimaPos + (ultimaPos - anteUltimaPos);
 	}
 	
-	public boolean checkearColision(Comestible comestible) {
-		if (nonNull(comestible))
-		System.out.println(ubicaciones.get(0) + " " + comestible.getUbicacion());
-		if(nonNull(comestible) && ubicaciones.get(0).equals(comestible.getUbicacion())) {
-			crecer();
-			return true;
-		}
-		return false;
+	public void checkearColision(Comestible comestible) {
+		estado = estado.checkearColision(comestible);
 	}
 	
 	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
-		Ubicacion cabeza = ubicaciones.get(0);
-		List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-		Integer idEnemigo = serpiente.getId();
-		for (int i = 0; i < cuerpo.size(); i++) {
-			Ubicacion actual = cuerpo.get(i);
-			if (cabeza.equals(actual)) {
-				if (i == 0  && !soyYo(idEnemigo)) {
-					serpiente.matar();
-				}
-				if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) { 
-					matar();
-				} 
-				
-			}
-		}
-		
-		
+		estado = estado.checkearColision(serpiente);
 	}
 	
 	private boolean soyYo(Integer id) {
 		return this.id.equals(id);
-	}
-	
-	public void matar() {
-		vivo = false;
-		ubicaciones = new ArrayList<>();
 	}
 	
 	public void mirarDerecha() { 
@@ -126,8 +93,88 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
+
 	public Integer getId() {
 		return id;
+	}		
+	
+	class Normal implements Estado {
+
+		@Override
+		public Estado moverse() {
+			for(int i = ubicaciones.size() - 1 ; i >= 0 ; i--) {
+				if (i != 0) {
+					ubicaciones.set(i, ubicaciones.get(i-1));
+				} else {
+					Ubicacion cabeza = ubicaciones.get(i);
+					int x = mirandoX != 0 ? cabeza.getX() + (mirandoX * velocidad) : cabeza.getX();
+					int y = mirandoY != 0 ? cabeza.getY() + (mirandoY * velocidad) : cabeza.getY();
+					
+					ubicaciones.set(0, new Ubicacion(x,y));
+				}	
+			}
+			return this;
+		}
+
+		@Override
+		public Estado checkearColision(Serpiente serpiente) {
+			Ubicacion cabeza = ubicaciones.get(0);
+			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
+			Integer idEnemigo = serpiente.getId();
+			for (int i = 0; i < cuerpo.size(); i++) {
+				Ubicacion actual = cuerpo.get(i);
+				if (cabeza.equals(actual)) {
+					if (i == 0  && !soyYo(idEnemigo)) {
+						serpiente.matar();
+					}
+					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
+						matar();
+					} 
+					
+				}
+			}
+			return this;
+		}
+
+		@Override
+		public Estado checkearColision(Comestible comestible) {
+			if(nonNull(comestible) && !ubicaciones.isEmpty() && ubicaciones.get(0).equals(comestible.getUbicacion())) {
+				crecer();
+				comestible.setComida(true);
+			}
+			return this;
+		}
+
+		@Override
+		public Estado matar() {
+			ubicaciones = new ArrayList<>();
+			return new Muerto();
+		}
+		
 	}
+	
+	class Muerto implements Estado {
+
+		@Override
+		public Estado moverse() {
+			return this;
+		}
+
+		@Override
+		public Estado checkearColision(Serpiente serpiente) {
+			return this;
+		}
+
+		@Override
+		public Estado checkearColision(Comestible comestible) {
+			return this;
+		}
+		
+		@Override
+		public Estado matar() {
+			return this;
+		}
+	}
+	
 	
 }
