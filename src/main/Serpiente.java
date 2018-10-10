@@ -20,11 +20,11 @@ public class Serpiente {
 	
 	Serpiente(){
 		estado = new Normal(); 
-		ubicaciones.add(new Ubicacion(50, 90)); //TODO ELIMINAR UBICACIONES DEFAULT
-		ubicaciones.add(new Ubicacion(50, 70));
-		ubicaciones.add(new Ubicacion(50, 50));
-		ubicaciones.add(new Ubicacion(50, 30));
-		ubicaciones.add(new Ubicacion(50, 10));
+		ubicaciones.add(new Ubicacion(40, 100)); //TODO ELIMINAR UBICACIONES DEFAULT
+		ubicaciones.add(new Ubicacion(40, 80));
+		ubicaciones.add(new Ubicacion(40, 60));
+		ubicaciones.add(new Ubicacion(40, 40));
+		ubicaciones.add(new Ubicacion(40, 20));
 		mirarAbajo();
 	}
 
@@ -121,6 +121,17 @@ public class Serpiente {
 					Ubicacion cabeza = ubicaciones.get(i);
 					int x = mirandoX != 0 ? cabeza.getX() + (mirandoX * velocidad) : cabeza.getX();
 					int y = mirandoY != 0 ? cabeza.getY() + (mirandoY * velocidad) : cabeza.getY();
+				
+					if (x > ANCHO_VENTANA) {
+						x = 0;
+					} else if (x < 0) {
+						x = ANCHO_VENTANA;
+					}
+					if (y > ALTURA_VENTANA) {
+						y = 0;
+					} else if (y < 0) {
+						y = ALTURA_VENTANA;
+					}
 					
 					ubicaciones.set(0, new Ubicacion(x,y));
 				}	

@@ -36,8 +36,8 @@ public class Ubicacion extends Observable {
 	public void generarUbicacionAleatoria() {
 		double randomX = Math.random() * 770;
 		double randomY = Math.random() * 550;
-		this.x = (int) (10 + (randomX - (randomX % 20)));
-		this.y = (int) (10 + (randomY - (randomY % 20)));
+		this.x = (int) (randomX - (randomX % 20));
+		this.y = (int) (randomY - (randomY % 20));
 	}
 
 	@Override

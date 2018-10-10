@@ -9,6 +9,9 @@ public abstract class Comestible {
 		this.ubicacion = new Ubicacion();
 	}
 	
+	Comestible(Ubicacion ubicacion) {
+		this.ubicacion = ubicacion;
+	}
 
 	public Ubicacion getUbicacion() {
 		return ubicacion;
