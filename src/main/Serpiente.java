@@ -140,7 +140,7 @@ public class Serpiente {
 						serpiente.matar();
 					}
 					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
-						matar();
+						return matar();
 					} 
 					
 				}

@@ -24,13 +24,9 @@ public class Ui extends JPanel implements Observer {
         Campo campo = (Campo) o;
         if (arg.equals("campo")){
             addKeyListener(campo);
-        }
-        if (arg.equals("serpientes")) {
-            ubicacionesSerpientes = campo.notificarUbicacionesSerpientes();
-        } else if (arg.equals("comestibles")) {
-            ubicacionesComestibles =  campo.notificarUbicacionesComestibles();
-        }
-        if (arg.equals("finish")) {
+        } else if (arg.equals("dibuja")) {
+        	ubicacionesSerpientes.addAll(campo.notificarUbicacionesSerpientes());
+            ubicacionesComestibles.addAll(campo.notificarUbicacionesComestibles());
             repaint();
         }
     }
@@ -52,7 +48,7 @@ public class Ui extends JPanel implements Observer {
         for (Ubicacion serpiente : ubicacionesSerpientes){
             g.fillOval(serpiente.getX(), serpiente.getY(), 20, 20);
         }
-        ubicacionesSerpientes = new ArrayList<>();
+        ubicacionesSerpientes.removeAll(ubicacionesSerpientes);
     }
 
     private void pintarComestibles(Graphics g) {
@@ -60,6 +56,6 @@ public class Ui extends JPanel implements Observer {
         for (Ubicacion comestible : ubicacionesComestibles) {
             g.fillOval(comestible.getX(), comestible.getY(), 20, 20);
         }
-        ubicacionesComestibles = new ArrayList<>();
+        ubicacionesComestibles.removeAll(ubicacionesComestibles);
     }
 }

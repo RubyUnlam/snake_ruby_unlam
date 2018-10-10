@@ -61,24 +61,27 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (comestibles.isEmpty()) {
+			comestibles.add(new Manzana());
+		}
+		
         for (Serpiente jugador : serpientes) {
             jugador.moverse();
         }
 
         for (Serpiente jugador : serpientes) {
-            for (Serpiente jugador2 : serpientes) {
-                jugador.checkearColision(jugador2);
-            }
-            for (Comestible comestible : comestibles) {
+        	for (Comestible comestible : comestibles) {
                 jugador.checkearColision(comestible);
                 if (comestible.fueComida()) {
                     comestibles.remove(comestible);
                 }
             }
+        	
+            for (Serpiente jugador2 : serpientes) {
+                jugador.checkearColision(jugador2);
+            }
         }
-        observer.update(this, "serpientes");
-        observer.update(this, "comestibles");
-        observer.update(this, "finish");
+        observer.update(this, "dibuja");
     }
 
     @Override
