@@ -7,7 +7,7 @@ public class Ubicacion {
 	private int x;
 	private int y;
 
-	Ubicacion(int x, int y) {
+	public Ubicacion(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

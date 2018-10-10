@@ -17,7 +17,7 @@ public class Juego {
 		
 		List<Serpiente> serpientes = new ArrayList<>();
 		serpientes.add(new Serpiente());
-		
+
 		List<Serpiente> serpientesIA = new ArrayList<>();
 		
 		ventana.setContentPane(new Campo(serpientes, serpientesIA)); //TODO NO CREAR SERPIENTE A LO CABEZA
