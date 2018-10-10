@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public class Juego {
 
 	public static void main(String[] args) {
-		JFrame ventana = new JFrame("Sarasa");
+		JFrame ventana = new JFrame("Snake");
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setBounds(0, 0, 800, 600);
 		ventana.setResizable(false);

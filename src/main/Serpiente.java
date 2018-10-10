@@ -28,8 +28,8 @@ public class Serpiente {
 		mirarAbajo();
 	}
 
-	private void matar() {
-		estado = estado.matar();
+	private void morir() {
+		estado = estado.morir();
 	}
 	
 	public void moverse() {
@@ -102,37 +102,35 @@ public class Serpiente {
 
 		@Override
 		public Estado moverse() {
-			for(int i = ubicaciones.size() - 1 ; i >= 0 ; i--) {
-				if (i != 0) {
+			for(int i = ubicaciones.size() - 1 ; i > 0 ; i--) {
 					ubicaciones.set(i, ubicaciones.get(i-1));
-				} else {
-					Ubicacion cabeza = ubicaciones.get(i);
-					int x = mirandoX != 0 ? cabeza.getX() + (mirandoX * velocidad) : cabeza.getX();
-					int y = mirandoY != 0 ? cabeza.getY() + (mirandoY * velocidad) : cabeza.getY();
+				}
+			Ubicacion cabeza = ubicaciones.get(0);
+			int x = cabeza.getX() + (mirandoX * velocidad);
+			int y = cabeza.getY() + (mirandoY * velocidad);
 					
-					ubicaciones.set(0, new Ubicacion(x,y));
-				}	
-			}
+			ubicaciones.set(0, new Ubicacion(x,y));
 			return this;
-		}
+		}	
+		
+
 
 		@Override
 		public Estado checkearColision(Serpiente serpiente) {
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
 			Integer idEnemigo = serpiente.getId();
-			for (int i = 0; i < cuerpo.size(); i++) {
+			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !soyYo(idEnemigo)) {
+				serpiente.morir();
+				return morir();
+			} //verifico si no chocaron sus cabezas
+			
+			for (int i = 1; i < cuerpo.size(); i++) {
 				Ubicacion actual = cuerpo.get(i);
 				if (cabeza.equals(actual)) {
-					if (i == 0  && !soyYo(idEnemigo)) {
-						serpiente.matar();
-					}
-					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
-						matar();
-					} 
-					
+					return morir(); 
 				}
-			}
+			} //si chocó contra algo, muere			
 			return this;
 		}
 
@@ -145,8 +143,9 @@ public class Serpiente {
 			return this;
 		}
 
+
 		@Override
-		public Estado matar() {
+		public Estado morir() {
 			ubicaciones = new ArrayList<>();
 			return new Muerto();
 		}
@@ -171,7 +170,7 @@ public class Serpiente {
 		}
 		
 		@Override
-		public Estado matar() {
+		public Estado morir() {
 			return this;
 		}
 	}
