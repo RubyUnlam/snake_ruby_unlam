@@ -1,8 +1,9 @@
 package main;
 
 import java.util.Objects;
+import java.util.Observable;
 
-public class Ubicacion {
+public class Ubicacion extends Observable {
 
 	private int x;
 	private int y;
