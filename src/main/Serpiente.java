@@ -7,8 +7,6 @@ import java.util.List;
 import static utilidades.Constantes.*;
 
 public class Serpiente {
-	
-	private Integer id = 1;
 
 	private Estado estado;
 	
@@ -18,14 +16,23 @@ public class Serpiente {
 
 	private int velocidad = 20;
 	
-	Serpiente(){
-		estado = new Normal(); 
-		ubicaciones.add(new Ubicacion(40, 100)); //TODO ELIMINAR UBICACIONES DEFAULT
-		ubicaciones.add(new Ubicacion(40, 80));
-		ubicaciones.add(new Ubicacion(40, 60));
-		ubicaciones.add(new Ubicacion(40, 40));
-		ubicaciones.add(new Ubicacion(40, 20));
-		mirarAbajo();
+	public Serpiente(){
+		estado = new Normal();
+		Ubicacion cabeza = new Ubicacion();
+		ubicaciones.add(cabeza);
+		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		crecer();
+		crecer();
+		mirarIzquierda();
+	}
+	
+	public Serpiente(Ubicacion cabeza){
+		estado = new Normal();
+		ubicaciones.add(cabeza);
+		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		crecer();
+		crecer();
+		mirarIzquierda();
 	}
 
 	private void matar() {
@@ -55,10 +62,6 @@ public class Serpiente {
 	
 	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
 		estado = estado.checkearColision(serpiente);
-	}
-	
-	private boolean soyYo(Integer id) {
-		return this.id.equals(id);
 	}
 	
 	public void mirarDerecha() { 
@@ -105,11 +108,6 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
-
-	public Integer getId() {
-		return id;
-	}		
-	
 	class Normal implements Estado {
 
 		@Override
@@ -143,14 +141,13 @@ public class Serpiente {
 		public Estado checkearColision(Serpiente serpiente) {
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-			Integer idEnemigo = serpiente.getId();
 			for (int i = 0; i < cuerpo.size(); i++) {
 				Ubicacion actual = cuerpo.get(i);
 				if (cabeza.equals(actual)) {
-					if (i == 0  && !soyYo(idEnemigo)) {
+					if (i == 0  && !Serpiente.this.equals(serpiente)) {
 						serpiente.matar();
 					}
-					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
+					if (Serpiente.this.equals(serpiente) && i != 0 || !Serpiente.this.equals(serpiente)) {
 						return matar();
 					} 
 					

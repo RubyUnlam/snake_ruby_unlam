@@ -2,11 +2,11 @@ package main;
 
 public class Manzana extends Comestible {
 	
-	Manzana(){
+	public Manzana(){
 		super();
 	}
 	
-	Manzana(Ubicacion ubicacion) {
+	public Manzana(Ubicacion ubicacion) {
 		super(ubicacion);
 	}
 	
