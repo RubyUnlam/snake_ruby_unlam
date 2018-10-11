@@ -1,13 +1,18 @@
 package main;
 
 import java.util.Objects;
+import java.util.Observable;
 
-public class Ubicacion {
+public class Ubicacion extends Observable {
 
 	private int x;
 	private int y;
+	
+	public Ubicacion() {
+		this.generarUbicacionAleatoria();
+	}
 
-	Ubicacion(int x, int y) {
+	public Ubicacion(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -26,6 +31,13 @@ public class Ubicacion {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public void generarUbicacionAleatoria() {
+		double randomX = Math.random() * 770;
+		double randomY = Math.random() * 550;
+		this.x = (int) (randomX - (randomX % 20));
+		this.y = (int) (randomY - (randomY % 20));
 	}
 
 	@Override
