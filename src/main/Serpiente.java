@@ -7,8 +7,6 @@ import java.util.List;
 import static utilidades.Constantes.*;
 
 public class Serpiente {
-	
-	private Integer id = 1;
 
 	private Estado estado;
 	
@@ -18,18 +16,27 @@ public class Serpiente {
 
 	private int velocidad = 20;
 	
-	Serpiente(){
-		estado = new Normal(); 
-		ubicaciones.add(new Ubicacion(50, 90)); //TODO ELIMINAR UBICACIONES DEFAULT
-		ubicaciones.add(new Ubicacion(50, 70));
-		ubicaciones.add(new Ubicacion(50, 50));
-		ubicaciones.add(new Ubicacion(50, 30));
-		ubicaciones.add(new Ubicacion(50, 10));
-		mirarAbajo();
+	public Serpiente(){
+		estado = new Normal();
+		Ubicacion cabeza = new Ubicacion();
+		ubicaciones.add(cabeza);
+		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		crecer();
+		crecer();
+		mirarIzquierda();
+	}
+	
+	public Serpiente(Ubicacion cabeza){
+		estado = new Normal();
+		ubicaciones.add(cabeza);
+		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		crecer();
+		crecer();
+		mirarIzquierda();
 	}
 
-	private void matar() {
-		estado = estado.matar();
+	private void morir() {
+		estado = estado.morir();
 	}
 	
 	public void moverse() {
@@ -55,10 +62,6 @@ public class Serpiente {
 	
 	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
 		estado = estado.checkearColision(serpiente);
-	}
-	
-	private boolean soyYo(Integer id) {
-		return this.id.equals(id);
 	}
 	
 	public void mirarDerecha() { 
@@ -105,46 +108,50 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
-
-	public Integer getId() {
-		return id;
-	}		
-	
 	class Normal implements Estado {
 
 		@Override
 		public Estado moverse() {
-			for(int i = ubicaciones.size() - 1 ; i >= 0 ; i--) {
-				if (i != 0) {
+			for(int i = ubicaciones.size() - 1 ; i > 0 ; i--) {
 					ubicaciones.set(i, ubicaciones.get(i-1));
-				} else {
-					Ubicacion cabeza = ubicaciones.get(i);
-					int x = mirandoX != 0 ? cabeza.getX() + (mirandoX * velocidad) : cabeza.getX();
-					int y = mirandoY != 0 ? cabeza.getY() + (mirandoY * velocidad) : cabeza.getY();
-					
-					ubicaciones.set(0, new Ubicacion(x,y));
-				}	
 			}
+			Ubicacion cabeza = ubicaciones.get(0);
+			int x = cabeza.getX() + (mirandoX * velocidad);
+			int y = cabeza.getY() + (mirandoY * velocidad);
+			
+			if (x > ANCHO_VENTANA) {
+				x = 0;
+			} else if (x < 0) {
+				x = ANCHO_VENTANA;
+			}
+			
+			if (y > ALTURA_VENTANA) {
+				y = 0;
+			} else if (y < 0) {
+				y = ALTURA_VENTANA;
+			}
+					
+			ubicaciones.set(0, new Ubicacion(x,y));
 			return this;
-		}
+		}	
+		
+
 
 		@Override
 		public Estado checkearColision(Serpiente serpiente) {
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-			Integer idEnemigo = serpiente.getId();
-			for (int i = 0; i < cuerpo.size(); i++) {
+			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
+				serpiente.morir();
+				return morir();
+			} //verifico si no chocaron sus cabezas
+			
+			for (int i = 1; i < cuerpo.size(); i++) {
 				Ubicacion actual = cuerpo.get(i);
 				if (cabeza.equals(actual)) {
-					if (i == 0  && !soyYo(idEnemigo)) {
-						serpiente.matar();
-					}
-					if (soyYo(idEnemigo) && i != 0 || !soyYo(idEnemigo)) {
-						matar();
-					} 
-					
+					return morir(); 
 				}
-			}
+			} //si chocó contra algo, muere			
 			return this;
 		}
 
@@ -157,8 +164,9 @@ public class Serpiente {
 			return this;
 		}
 
+
 		@Override
-		public Estado matar() {
+		public Estado morir() {
 			ubicaciones = new ArrayList<>();
 			return new Muerto();
 		}
@@ -183,7 +191,7 @@ public class Serpiente {
 		}
 		
 		@Override
-		public Estado matar() {
+		public Estado morir() {
 			return this;
 		}
 	}
