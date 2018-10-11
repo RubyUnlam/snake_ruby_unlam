@@ -15,26 +15,26 @@ public class SerpienteTest {
 	public void testMoverseNoCrece() {
 		Serpiente serpiente = new Serpiente();
 		
-		int tama√±oInicial = serpiente.getUbicaciones().size();
+		int tamanioInicial = serpiente.getUbicaciones().size(); 
 		serpiente.moverse();
 		
-		Assert.assertEquals(4, tama√±oInicial);
+		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(4, serpiente.getUbicaciones().size());
-	}
+	}//Se verifica que el mÈtodo moverse no incrementa el tamaÒo de la serpiente
 	
 	@Test
 	public void testComerManzana() {
 		Serpiente serpiente = new Serpiente();
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
-		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
+		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 pÌxeles delante de la serpiente
 		
-		int tama√±oInicial = serpiente.getUbicaciones().size();
+		int tamanioInicial = serpiente.getUbicaciones().size();
 		serpiente.moverse();
 		serpiente.checkearColision(manzana);
 		
-		Assert.assertEquals(4, tama√±oInicial);
+		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(5, serpiente.getUbicaciones().size());
-	}
+	}//Se verifica que comer manzana incremente el tamaÒo de la serpiente
 	
 	@Test
 	public void testComerManzanaSinEstarEnPosicion() {
@@ -42,12 +42,12 @@ public class SerpienteTest {
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
 		
-		int tama√±oInicial = serpiente.getUbicaciones().size();
+		int tamanioInicial = serpiente.getUbicaciones().size();
 		serpiente.checkearColision(manzana);
 		
-		Assert.assertEquals(4, tama√±oInicial);
+		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(4, serpiente.getUbicaciones().size());
-	}
+	}//Se verifica que si la cabeza de la serpiente no est· en la posiciÛn de la manzana, esta no sea comida ni crezca.
 	
 	@Test
 	public void testMoverseSeMueve() {
@@ -63,41 +63,41 @@ public class SerpienteTest {
 		Assert.assertEquals(cabeza, serpiente.getUbicaciones().get(1));
 		Assert.assertEquals(hombro, serpiente.getUbicaciones().get(2));
 		Assert.assertEquals(rodilla, serpiente.getUbicaciones().get(3));
-	}
+	}//Guardo las posiciones de la serpiente, la muevo, y verifico que todas estÈn desplazadas
 	
 	@Test
 	public void testChocarContraOtraSerpienteMata() {
 		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60));
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60));
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60)); //Creo una serpiente a 4 posiciones de distancia
 		
 		
-		int tama√±oInicial = serpienteUno.getUbicaciones().size();
-		serpienteUno.moverse();
+		int tamanioInicial = serpienteUno.getUbicaciones().size();
+		serpienteUno.moverse(); //Se mueve la serpiente hacia la derecha
 		serpienteUno.checkearColision(serpienteDos);
 		
-		Assert.assertEquals(4, tama√±oInicial);
+		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertTrue(serpienteUno.getUbicaciones().isEmpty());
 		Assert.assertEquals(4, serpienteDos.getUbicaciones().size());
-	}
+	}//Verifico que la colisiÛn entre serpientes resulte en una muerte
 	
 	@Test
 	public void testChocarContraOtraCabezaMuerenAmbas() {
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40));
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60));
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40)); 
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60)); //Spawneo 2 serpientes a 1 posiciÛn de distancia
 		
 		
-		int tama√±oInicialUno = serpienteUno.getUbicaciones().size();
-		int tama√±oInicialDos = serpienteDos.getUbicaciones().size();
+		int tamanioInicialUno = serpienteUno.getUbicaciones().size();
+		int tamanioInicialDos = serpienteDos.getUbicaciones().size();
 		
 		serpienteUno.mirarAbajo();
 		serpienteUno.moverse();
-		serpienteUno.checkearColision(serpienteDos);
+		serpienteUno.checkearColision(serpienteDos); //Las acomodo para que se miren, muevo una y chequeo colisiÛn
 		
-		Assert.assertEquals(4, tama√±oInicialUno);
-		Assert.assertEquals(4, tama√±oInicialDos);
+		Assert.assertEquals(4, tamanioInicialUno);
+		Assert.assertEquals(4, tamanioInicialDos);
 		Assert.assertTrue(serpienteUno.getUbicaciones().isEmpty());
 		Assert.assertTrue(serpienteDos.getUbicaciones().isEmpty());
-	}
+	}//Choque de cabezas resulta en la muerte de ambas serpientes
 	
 	@Test
 	public void testChocarConsigoMisma() {
@@ -111,12 +111,12 @@ public class SerpienteTest {
 		serpiente.moverse();
 		serpiente.mirarArriba();
 		serpiente.moverse();
-		int tama√±oAntesDeMorir = serpiente.getUbicaciones().size();
+		int tamanioAntesDeMorir = serpiente.getUbicaciones().size();
 		serpiente.checkearColision(serpiente);
 		
-		Assert.assertEquals(5, tama√±oAntesDeMorir);
+		Assert.assertEquals(5, tamanioAntesDeMorir);
 		Assert.assertTrue(serpiente.getUbicaciones().isEmpty());
-	}
+	}//Se crea una serpiente de 5 posiciones y se la mueve en cÌrculos hasta que choque consigo misma
 	
 	@Test
 	public void testFueraDeRangoIzquierda() {
@@ -126,5 +126,34 @@ public class SerpienteTest {
 		
 		Assert.assertEquals(new Ubicacion(ANCHO_VENTANA, 50), serpiente.getUbicaciones().get(0));
 	}
+	
+	@Test
+	public void testFueraDeRangoDerecha() {
+		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA, 50));
+		serpiente.mirarArriba();
+		serpiente.moverse();
+		serpiente.mirarDerecha();
+		serpiente.moverse();
+		
+		Assert.assertEquals(new Ubicacion(0, 30), serpiente.getUbicaciones().get(0));
+	}
+	
+	@Test
+	public void testFueraDeRangoArriba() {
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, 0));
+		serpiente.mirarArriba();
+		serpiente.moverse();
+		
+		Assert.assertEquals(new Ubicacion(0, ALTURA_VENTANA), serpiente.getUbicaciones().get(0));
+	}
+	@Test
+	public void testFueraDeRangoAbajo() {
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA));
+		serpiente.mirarAbajo();
+		serpiente.moverse();
+		
+		Assert.assertEquals(new Ubicacion(0, 0), serpiente.getUbicaciones().get(0));
+	}
+	//En todos ˙ltimos 4 test se verifica que si una serpiente desaparece por un borde, que aparezca en el opuesto.
 
 }

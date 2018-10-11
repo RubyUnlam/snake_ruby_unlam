@@ -151,7 +151,7 @@ public class Serpiente {
 				if (cabeza.equals(actual)) {
 					return morir(); 
 				}
-			} //si chocó contra algo, muere			
+			} //si choca contra algo, muere			
 			return this;
 		}
 
