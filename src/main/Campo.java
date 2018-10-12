@@ -61,8 +61,19 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//Spawn de manzana, validacion para no spawnear sobre serpiente
+		Comestible manzana; // TODO: extraer a un metodo.
+		boolean spawneaEncimaDeAlgo = false;
 		if (comestibles.isEmpty()) {
-			comestibles.add(new Manzana());
+			do {
+				manzana = new Manzana();
+				for (Serpiente serpiente : serpientes) {
+					if ( serpiente.getUbicaciones().contains(manzana.getUbicacion()) ) {
+						spawneaEncimaDeAlgo = true;
+					}
+				}
+			} while (spawneaEncimaDeAlgo);
+			comestibles.add(manzana);
 		}
 		
         for (Serpiente jugador : serpientes) {
