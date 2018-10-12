@@ -138,7 +138,7 @@ public class Serpiente {
 
 
 		@Override
-		public Estado checkearColision(Serpiente serpiente) {
+		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
 			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
@@ -151,7 +151,7 @@ public class Serpiente {
 				if (cabeza.equals(actual)) {
 					return morir(); 
 				}
-			} //si chocó contra algo, muere			
+			} //si choca contra algo, muere			
 			return this;
 		}
 
