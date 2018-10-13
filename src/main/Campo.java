@@ -62,18 +62,8 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//Spawn de manzana, validacion para no spawnear sobre serpiente
-		Comestible manzana; // TODO: extraer a un metodo.
-		boolean spawneaEncimaDeAlgo = false;
 		if (comestibles.isEmpty()) {
-			do {
-				manzana = new Manzana();
-				for (Serpiente serpiente : serpientes) {
-					if ( serpiente.getUbicaciones().contains(manzana.getUbicacion()) ) {
-						spawneaEncimaDeAlgo = true;
-					}
-				}
-			} while (spawneaEncimaDeAlgo);
-			comestibles.add(manzana);
+			comestibles.add(generarManzana());
 		}
 		
         for (Serpiente jugador : serpientes) {
@@ -94,6 +84,25 @@ public class Campo extends Observable implements KeyListener, ActionListener {
         }
         observer.update(this, "dibuja");
     }
+
+	private Comestible generarManzana() { //TODO: rever para cuando se spawnee mas de una manzana
+		boolean ubicacionOcupada = false;
+		Comestible manzana;
+		do {
+			manzana = new Manzana();
+			for (Serpiente serpiente : serpientes) {
+				if ( serpiente.getUbicaciones().contains(manzana.getUbicacion() ) ) {
+					ubicacionOcupada = true;
+				}
+			}
+			for (Comestible comestible : comestibles) {
+				if ( comestible.getUbicacion().equals(manzana.getUbicacion()) ) {
+					ubicacionOcupada = true;
+				}
+			}
+		} while (ubicacionOcupada);
+		return manzana;
+	}
 
     @Override
     public void addObserver(Observer observer){
