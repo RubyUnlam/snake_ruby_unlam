@@ -119,16 +119,16 @@ public class Serpiente {
 			int x = cabeza.getX() + (mirandoX * velocidad);
 			int y = cabeza.getY() + (mirandoY * velocidad);
 			
-			if (x > ANCHO_VENTANA) {
+			if (x == ANCHO_VENTANA) {
 				x = 0;
 			} else if (x < 0) {
-				x = ANCHO_VENTANA;
+				x = ANCHO_VENTANA - 20;
 			}
 			
-			if (y > ALTURA_VENTANA) {
+			if (y == ALTURA_VENTANA) {
 				y = 0;
 			} else if (y < 0) {
-				y = ALTURA_VENTANA;
+				y = ALTURA_VENTANA - 20;
 			}
 					
 			ubicaciones.set(0, new Ubicacion(x,y));
