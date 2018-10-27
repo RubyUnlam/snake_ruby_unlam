@@ -53,7 +53,17 @@ public class Ubicacion extends Observable {
 		int xSiguiente = siguiente.getX();
 		int ySiguiente = siguiente.getY();
 		
-		return new Ubicacion(xUltima + (xUltima - xSiguiente), yUltima + (yUltima - ySiguiente));
+		return new Ubicacion(moverAtras(xUltima, xSiguiente), moverAtras(yUltima, ySiguiente));
+	}
+	
+	/**
+	 * Calcula la coordenada anterior a la ultima
+	 * @param ultima
+	 * @param siguiente
+	 * @return
+	 */
+	private int moverAtras(int ultima, int siguiente) {
+		return ultima + (ultima - siguiente);
 	}
 
 	@Override
