@@ -41,8 +41,8 @@ public class Ubicacion extends Observable {
 	}
 	
 	/**
-	 * Dada la ubicacion siguiente calcula la posicion de atras a la 
-	 * ubicacion actual
+	 * Dadas dos ubicaciones consecutivas, calcula que posicion 
+	 * le corresponde a la anterior a estas
 	 * @param ultima
 	 * @param anteUltima
 	 * @return
