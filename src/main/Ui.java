@@ -33,8 +33,6 @@ public class Ui extends JPanel implements Observador {
     public void paint(Graphics g){
         fondoDefault = new ImageIcon(fondoPath);
         fondoDefault.paintIcon(this, g, 0, 0);
-//        g.setColor(Color.RED);
-//        g.drawRect(0, 0, 798, 790);
         if (!ubicacionesSerpientes.isEmpty()) {
             pintarSerpientes(g);
         }
@@ -47,7 +45,6 @@ public class Ui extends JPanel implements Observador {
     private void pintarSerpientes(Graphics g) {
         g.setColor(Color.BLUE); //TODO VER SI USAMOS IMAGENES EN VEZ DE CIRCULOS
         for (Ubicacion serpiente : ubicacionesSerpientes){
-        	System.out.println(serpiente);
             g.fillOval(serpiente.getX(), serpiente.getY(), 20, 20);
         }
         ubicacionesSerpientes.removeAll(ubicacionesSerpientes);
