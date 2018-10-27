@@ -3,8 +3,8 @@ package main;
 public interface Estado {
 
 	Estado moverse();
-	Estado checkearColision(Serpiente serpiente);
-	Estado checkearColision(Comestible comestible);
+	Estado chequearColision(Serpiente serpiente);
+	Estado chequearColision(Comestible comestible);
 	Estado morir();
 	
 }

@@ -58,8 +58,8 @@ public class Serpiente {
 	 * La implementacion del metodo se delega a cada uno de los estados.
 	 * @param comestible
 	 */
-	public void checkearColision(Comestible comestible) {
-		estado = estado.checkearColision(comestible);
+	public void chequearColision(Comestible comestible) {
+		estado = estado.chequearColision(comestible);
 	}
 	
 	/**
@@ -67,8 +67,8 @@ public class Serpiente {
 	 * La implementacion del metodo se delega a cada uno de los estados.
 	 * @param comestible
 	 */
-	public void checkearColision(Serpiente serpiente) {
-		estado = estado.checkearColision(serpiente);
+	public void chequearColision(Serpiente serpiente) {
+		estado = estado.chequearColision(serpiente);
 	}
 	
 	public void mirarDerecha() { 
@@ -155,7 +155,7 @@ public class Serpiente {
 		}	
 
 		@Override
-		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
+		public Estado chequearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
 			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
@@ -173,7 +173,7 @@ public class Serpiente {
 		}
 
 		@Override
-		public Estado checkearColision(Comestible comestible) {
+		public Estado chequearColision(Comestible comestible) {
 			if(nonNull(comestible) && !ubicaciones.isEmpty() && ubicaciones.get(0).equals(comestible.getUbicacion())) {
 				crecer();
 				comestible.setComida(true);
@@ -198,12 +198,12 @@ public class Serpiente {
 		}
 
 		@Override
-		public Estado checkearColision(Serpiente serpiente) {
+		public Estado chequearColision(Serpiente serpiente) {
 			return this;
 		}
 
 		@Override
-		public Estado checkearColision(Comestible comestible) {
+		public Estado chequearColision(Comestible comestible) {
 			return this;
 		}
 		

@@ -12,7 +12,7 @@ import static utilidades.Constantes.*;
 public class SerpienteTest {
 	
 	/**
-	 * Se verifica que el método moverse no incrementa el tamaño de la serpiente
+	 * Se verifica que el mï¿½todo moverse no incrementa el tamaï¿½o de la serpiente
 	 */
 	@Test
 	public void testMoverseNoCrece() {
@@ -26,24 +26,24 @@ public class SerpienteTest {
 	}
 	
 	/**
-	 * Se verifica que comer manzana incremente el tamaño de la serpiente
+	 * Se verifica que comer manzana incremente el tamaï¿½o de la serpiente
 	 */
 	@Test
 	public void testComerManzana() {
 		Serpiente serpiente = new Serpiente();
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
-		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 píxeles delante de la serpiente
+		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 pï¿½xeles delante de la serpiente
 		
 		int tamanioInicial = serpiente.getUbicaciones().size();
 		serpiente.moverse();
-		serpiente.checkearColision(manzana);
+		serpiente.chequearColision(manzana);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(5, serpiente.getUbicaciones().size());
 	}
 	
 	/**
-	 * Se verifica que si la cabeza de la serpiente no está en la posición de la manzana, esta no sea comida ni crezca.
+	 * Se verifica que si la cabeza de la serpiente no estï¿½ en la posiciï¿½n de la manzana, esta no sea comida ni crezca.
 	 */
 	@Test
 	public void testComerManzanaSinEstarEnPosicion() {
@@ -52,14 +52,14 @@ public class SerpienteTest {
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
 		
 		int tamanioInicial = serpiente.getUbicaciones().size();
-		serpiente.checkearColision(manzana);
+		serpiente.chequearColision(manzana);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(4, serpiente.getUbicaciones().size());
 	}
 	
 	/**
-	 * Guardo las posiciones de la serpiente, la muevo, y verifico que todas estén desplazadas
+	 * Guardo las posiciones de la serpiente, la muevo, y verifico que todas estï¿½n desplazadas
 	 */
 	@Test
 	public void testMoverseSeMueve() {
@@ -79,7 +79,7 @@ public class SerpienteTest {
 	
 	/**
 	 * Se verifica que el choque de una serpiente contra otra (siempre que el choque no sea en la cabeza)
-	 * provoca la muerte de la serpiente que chocó.
+	 * provoca la muerte de la serpiente que chocï¿½.
 	 * */
 	@Test
 	public void testChocarContraOtraSerpienteMata() {
@@ -89,7 +89,7 @@ public class SerpienteTest {
 		
 		int tamanioInicial = serpienteUno.getUbicaciones().size();
 		serpienteUno.moverse();
-		serpienteUno.checkearColision(serpienteDos);
+		serpienteUno.chequearColision(serpienteDos);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertTrue(serpienteUno.getUbicaciones().isEmpty());
@@ -110,7 +110,7 @@ public class SerpienteTest {
 		
 		serpienteUno.mirarAbajo();
 		serpienteUno.moverse();
-		serpienteUno.checkearColision(serpienteDos);
+		serpienteUno.chequearColision(serpienteDos);
 		
 		Assert.assertEquals(4, tamanioInicialUno);
 		Assert.assertEquals(4, tamanioInicialDos);
@@ -119,14 +119,14 @@ public class SerpienteTest {
 	}
 	
 	/**
-	 * Se crea una serpiente de 5 posiciones y se la mueve en círculos hasta que choque consigo misma
+	 * Se crea una serpiente de 5 posiciones y se la mueve en cï¿½rculos hasta que choque consigo misma
 	 */
 	@Test
 	public void testChocarConsigoMisma() {
 		Ubicacion cabeza = new Ubicacion(140, 140);
 		Serpiente serpiente = new Serpiente(cabeza);
 		
-		serpiente.checkearColision(new Manzana(cabeza));
+		serpiente.chequearColision(new Manzana(cabeza));
 		serpiente.mirarAbajo();
 		serpiente.moverse();
 		serpiente.mirarDerecha();
@@ -134,7 +134,7 @@ public class SerpienteTest {
 		serpiente.mirarArriba();
 		serpiente.moverse();
 		int tamanioAntesDeMorir = serpiente.getUbicaciones().size();
-		serpiente.checkearColision(serpiente);
+		serpiente.chequearColision(serpiente);
 		
 		Assert.assertEquals(5, tamanioAntesDeMorir);
 		Assert.assertTrue(serpiente.getUbicaciones().isEmpty());
