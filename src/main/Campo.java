@@ -31,6 +31,14 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 
 	public Observer observer;
 	
+	/**
+	 * Inicializacion de los jugadores e IA's
+	 * Se inicializa el Timer, el cual llama al metodo
+	 * actionPerformed del campo cada n milisegundos.
+	 * 
+	 * @param jugadores
+	 * @param serpientesIA
+	 */
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
@@ -39,6 +47,10 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 		timer.start();
 	}
 
+	/**
+	 * Devuelve las ubicaciones de todas las serpientes en el campo
+	 * @return
+	 */
 	public List<Ubicacion> notificarUbicacionesSerpientes() {
 	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
 	    for(Serpiente serpientes : serpientes){
@@ -51,6 +63,11 @@ public class Campo extends Observable implements KeyListener, ActionListener {
         return ubicacionesActuales;
     }
 
+	
+	/**
+	 * Devuelve las ubicaciones de todos los comestibles en el campo
+	 * @return
+	 */
     public List<Ubicacion> notificarUbicacionesComestibles() {
 	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
         for (Comestible comestible : comestibles) {

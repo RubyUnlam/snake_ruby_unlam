@@ -43,24 +43,31 @@ public class Serpiente {
 		estado = this.estado.moverse();
 	}
 
+	/**
+	 * Genera una nueva ubicacion justo detras de la cola
+	 */
 	private void crecer() {
-		int cola = ubicaciones.size() - 1;
-		Ubicacion uCola = ubicaciones.get(cola);
-		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
-		int nuevoX = calcularPosicionAnterior(uCola.getX(), uAnteUltimo.getX());
-		int nuevoY = calcularPosicionAnterior(uCola.getY() ,uAnteUltimo.getY());
-		ubicaciones.add(new Ubicacion(nuevoX, nuevoY));
+		int indiceCola = ubicaciones.size() - 1;
+		Ubicacion cola = ubicaciones.get(indiceCola);
+		Ubicacion anteUltimo = ubicaciones.get(indiceCola - 1);
+		ubicaciones.add(cola.calcularUbicacionAnterior(anteUltimo));
 	}
 	
-	private int calcularPosicionAnterior(int ultimaPos, int anteUltimaPos) {
-		return ultimaPos + (ultimaPos - anteUltimaPos);
-	}
-	
+	/**
+	 * Se verifica si hubo colision con el comestible dado.
+	 * La implementacion del metodo se delega a cada uno de los estados.
+	 * @param comestible
+	 */
 	public void checkearColision(Comestible comestible) {
 		estado = estado.checkearColision(comestible);
 	}
 	
-	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
+	/**
+	 * Se verifica si hubo colision contra una serpiente dada.
+	 * La implementacion del metodo se delega a cada uno de los estados.
+	 * @param comestible
+	 */
+	public void checkearColision(Serpiente serpiente) {
 		estado = estado.checkearColision(serpiente);
 	}
 	
@@ -92,12 +99,24 @@ public class Serpiente {
 		}
 	}
 	
+	/**
+	 * Validacion para saber si puede girar en la direccion
+	 * especificada en X
+	 * @param direccion
+	 * @return
+	 */
 	private boolean noEs180GradosEnX(int direccion) {
 		int cabeza = ubicaciones.get(0).getX();
 		int cuello = ubicaciones.get(1).getX();
 		return ((cabeza + (direccion * velocidad)) != cuello);
 	}
 	
+	/**
+	 * Validacion para saber si puede girar en la direccion
+	 * especificada en Y
+	 * @param direccion
+	 * @return
+	 */
 	private boolean noEs180GradosEnY(int direccion) {
 		int cabeza = ubicaciones.get(0).getY();
 		int cuello = ubicaciones.get(1).getY();
@@ -134,8 +153,6 @@ public class Serpiente {
 			ubicaciones.set(0, new Ubicacion(x,y));
 			return this;
 		}	
-		
-
 
 		@Override
 		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
@@ -195,6 +212,5 @@ public class Serpiente {
 			return this;
 		}
 	}
-	
 	
 }

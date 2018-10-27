@@ -39,6 +39,22 @@ public class Ubicacion extends Observable {
 		this.x = (int) (randomX - (randomX % 20));
 		this.y = (int) (randomY - (randomY % 20));
 	}
+	
+	/**
+	 * Dada la ubicacion siguiente calcula la posicion de atras a la 
+	 * ubicacion actual
+	 * @param ultima
+	 * @param anteUltima
+	 * @return
+	 */
+	public Ubicacion calcularUbicacionAnterior(Ubicacion siguiente) {
+		int xUltima = this.getX();
+		int yUltima = this.getY();
+		int xSiguiente = siguiente.getX();
+		int ySiguiente = siguiente.getY();
+		
+		return new Ubicacion(xUltima + (xUltima - xSiguiente), yUltima + (yUltima - ySiguiente));
+	}
 
 	@Override
 	public String toString() {
