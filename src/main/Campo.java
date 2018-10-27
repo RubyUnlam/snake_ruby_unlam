@@ -114,6 +114,10 @@ public class Campo implements KeyListener, ActionListener, Observado {
 		// TODO Auto-generated method stub	
 	}
 
+	/**
+	 * Metodo para agregar un observador a la lista.
+	 * Cada jugador deberia ser un observador
+	 */
 	@Override
 	public void agregarObservador(Observador observador) {
 		observadores.add(observador);
