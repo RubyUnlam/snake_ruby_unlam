@@ -29,7 +29,7 @@ public class Juego {
 
         Campo campo = new Campo(serpientes, serpientesIA);
 
-        campo.addObserver(ui);
+        campo.agregarObservador(ui);
 
         ventana.setContentPane(ui); //TODO NO CREAR SERPIENTE A LO CABEZA
 		ventana.setVisible(true);
