@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Ui extends JPanel implements Observer {
+public class Ui extends JPanel implements Observador {
 
     private ImageIcon fondoDefault;
     private String fondoPath = "src/imagenes/fondo.png"; //TODO HACERLO VARIABLE
@@ -19,17 +19,16 @@ public class Ui extends JPanel implements Observer {
         setFocusTraversalKeysEnabled(false);
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        Campo campo = (Campo) o;
-        if (arg.equals("campo")){
-            addKeyListener(campo);
-        } else if (arg.equals("dibuja")) {
-        	ubicacionesSerpientes.addAll(campo.notificarUbicacionesSerpientes());
-            ubicacionesComestibles.addAll(campo.notificarUbicacionesComestibles());
-            repaint();
-        }
-    }
+	@Override
+	public void dibujar(Campo campo) {
+		if (this.getKeyListeners().length == 0) {
+			addKeyListener(campo);
+		}
+	    
+    	ubicacionesSerpientes.addAll(campo.notificarUbicacionesSerpientes());
+        ubicacionesComestibles.addAll(campo.notificarUbicacionesComestibles());
+        repaint();
+	}
 
     public void paint(Graphics g){
         fondoDefault = new ImageIcon(fondoPath);
@@ -58,4 +57,5 @@ public class Ui extends JPanel implements Observer {
         }
         ubicacionesComestibles.clear();
     }
+
 }

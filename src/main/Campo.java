@@ -15,7 +15,7 @@ import javax.swing.Timer;
 import static main.Juego.initTime;
 
 
-public class Campo extends Observable implements KeyListener, ActionListener {
+public class Campo implements KeyListener, ActionListener, Observado {
 	
 	private Timer timer;
 	private int delay = 100;
@@ -29,7 +29,7 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
 	private int keyEventLEFT = KeyEvent.VK_LEFT;
 
-	public Observer observer;
+	private List<Observador> observadores = new ArrayList<>();
 	
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
@@ -81,15 +81,14 @@ public class Campo extends Observable implements KeyListener, ActionListener {
                 jugador.checkearColision(jugador2);
             }
         }
-        observer.update(this, "dibuja");
+        
+        for (Observador observador : observadores) {
+        	observador.dibujar(this);
+        }
+        
     }
 
-    @Override
-    public void addObserver(Observer observer){
-        this.observer = observer;
-        observer.update(this, "campo");
-    }
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
 		int teclaPresionada = e.getKeyCode();
@@ -113,6 +112,15 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub	
+	}
+
+	/**
+	 * Metodo para agregar un observador a la lista.
+	 * Cada jugador deberia ser un observador
+	 */
+	@Override
+	public void agregarObservador(Observador observador) {
+		observadores.add(observador);
 	}
 
 }
