@@ -48,7 +48,7 @@ public class Ui extends JPanel implements Observer {
         for (Ubicacion serpiente : ubicacionesSerpientes){
             g.fillOval(serpiente.getX(), serpiente.getY(), 20, 20);
         }
-        ubicacionesSerpientes.removeAll(ubicacionesSerpientes);
+        ubicacionesSerpientes.clear();
     }
 
     private void pintarComestibles(Graphics g) {
@@ -56,6 +56,6 @@ public class Ui extends JPanel implements Observer {
         for (Ubicacion comestible : ubicacionesComestibles) {
             g.fillOval(comestible.getX(), comestible.getY(), 20, 20);
         }
-        ubicacionesComestibles.removeAll(ubicacionesComestibles);
+        ubicacionesComestibles.clear();
     }
 }
