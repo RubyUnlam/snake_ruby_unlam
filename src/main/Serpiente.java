@@ -12,14 +12,12 @@ public class Serpiente {
 	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	private Direccion direccion;
-
-	private int velocidad = 20;
 	
 	public Serpiente(){
 		estado = new Normal();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
-		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
 		crecer();
 		this.direccion = Direccion.IZQUIERDA;
@@ -28,7 +26,7 @@ public class Serpiente {
 	public Serpiente(Ubicacion cabeza){
 		estado = new Normal();
 		ubicaciones.add(cabeza);
-		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
 		crecer();
 		this.direccion = Direccion.IZQUIERDA;
@@ -59,7 +57,7 @@ public class Serpiente {
 		estado = estado.checkearColision(comestible);
 	}
 	
-	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
+	public void checkearColision(Serpiente serpiente) {
 		estado = estado.checkearColision(serpiente);
 	}
 	
@@ -79,8 +77,8 @@ public class Serpiente {
 					ubicaciones.set(i, ubicaciones.get(i-1));
 			}
 			Ubicacion cabeza = ubicaciones.get(0);
-			int x = cabeza.getX() + (direccion.getMirandoX() * velocidad);
-			int y = cabeza.getY() + (direccion.getMirandoY() * velocidad);
+			int x = cabeza.getX() + (direccion.getMirandoX() * VELOCIDAD);
+			int y = cabeza.getY() + (direccion.getMirandoY() * VELOCIDAD);
 			
 			if (x == ANCHO_VENTANA) {
 				x = 0;

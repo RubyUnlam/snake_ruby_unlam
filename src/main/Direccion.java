@@ -34,32 +34,53 @@ public enum Direccion {
 	 */
 	public Direccion cambiarDireccion(String mirar, Serpiente aDireccionar) {
 		Direccion direccion = encontrarDireccion(mirar);
-		if (nonNull(direccion) && direccion.idOpuesto != this.id  && (puedeMirarEnX(direccion, aDireccionar) || puedeMirarEnY(direccion, aDireccionar))){
+		if (esDireccionValida(direccion) && esGiroValido(direccion, aDireccionar)) {
 			return direccion;
 		}
 		return this;
 	}
-
+	
 	/**
-	 * Puede mirar a la direccion pedida en X si la direccion
-	 * es IZQUIERDA o DERECHA y no intenta hace un giro de 180 grados
+	 * Es una direccion valida si fue encontrada entre los elementos
+	 * del enum (no es null) y no es opuesta a la direccion actual
 	 * @param direccion
-	 * @param aDireccionar
 	 * @return
 	 */
-	private boolean puedeMirarEnX(Direccion direccion, Serpiente aDireccionar) {
-		return (IZQUIERDA.equals(direccion) || DERECHA.equals(direccion)) && noEs180GradosEnX(direccion, aDireccionar);
+	private boolean esDireccionValida(Direccion direccion) {
+		return nonNull(direccion) && direccion.idOpuesto != this.id;
 	}
 	
 	/**
-	 * Puede mirar a la direccion pedida en Y si la direccion
-	 * es ARRIBA o ABAJO y no intenta hace un giro de 180 grados
+	 * Es un giro valido si no esta haciendo un giro de 180 grados en la direccion
+	 * que quiere mirar
 	 * @param direccion
 	 * @param aDireccionar
 	 * @return
 	 */
-	private boolean puedeMirarEnY(Direccion direccion, Serpiente aDireccionar) {
-		return (ARRIBA.equals(direccion) || ABAJO.equals(direccion)) && noEs180GradosEnY(direccion, aDireccionar);
+	private boolean esGiroValido(Direccion direccion, Serpiente aDireccionar) {
+		return (quiereMirarEnX(direccion) && noEs180GradosEnX(direccion, aDireccionar)) || (quiereMirarEnY(direccion) && noEs180GradosEnY(direccion, aDireccionar));
+	}
+
+	/**
+	 * Quiere mirar en la direccion X si la direccion pedida
+	 * es IZQUIERDA o DERECHA
+	 * @param direccion
+	 * @param aDireccionar
+	 * @return
+	 */
+	private boolean quiereMirarEnX(Direccion direccion) {
+		return IZQUIERDA.equals(direccion) || DERECHA.equals(direccion);
+	}
+	
+	/**
+	 * Quiere mirar en la direccion Y si la direccion pedida
+	 * es ARRIBA o ABAJO
+	 * @param direccion
+	 * @param aDireccionar
+	 * @return
+	 */
+	private boolean quiereMirarEnY(Direccion direccion) {
+		return ARRIBA.equals(direccion) || ABAJO.equals(direccion);
 	}
 	
 	/**
