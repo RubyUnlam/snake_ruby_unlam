@@ -72,28 +72,28 @@ public class Serpiente {
 	}
 	
 	public void mirarDerecha() { 
-		if (noEs180GradosEnX(MIRAR_DERECHA)) {
+		if (mirandoX != MIRAR_IZQUIERDA && noEs180GradosEnX(MIRAR_DERECHA)) {
 			mirandoX = MIRAR_DERECHA;
 			mirandoY = NO_MIRAR;
 		}
 	}
 	
 	public void mirarIzquierda() {
-		if (noEs180GradosEnX(MIRAR_IZQUIERDA)) {
+		if (mirandoX != MIRAR_DERECHA && noEs180GradosEnX(MIRAR_IZQUIERDA)) {
 			mirandoX = MIRAR_IZQUIERDA;
 			mirandoY = NO_MIRAR;			
 		}
 	}
 	
 	public void mirarArriba() {
-		if (noEs180GradosEnY(MIRAR_ARRIBA)) {
+		if (mirandoY != MIRAR_ABAJO && noEs180GradosEnY(MIRAR_ARRIBA)) {
 			mirandoX = NO_MIRAR;
 			mirandoY = MIRAR_ARRIBA;			
 		}
 	}
 	
 	public void mirarAbajo() {
-		if (noEs180GradosEnY(MIRAR_ABAJO)) {
+		if (mirandoY != MIRAR_ARRIBA && noEs180GradosEnY(MIRAR_ABAJO)) {
 			mirandoX = NO_MIRAR;
 			mirandoY = MIRAR_ABAJO;			
 		}
@@ -106,9 +106,12 @@ public class Serpiente {
 	 * @return
 	 */
 	private boolean noEs180GradosEnX(int direccion) {
-		int cabeza = ubicaciones.get(0).getX();
-		int cuello = ubicaciones.get(1).getX();
-		return ((cabeza + (direccion * velocidad)) != cuello);
+		if (!ubicaciones.isEmpty()) {
+			int cabeza = ubicaciones.get(0).getX();
+			int cuello = ubicaciones.get(1).getX();
+			return ((cabeza + (direccion * velocidad)) != cuello);
+		}
+		return false;
 	}
 	
 	/**
@@ -118,9 +121,12 @@ public class Serpiente {
 	 * @return
 	 */
 	private boolean noEs180GradosEnY(int direccion) {
-		int cabeza = ubicaciones.get(0).getY();
-		int cuello = ubicaciones.get(1).getY();
-		return ((cabeza + (direccion * velocidad)) != cuello);
+		if (!ubicaciones.isEmpty()) {
+			int cabeza = ubicaciones.get(0).getY();
+			int cuello = ubicaciones.get(1).getY();
+			return ((cabeza + (direccion * velocidad)) != cuello);
+		}
+		return false;
 	}
 	
 	public List<Ubicacion> getUbicaciones() {
@@ -138,16 +144,16 @@ public class Serpiente {
 			int x = cabeza.getX() + (mirandoX * velocidad);
 			int y = cabeza.getY() + (mirandoY * velocidad);
 			
-			if (x > ANCHO_VENTANA) {
+			if (x == ANCHO_VENTANA) {
 				x = 0;
 			} else if (x < 0) {
-				x = ANCHO_VENTANA;
+				x = ANCHO_VENTANA - 20;
 			}
 			
-			if (y > ALTURA_VENTANA) {
+			if (y == ALTURA_VENTANA) {
 				y = 0;
 			} else if (y < 0) {
-				y = ALTURA_VENTANA;
+				y = ALTURA_VENTANA - 20;
 			}
 					
 			ubicaciones.set(0, new Ubicacion(x,y));
