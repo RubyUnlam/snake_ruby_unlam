@@ -11,8 +11,7 @@ public class Serpiente {
 	private Estado estado;
 	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
-	private int mirandoX;
-	private int mirandoY;
+	private Direccion direccion;
 
 	private int velocidad = 20;
 	
@@ -23,7 +22,7 @@ public class Serpiente {
 		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
 		crecer();
 		crecer();
-		mirarIzquierda();
+		this.direccion = Direccion.IZQUIERDA;
 	}
 	
 	public Serpiente(Ubicacion cabeza){
@@ -32,7 +31,7 @@ public class Serpiente {
 		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
 		crecer();
 		crecer();
-		mirarIzquierda();
+		this.direccion = Direccion.IZQUIERDA;
 	}
 
 	private void morir() {
@@ -64,45 +63,9 @@ public class Serpiente {
 		estado = estado.checkearColision(serpiente);
 	}
 	
-	public void mirarDerecha() { 
-		if (noEs180GradosEnX(MIRAR_DERECHA)) {
-			mirandoX = MIRAR_DERECHA;
-			mirandoY = NO_MIRAR;
-		}
-	}
-	
-	public void mirarIzquierda() {
-		if (noEs180GradosEnX(MIRAR_IZQUIERDA)) {
-			mirandoX = MIRAR_IZQUIERDA;
-			mirandoY = NO_MIRAR;			
-		}
-	}
-	
-	public void mirarArriba() {
-		if (noEs180GradosEnY(MIRAR_ARRIBA)) {
-			mirandoX = NO_MIRAR;
-			mirandoY = MIRAR_ARRIBA;			
-		}
-	}
-	
-	public void mirarAbajo() {
-		if (noEs180GradosEnY(MIRAR_ABAJO)) {
-			mirandoX = NO_MIRAR;
-			mirandoY = MIRAR_ABAJO;			
-		}
-	}
-	
-	private boolean noEs180GradosEnX(int direccion) {
-		int cabeza = ubicaciones.get(0).getX();
-		int cuello = ubicaciones.get(1).getX();
-		return ((cabeza + (direccion * velocidad)) != cuello);
-	}
-	
-	private boolean noEs180GradosEnY(int direccion) {
-		int cabeza = ubicaciones.get(0).getY();
-		int cuello = ubicaciones.get(1).getY();
-		return ((cabeza + (direccion * velocidad)) != cuello);
-	}
+	public void mirar(String mirarA) {
+		this.direccion = direccion.cambiarDireccion(mirarA, this);
+	}	
 	
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
@@ -116,8 +79,8 @@ public class Serpiente {
 					ubicaciones.set(i, ubicaciones.get(i-1));
 			}
 			Ubicacion cabeza = ubicaciones.get(0);
-			int x = cabeza.getX() + (mirandoX * velocidad);
-			int y = cabeza.getY() + (mirandoY * velocidad);
+			int x = cabeza.getX() + (direccion.getMirandoX() * velocidad);
+			int y = cabeza.getY() + (direccion.getMirandoY() * velocidad);
 			
 			if (x > ANCHO_VENTANA) {
 				x = 0;
