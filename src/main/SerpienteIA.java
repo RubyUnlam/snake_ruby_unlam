@@ -12,6 +12,7 @@ public class SerpienteIA extends Serpiente{
 	}
 
 	public void cambiarMirada(Comestible comestible) {
+		
 		if( comprobarEstado() == "Muerto") {
 			return;
 		}

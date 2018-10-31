@@ -114,6 +114,8 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
+	//Para SerpientaIA 
+	
 	public void cambiarMirada(Comestible peek) {
 		//Implementada en SerpienteIA
 	}
@@ -183,7 +185,6 @@ public class Serpiente {
 			}
 			return this;
 		}
-
 
 		@Override
 		public Estado morir() {

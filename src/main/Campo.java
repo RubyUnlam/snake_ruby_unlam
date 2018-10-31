@@ -18,7 +18,7 @@ import static main.Juego.initTime;
 public class Campo implements KeyListener, ActionListener, Observado {
 	
 	private Timer timer;
-	private int delay = 20;
+	private int delay = 100;
 	
 	private List<Serpiente> serpientes;
 	private List<Serpiente> serpientesIA;
