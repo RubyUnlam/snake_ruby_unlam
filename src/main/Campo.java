@@ -18,7 +18,7 @@ import static main.Juego.initTime;
 public class Campo implements KeyListener, ActionListener, Observado {
 	
 	private Timer timer;
-	private int delay = 100;
+	private int delay = 20;
 	
 	private List<Serpiente> serpientes;
 	private List<Serpiente> serpientesIA;
@@ -68,6 +68,10 @@ public class Campo implements KeyListener, ActionListener, Observado {
         for (Serpiente jugador : serpientes) {
             jugador.moverse();
         }
+        for (Serpiente jugadorIA : serpientesIA) {
+        	jugadorIA.cambiarMirada(comestibles.peek());
+        	jugadorIA.moverse();
+        }
 
         for (Serpiente jugador : serpientes) {
         	for (Comestible comestible : comestibles) {
@@ -80,6 +84,24 @@ public class Campo implements KeyListener, ActionListener, Observado {
             for (Serpiente jugador2 : serpientes) {
                 jugador.checkearColision(jugador2);
             }
+            for (Serpiente jugadorIA : serpientesIA) {
+            	jugador.checkearColision(jugadorIA);
+            }
+        }
+        // LA serpiente jugador muere bien
+        for (Serpiente jugadorIA : serpientesIA) {
+        	for (Comestible comestible : comestibles) {
+                jugadorIA.checkearColision(comestible);
+                if (comestible.fueComida()) {
+                    comestibles.remove(comestible);
+                }
+            }
+        	 for (Serpiente jugador2 : serpientes) {
+                 jugadorIA.checkearColision(jugador2);
+             }
+             for (Serpiente jugadorIA2 : serpientesIA) {
+             	jugadorIA.checkearColision(jugadorIA2);
+             }
         }
         
         for (Observador observador : observadores) {
@@ -122,5 +144,4 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	public void agregarObservador(Observador observador) {
 		observadores.add(observador);
 	}
-
 }

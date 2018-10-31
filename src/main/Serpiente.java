@@ -114,6 +114,20 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
+	public void cambiarMirada(Comestible peek) {
+		//Implementada en SerpienteIA
+	}
+	
+	protected Ubicacion getUbicacionCabeza() {
+		return  ubicaciones.get(0);
+	}
+	
+	protected String comprobarEstado() {
+		if( ubicaciones.isEmpty())
+			return "Muerto";
+		return "Vivo";
+	}
+	
 	class Normal implements Estado {
 
 		@Override
@@ -141,23 +155,23 @@ public class Serpiente {
 			return this;
 		}	
 		
-
-
 		@Override
 		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
 			Ubicacion cabeza = ubicaciones.get(0);
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
-				serpiente.morir();
-				return morir();
-			} //verifico si no chocaron sus cabezas
-			
-			for (int i = 1; i < cuerpo.size(); i++) {
-				Ubicacion actual = cuerpo.get(i);
-				if (cabeza.equals(actual)) {
-					return morir(); 
-				}
-			} //si choca contra algo, muere			
+			if(!serpiente.getUbicaciones().isEmpty()) {
+				if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
+					serpiente.morir();
+					return morir();
+				} //verifico si no chocaron sus cabezas
+				
+				for (int i = 1; i < cuerpo.size(); i++) { // cuerpo de la otra serpiente, ya sea otra o si misma
+					Ubicacion actual = cuerpo.get(i);
+					if (cabeza.equals(actual)) { 
+						return morir(); 
+					}
+				} //si choca contra algo, muere			
+			}
 			return this;
 		}
 
@@ -201,6 +215,7 @@ public class Serpiente {
 			return this;
 		}
 	}
+
 	
 	
 }
