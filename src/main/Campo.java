@@ -21,7 +21,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	private int delay = 100;
 	
 	private List<Serpiente> serpientes;
-	private List<Serpiente> serpientesIA;
+	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
 	
 	private int keyEventUP = KeyEvent.VK_UP;
@@ -31,7 +31,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 
 	private List<Observador> observadores = new ArrayList<>();
 	
-	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
+	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue();
@@ -68,7 +68,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
         for (Serpiente jugador : serpientes) {
             jugador.moverse();
         }
-        for (Serpiente jugadorIA : serpientesIA) {
+        for (SerpienteIA jugadorIA : serpientesIA) {
         	jugadorIA.cambiarMirada(comestibles.peek());
         	jugadorIA.moverse();
         }

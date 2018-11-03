@@ -115,11 +115,7 @@ public class Serpiente {
 	}
 	
 	//Para SerpientaIA 
-	
-	public void cambiarMirada(Comestible peek) {
-		//Implementada en SerpienteIA
-	}
-	
+		
 	protected Ubicacion getUbicacionCabeza() {
 		return  ubicaciones.get(0);
 	}

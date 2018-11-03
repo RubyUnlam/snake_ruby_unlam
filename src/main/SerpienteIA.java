@@ -20,10 +20,12 @@ public class SerpienteIA extends Serpiente{
 		Random random = new Random();
 		int probabilidadCaminoOptimo = random.nextInt()*100;
 		
-		if( probabilidadCaminoOptimo <= dificultad )
+		if( probabilidadCaminoOptimo <= dificultad ) {
 			caminoOptimoIA(comestible);
-		else
+		}
+		else {
 			caminoRandomIA();
+		}
 	}
 	
 	private void caminoRandomIA() {
@@ -67,7 +69,11 @@ public class SerpienteIA extends Serpiente{
 		}
 		
 		// X < Y  o  X == Y (decido ir a por Y)
-		if(direccionEnY == 1) mirarArriba();
-		else mirarAbajo();
+		if(direccionEnY == 1) {
+			mirarArriba();
+		}
+		else {
+			mirarAbajo();
+		}
 	}
 }
