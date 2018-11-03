@@ -13,23 +13,23 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 public class Sesion {
 
 	private Usuario usuario;
-	// TODO: utilizar Singleton para que se instancie una sola vez.
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Usuario.class)
-			.buildSessionFactory();
-	Session session;
-	Transaction tx;
+	private SessionFactory factory;
+	private Session session;
+	private Transaction tx;
 
-	public Sesion(String nombreUsuario, String contrasenia) {
+	public Sesion(String nombreUsuario, char[] contraseniaChar) {
+		// TODO: Esto podría ejecutarse al iniciar el servidor. 
+		factory = SesionSingleton.getSessionFactory();
+		session = factory.openSession();
+		String contrasenia = new String(contraseniaChar);
 		this.usuario = new Usuario(nombreUsuario, contrasenia);
 	}
 
 	public boolean registrarUsuario() {
-		session = factory.openSession();
 		try {
 			if (nombreUsuarioValido(usuario)) {
 				return registrarUsuario(usuario);
@@ -73,23 +73,12 @@ public class Sesion {
 			predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));			
 		}
 
-		// query itself
 		cq.select(ru).where(predicates.toArray(new Predicate[] {}));
 		
-		Usuario usuarioEncontrado = null;
 		try {
-			usuarioEncontrado = session.createQuery(cq).getSingleResult();
+			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			// TODO: Entra aca si no encuentra usuario. Catchear correctamente.
-		}
-
-		if (usuarioEncontrado == null) {
 			existeCuenta = false;
-		} else {
-			System.out.println("Acceso correcto");
-			// TODO: Podria implementarse manejo de excepciones para retornar un mensaje de
-			// error
-			// distinto al label segun la excepcion
 		}
 
 		return existeCuenta;
@@ -108,20 +97,11 @@ public class Sesion {
 		Root<Usuario> ru = cq.from(Usuario.class);
 		cq.select(ru).where(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
 
-		Usuario usuarioEncontrado = null;
 		try {
-			usuarioEncontrado = session.createQuery(cq).getSingleResult();
+			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			// TODO: Entra aca si no encuentra usuario. Catchear correctamente.
-		}
-
-		if (usuarioEncontrado == null) {
+			System.out.println("El nombre de usuario está disponible para ser registrado");
 			nombreValido = true;
-		} else {
-			System.out.println("Nombre de usuario en uso");
-			// TODO: Podria implementarse manejo de excepciones para retornar un mensaje de
-			// error
-			// distinto al label segun la excepcion
 		}
 
 		return nombreValido;

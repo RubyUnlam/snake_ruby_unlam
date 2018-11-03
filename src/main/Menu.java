@@ -20,6 +20,7 @@ public class Menu extends JFrame {
 	private JButton btnJugar;
 	
 	public Menu() {
+		
 		setResizable(false);
 		setTitle("Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,11 +32,12 @@ public class Menu extends JFrame {
 		
 		lblUsuario = new JLabel("Debe iniciar sesion para poder jugar.");
 		lblUsuario.setLocation(10, 30);
-		lblUsuario.setBounds(90, 36, 262, 14);
+		lblUsuario.setBounds(6, 45, 398, 14);
+		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblUsuario);
 		
 		btnAbrir = new JButton("Iniciar Sesion");
-		btnAbrir.setBounds(177, 98, 300, 23);
+		btnAbrir.setBounds(100, 10, 304, 23);
 		btnAbrir.setLocation(100, 10);
 		btnAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -66,7 +68,7 @@ public class Menu extends JFrame {
 	
 	public void loggeado(String texto) {
 		btnJugar.setEnabled(true);
-		lblUsuario.setText("Bienvenide usuarie: " + texto);
+		lblUsuario.setText("Sesión iniciada. Usuario: " + texto);
 		lblUsuario.setVisible(true);
 	}
 
