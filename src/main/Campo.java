@@ -33,7 +33,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
-		this.comestibles = new ConcurrentLinkedQueue();
+		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		timer = new Timer(delay, this);
 		timer.start();
 	}
