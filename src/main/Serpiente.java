@@ -19,6 +19,9 @@ public class Serpiente {
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	private int mirandoX;
 	private int mirandoY;
+	
+	// TODO: analizar si realmente es necesario que la serpiente tenga esto.
+	private Puntaje puntaje;
 
 	private int velocidad = 20;
 	
@@ -30,6 +33,18 @@ public class Serpiente {
 		crecer();
 		crecer();
 		mirarIzquierda();
+	}
+	
+	// Constructor para recibir el usuario del login e inicializar el puntaje
+	public Serpiente(String usuario){
+		estado = new Normal();
+		Ubicacion cabeza = new Ubicacion();
+		ubicaciones.add(cabeza);
+		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		crecer();
+		crecer();
+		mirarIzquierda();
+		puntaje = new Puntaje(0, usuario, 0, 0);
 	}
 	
 	public Serpiente(Ubicacion cabeza){
@@ -116,6 +131,10 @@ public class Serpiente {
 		return false;
 	}
 	
+	public Puntaje getPuntaje() {
+		return puntaje;
+	}
+
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
 	}
@@ -179,6 +198,10 @@ public class Serpiente {
 
 		@Override
 		public Estado morir() {
+			// Esto definitivamente no deberia estar aca.
+			Sesion sesion = new Sesion(puntaje);
+			sesion.persistirPuntaje();
+			//
 			ubicaciones = new ArrayList<>();
 			return new Muerto();
 		}

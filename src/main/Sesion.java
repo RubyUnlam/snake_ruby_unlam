@@ -20,13 +20,28 @@ public class Sesion {
 	private SessionFactory factory;
 	private Session session;
 	private Transaction tx;
-
+	private Puntaje puntaje;
+	
+	public Sesion(Puntaje puntaje) {
+		// TODO: Esto podría ejecutarse al iniciar el servidor. 
+		factory = SesionSingleton.getSessionFactory();
+		session = factory.openSession();
+		this.puntaje = puntaje;
+	}
+	
 	public Sesion(String nombreUsuario, char[] contraseniaChar) {
 		// TODO: Esto podría ejecutarse al iniciar el servidor. 
 		factory = SesionSingleton.getSessionFactory();
 		session = factory.openSession();
 		String contrasenia = new String(contraseniaChar);
 		this.usuario = new Usuario(nombreUsuario, contrasenia);
+	}
+	
+	public void persistirPuntaje() {
+		tx = session.beginTransaction();
+		session.saveOrUpdate(this.puntaje);
+		tx.commit();
+		session.close();
 	}
 
 	public boolean registrarUsuario() {

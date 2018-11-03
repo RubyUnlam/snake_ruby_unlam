@@ -18,6 +18,7 @@ public class Menu extends JFrame {
 	private JLabel lblUsuario;
 	private JButton btnAbrir;
 	private JButton btnJugar;
+	private String nombreUsuarioLoggeado;
 	
 	public Menu() {
 		
@@ -52,7 +53,9 @@ public class Menu extends JFrame {
 		btnJugar.setEnabled(false);
 		btnJugar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Juego.iniciar();
+				// TODO: Aca se inicia el juego con un solo usuario, hay que ver
+				// como se haria con la implementacion de salas.
+				Juego.iniciar(nombreUsuarioLoggeado);
 			}
 		});
 
@@ -67,8 +70,9 @@ public class Menu extends JFrame {
 	}
 	
 	public void loggeado(String texto) {
+		nombreUsuarioLoggeado = texto;
 		btnJugar.setEnabled(true);
-		lblUsuario.setText("Sesión iniciada. Usuario: " + texto);
+		lblUsuario.setText("Sesión iniciada. Usuario: " + nombreUsuarioLoggeado);
 		lblUsuario.setVisible(true);
 	}
 

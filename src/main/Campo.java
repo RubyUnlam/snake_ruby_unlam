@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -22,6 +23,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	private List<Serpiente> serpientes;
 	private List<Serpiente> serpientesIA;
 	private Queue<Comestible> comestibles;
+	private List<Puntaje> puntajes = new ArrayList<Puntaje>();
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
@@ -66,13 +68,19 @@ public class Campo implements KeyListener, ActionListener, Observado {
 		
         for (Serpiente jugador : serpientes) {
             jugador.moverse();
+            // Se agrega el puntaje a una lista. Cada puntaje tiene su nombre de usuario por lo que 
+            // se puede identificar cada uno.
+            if (!puntajes.contains(jugador.getPuntaje())) {
+            	puntajes.add(jugador.getPuntaje());
+            }
         }
 
         for (Serpiente jugador : serpientes) {
         	for (Comestible comestible : comestibles) {
                 jugador.checkearColision(comestible);
                 if (comestible.fueComida()) {
-                    comestibles.remove(comestible);
+                	comestibles.remove(comestible);
+                	jugador.getPuntaje().incrementarPuntuacion();
                 }
             }
         	
@@ -123,6 +131,12 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	@Override
 	public void agregarObservador(Observador observador) {
 		observadores.add(observador);
+	}
+
+	public List<Puntaje> notificarPuntajes() {
+	    List<Puntaje> puntajesActuales = new ArrayList<>();
+		puntajesActuales.addAll(puntajes);
+		return puntajesActuales;
 	}
 
 }

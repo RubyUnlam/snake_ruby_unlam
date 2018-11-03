@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,8 @@ public class Ui extends JPanel implements Observador {
     private ImageIcon fondoDefault;
     private String fondoPath = "src/imagenes/fondo.png"; //TODO HACERLO VARIABLE
     private List<Ubicacion> ubicacionesSerpientes = new ArrayList<>();
-    private List<Ubicacion> ubicacionesComestibles= new ArrayList<>();
+    private List<Ubicacion> ubicacionesComestibles = new ArrayList<>();
+    private List<Puntaje> puntajes = new ArrayList<>();
 
     Ui() {
         setFocusable(true);
@@ -25,7 +27,7 @@ public class Ui extends JPanel implements Observador {
 		if (this.getKeyListeners().length == 0) {
 			addKeyListener(campo);
 		}
-	    
+	    puntajes.addAll(campo.notificarPuntajes());
     	ubicacionesSerpientes.addAll(campo.notificarUbicacionesSerpientes());
         ubicacionesComestibles.addAll(campo.notificarUbicacionesComestibles());
         repaint();
@@ -39,6 +41,9 @@ public class Ui extends JPanel implements Observador {
         }
         if (!ubicacionesComestibles.isEmpty()) {
             pintarComestibles(g);
+        }
+        if (!puntajes.isEmpty()) {
+        	pintarPuntajes(g);
         }
         g.dispose();
     }
@@ -59,4 +64,13 @@ public class Ui extends JPanel implements Observador {
         ubicacionesComestibles.clear();
     }
 
+    private void pintarPuntajes(Graphics g) {
+        g.setColor(Color.BLACK); //TODO: Elegir una fuente mas linda, y mejorar posicion.
+        g.setFont(new Font("ArialBlack", Font.PLAIN, 20)); 
+        for (Puntaje puntaje : puntajes) {
+        	g.drawString(puntaje.getNombreUsuario(), 30, 30);
+        	g.drawString(String.valueOf(puntaje.getPuntuacion()), 30, 55);
+        }
+        ubicacionesComestibles.clear();
+    }
 }

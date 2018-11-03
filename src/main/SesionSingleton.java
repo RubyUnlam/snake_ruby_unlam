@@ -12,6 +12,7 @@ public class SesionSingleton {
 	public static synchronized SessionFactory getSessionFactory() {
 		if (factory == null) {
 			factory = new Configuration().configure("hibernate.cfg.xml")
+					.addAnnotatedClass(Puntaje.class)
 					.addAnnotatedClass(Usuario.class)
 					.buildSessionFactory();
 		}
