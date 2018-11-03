@@ -62,11 +62,16 @@ public class Sesion {
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
 		cq.from(Usuario.class);
-		Root<Usuario> ru = cq.from(Usuario.class);
-//		cq.select(ru).where(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
+		Root<Usuario> ru = cq.from(Usuario.class);		
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
-		predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));
+		
+		if (usuario.getNombreUsuario() == null || !usuario.getNombreUsuario().isEmpty()) {
+			predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));			
+		}
+		
+		if (usuario.getContrasenia() == null || !usuario.getContrasenia().isEmpty()) {
+			predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));			
+		}
 
 		// query itself
 		cq.select(ru).where(predicates.toArray(new Predicate[] {}));

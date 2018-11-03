@@ -1,18 +1,17 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import static main.Juego.initTime;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
-
-import static main.Juego.initTime;
 
 
 public class Campo implements KeyListener, ActionListener, Observado {
@@ -86,6 +85,9 @@ public class Campo implements KeyListener, ActionListener, Observado {
         	observador.dibujar(this);
         }
         
+        if(serpientes.isEmpty()) {
+        	// TODO: Cerrar ventana del juego y volver al menu, previamente mostrar mensaje de victoria/derrota/puntajes
+        }
     }
 
 	

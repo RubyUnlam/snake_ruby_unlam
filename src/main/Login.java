@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 
 public class Login extends JDialog {
@@ -17,10 +19,7 @@ public class Login extends JDialog {
 	private JTextField txtNombreUsuario;
 	private JPasswordField txtContrasenia;
 	private JLabel lblErrorRegistro;
-	private JLabel lblErrorLoggeo;
 	private boolean loggeado = false;
-	private JPasswordField passwordField;
-
 	/**
 	 * Create the panel.
 	 */
@@ -44,7 +43,10 @@ public class Login extends JDialog {
 		btnRegistrarse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblErrorRegistro.setVisible(false);
-				if (registrarUsuario(txtNombreUsuario.getText(), txtContrasenia.getText())) {
+				if(txtNombreUsuario.getText().isEmpty() || txtContrasenia.getPassword().length == 0) {
+					lblErrorRegistro.setText("Rellene todos los campos");
+					lblErrorRegistro.setVisible(true);
+				} else if (registrarUsuario(txtNombreUsuario.getText(), txtContrasenia.getText())) {
 					menu.loggeado(txtNombreUsuario.getText());
 					dispose();
 				}
@@ -57,7 +59,10 @@ public class Login extends JDialog {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblErrorRegistro.setVisible(false);
-				if (iniciarSesion(txtNombreUsuario.getText(), txtContrasenia.getText())) {
+				if(txtNombreUsuario.getText().isEmpty() || txtContrasenia.getPassword().length == 0) {
+					lblErrorRegistro.setText("Rellene todos los campos");
+					lblErrorRegistro.setVisible(true);
+				} else if (iniciarSesion(txtNombreUsuario.getText(), txtContrasenia.getText())) {
 					menu.loggeado(txtNombreUsuario.getText());
 					dispose();
 				}
@@ -79,14 +84,12 @@ public class Login extends JDialog {
 		getContentPane().add(lblLogin);
 
 		lblErrorRegistro = new JLabel("Error al registrar");
-		lblErrorRegistro.setBounds(171, 34, 117, 16);
+		lblErrorRegistro.setHorizontalAlignment(SwingConstants.CENTER);
+		lblErrorRegistro.setBounds(6, 32, 318, 16);
 		lblErrorRegistro.setVisible(false);
+		lblErrorRegistro.setForeground(Color.RED);
 		getContentPane().add(lblErrorRegistro);
 
-		lblErrorLoggeo = new JLabel("Error al loggear");
-		lblErrorLoggeo.setBounds(171, 34, 117, 16);
-		lblErrorLoggeo.setVisible(false);
-		getContentPane().add(lblErrorLoggeo);
 
 	}
 
@@ -103,7 +106,8 @@ public class Login extends JDialog {
 		Sesion sesion = new Sesion(nombreUsuario, contrasenia);
 		boolean inicioCorrectamente = sesion.iniciarSesion();
 		if (!inicioCorrectamente) {
-			lblErrorLoggeo.setVisible(true);
+			lblErrorRegistro.setText("Error al loggear");
+			lblErrorRegistro.setVisible(true);
 		}
 		return inicioCorrectamente;
 	}
