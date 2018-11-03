@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,11 +7,7 @@ import java.awt.event.KeyListener;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
-
-import static main.Juego.initTime;
-
 
 public class Campo implements KeyListener, ActionListener, Observado {
 	
@@ -34,7 +28,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
-		this.comestibles = new ConcurrentLinkedQueue();
+		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		timer = new Timer(delay, this);
 		timer.start();
 	}
@@ -93,14 +87,13 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
 		int teclaPresionada = e.getKeyCode();
 		if (teclaPresionada == keyEventUP) {
-			serpientes.get(0).mirarArriba();
+			serpientes.get(0).mirar(Direccion.ARRIBA.name());
 		} else if (teclaPresionada == keyEventDOWN) {
-			serpientes.get(0).mirarAbajo();
+			serpientes.get(0).mirar(Direccion.ABAJO.name());
 		} else if (teclaPresionada == keyEventRIGTH) {
-            initTime = System.currentTimeMillis();
-			serpientes.get(0).mirarDerecha();
+            serpientes.get(0).mirar(Direccion.DERECHA.name());
 		} else if (teclaPresionada == keyEventLEFT) {
-			serpientes.get(0).mirarIzquierda();
+			serpientes.get(0).mirar(Direccion.IZQUIERDA.name());
 		}
 	}
 
