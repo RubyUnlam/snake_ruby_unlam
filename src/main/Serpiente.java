@@ -1,10 +1,16 @@
 package main;
 
-import java.util.ArrayList;
-
 import static java.util.Objects.nonNull;
+import static utilidades.Constantes.ALTURA_VENTANA;
+import static utilidades.Constantes.ANCHO_VENTANA;
+import static utilidades.Constantes.MIRAR_ABAJO;
+import static utilidades.Constantes.MIRAR_ARRIBA;
+import static utilidades.Constantes.MIRAR_DERECHA;
+import static utilidades.Constantes.MIRAR_IZQUIERDA;
+import static utilidades.Constantes.NO_MIRAR;
+
+import java.util.ArrayList;
 import java.util.List;
-import static utilidades.Constantes.*;
 
 public class Serpiente {
 

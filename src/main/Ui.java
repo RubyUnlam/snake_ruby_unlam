@@ -1,11 +1,12 @@
 package main;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class Ui extends JPanel implements Observador {
 
