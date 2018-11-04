@@ -16,7 +16,7 @@ public class Menu extends JFrame {
 	
 	private JPanel contentPane;
 	private JLabel lblUsuario;
-	private JButton btnAbrir;
+	private JButton btnIniciarSesion;
 	private JButton btnJugar;
 	
 	public Menu() {
@@ -32,23 +32,22 @@ public class Menu extends JFrame {
 		
 		lblUsuario = new JLabel("Debe iniciar sesion para poder jugar.");
 		lblUsuario.setLocation(10, 30);
-		lblUsuario.setBounds(6, 45, 398, 14);
+		lblUsuario.setBounds(6, 50, 398, 14);
 		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblUsuario);
 		
-		btnAbrir = new JButton("Iniciar Sesion");
-		btnAbrir.setBounds(100, 10, 304, 23);
-		btnAbrir.setLocation(100, 10);
-		btnAbrir.addActionListener(new ActionListener() {
+		btnIniciarSesion = new JButton("Iniciar Sesion");
+		btnIniciarSesion.setBounds(100, 15, 304, 23);
+		btnIniciarSesion.setLocation(100, 15);
+		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				abrirLogin();
 			}
 		});
-
 		
 		btnJugar = new JButton("Jugar");
 		btnJugar.setBounds(177, 98, 89, 23);
-		btnJugar.setLocation(10, 10);
+		btnJugar.setLocation(10, 15);
 		btnJugar.setEnabled(false);
 		btnJugar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -56,7 +55,7 @@ public class Menu extends JFrame {
 			}
 		});
 
-		contentPane.add(btnAbrir);
+		contentPane.add(btnIniciarSesion);
 		contentPane.add(btnJugar);
 		
 		setLocationRelativeTo(null);

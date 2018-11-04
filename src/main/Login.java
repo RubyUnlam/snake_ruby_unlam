@@ -52,7 +52,6 @@ public class Login extends JDialog {
 		btnRegistrarse.setBounds(27, 120, 117, 29);
 		btnRegistrarse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				actionRegistrar();
 				new Registro(login);
 				
 			}
@@ -76,21 +75,20 @@ public class Login extends JDialog {
 
 		JLabel lblLogin = new JLabel("Login");
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogin.setBounds(6, 6, 318, 16);
+		lblLogin.setBounds(6, 10, 318, 16);
 		
 		// Label para mostrar errores al registrarse/iniciar sesion
 		lblErrorRegistro = new JLabel();
 		lblErrorRegistro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrorRegistro.setBounds(6, 32, 318, 16);
 		lblErrorRegistro.setVisible(false);
-		lblErrorRegistro.setForeground(Color.RED);
 		
 		// Agregando componentes al panel.
 		getContentPane().add(txtNombreUsuario);
 		getContentPane().add(txtContrasenia);
 		getContentPane().add(lblErrorRegistro);
-		getContentPane().add(btnRegistrarse);
 		getContentPane().add(btnIniciarSesion);
+		getContentPane().add(btnRegistrarse);
 		getContentPane().add(lblNombreUsuario);
 		getContentPane().add(lblContrasenia);
 		getContentPane().add(lblLogin);
@@ -110,6 +108,8 @@ public class Login extends JDialog {
 		boolean inicioCorrectamente = sesion.iniciarSesion();
 		if (!inicioCorrectamente) {
 			lblErrorRegistro.setText("Error al loggear. Verifique los datos");
+			txtContrasenia.setText("");
+			lblErrorRegistro.setForeground(Color.RED);
 			lblErrorRegistro.setVisible(true);
 		}
 		return inicioCorrectamente;
@@ -132,6 +132,7 @@ public class Login extends JDialog {
 	private boolean camposLoginVacios() {
 		if(txtNombreUsuario.getText().isEmpty() || txtContrasenia.getPassword().length == 0) {
 			lblErrorRegistro.setText("Rellene todos los campos");
+			lblErrorRegistro.setForeground(Color.RED);
 			lblErrorRegistro.setVisible(true);
 			return true;
 		}
@@ -166,6 +167,15 @@ public class Login extends JDialog {
 				}			
 			}
 		});
+	}
+	
+	public void actualizarUsuario(String usuarioRegistrado) {
+		lblErrorRegistro.setText("Usuario registrado. Ingrese contraseña");
+		lblErrorRegistro.setForeground(Color.BLUE);
+		lblErrorRegistro.setVisible(true);
+		txtNombreUsuario.setText(usuarioRegistrado);
+		txtContrasenia.setText("");
+		txtContrasenia.requestFocus();
 	}
 	
 	public boolean isLoggeado() {

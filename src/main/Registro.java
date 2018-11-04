@@ -3,6 +3,8 @@ package main;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -15,13 +17,12 @@ public class Registro extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private Login ventanaLogin;
 	private JTextField txtNombreUsuario;
 	private JPasswordField txtContrasenia;
 	private JLabel lblInformativo;
 	private JTextField txtEmail;
 	private JButton btnRegistrarse;
-	private JButton btnCerrar;
+	private Login ventanaLogin;
 
 	/**
 	 * Cuadro de dialogo para el registro de usuarios.
@@ -30,8 +31,7 @@ public class Registro extends JDialog {
 	 */
 	public Registro(Login login) {
 		ventanaLogin = login;
-
-		// Propiedades del JDialog para el login.
+		// Propiedades del JDialog para el registro.
 		getContentPane().setLayout(null);
 		setVisible(true);
 		setBounds(0, 0, 330, 190);
@@ -47,9 +47,13 @@ public class Registro extends JDialog {
 		txtContrasenia.setBounds(158, 62, 149, 26);
 		txtContrasenia.setEnabled(true);
 
+		// Cuadro de texto para el email.
+		txtEmail = new JTextField();
+		txtEmail.setBounds(158, 92, 149, 26);
+
 		JLabel lblTitulo = new JLabel("Registrar usuario");
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitulo.setBounds(6, 6, 318, 16);
+		lblTitulo.setBounds(6, 4, 318, 16);
 
 		// Labels nombre de usuario, contrasenia y login
 		JLabel lblNombreUsuario = new JLabel("Nombre de Usuario");
@@ -60,9 +64,6 @@ public class Registro extends JDialog {
 
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setBounds(27, 97, 117, 16);
-
-		txtEmail = new JTextField();
-		txtEmail.setBounds(158, 92, 149, 26);
 
 		// Label para mostrar errores al registrarse/iniciar sesion
 		lblInformativo = new JLabel();
@@ -81,17 +82,6 @@ public class Registro extends JDialog {
 				actionRegistrar();
 			}
 		});
-		
-		// Boton cerrar
-		btnCerrar = new JButton("Cerrar");
-		btnCerrar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnCerrar.setBounds(27, 125, 280, 29);
-		btnCerrar.setVisible(false);
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cerrarDialogo();
-			}
-		});
 
 		// Agregando componentes al panel.
 		getContentPane().add(txtNombreUsuario);
@@ -99,13 +89,12 @@ public class Registro extends JDialog {
 		getContentPane().add(lblInformativo);
 		getContentPane().add(txtEmail);
 		getContentPane().add(btnRegistrarse);
-		getContentPane().add(btnCerrar);
 		getContentPane().add(lblNombreUsuario);
 		getContentPane().add(lblContrasenia);
 		getContentPane().add(lblTitulo);
 		getContentPane().add(lblEmail);
 
-//		iniciarSesionConEnter();
+		registrarseConEnter();
 	}
 	
 	/**
@@ -113,13 +102,8 @@ public class Registro extends JDialog {
 	 */
 	private void actionRegistrar() {
 		if (!camposRegistroVacios() && registrarUsuario(txtNombreUsuario.getText(), txtContrasenia.getPassword(), txtEmail.getText())) {
-			lblInformativo.setText("Se registro el usuario: " + txtNombreUsuario.getText());
-			lblInformativo.setVisible(true);
-			btnRegistrarse.setVisible(false);
-			txtContrasenia.setEnabled(false);
-			txtEmail.setEnabled(false);
-			txtNombreUsuario.setEnabled(false);
-			btnCerrar.setVisible(true);
+			dispose();
+			ventanaLogin.actualizarUsuario(txtNombreUsuario.getText());
 		}
 	}
 	
@@ -128,7 +112,7 @@ public class Registro extends JDialog {
 	 * @return
 	 */
 	private boolean camposRegistroVacios() {
-		if(txtNombreUsuario.getText().isEmpty() || txtContrasenia.getPassword().length == 0) {
+		if(txtNombreUsuario.getText().isEmpty() || txtContrasenia.getPassword().length == 0 || txtEmail.getText().isEmpty()) {
 			lblInformativo.setText("Rellene todos los campos");
 			lblInformativo.setVisible(true);
 			return true;
@@ -153,10 +137,33 @@ public class Registro extends JDialog {
 	}
 	
 	/**
-	 * Cierra la ventana del login y cambia el texto de bienvenida del menu principal.
+	 * Ejecuta el inicio de sesion al pulsar la tecla Enter en los JTextField.
 	 */
-	private void cerrarDialogo() {
-		dispose();
+	private void registrarseConEnter() {
+		txtContrasenia.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnRegistrarse.doClick();					
+				}
+			}
+		});
+		txtNombreUsuario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnRegistrarse.doClick();					
+				}			
+			}
+		});
+		txtEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnRegistrarse.doClick();					
+				}			
+			}
+		});
 	}
 
 }
