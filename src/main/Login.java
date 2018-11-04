@@ -22,6 +22,7 @@ public class Login extends JDialog {
 	private JButton btnIniciarSesion;
 	private Menu ventanaMenu;
 	private boolean loggeado = false;
+	Login login = this;
 	
 	/**
 	 * Cuadro de dialogo para el inicio de sesion o registro de usuarios. 
@@ -38,12 +39,12 @@ public class Login extends JDialog {
 		
 		// Cuadro de texto para el nombre del usuario.
 		txtNombreUsuario = new JTextField();
-		txtNombreUsuario.setBounds(158, 60, 149, 26);
+		txtNombreUsuario.setBounds(158, 47, 149, 26);
 		txtNombreUsuario.setColumns(10);
 		
 		// Cuadro de texto para la contrasenia.
 		txtContrasenia = new JPasswordField();
-		txtContrasenia.setBounds(158, 87, 149, 26);
+		txtContrasenia.setBounds(158, 74, 149, 26);
 		txtContrasenia.setColumns(10);
 
 		// Botón de registro.
@@ -51,7 +52,9 @@ public class Login extends JDialog {
 		btnRegistrarse.setBounds(27, 120, 117, 29);
 		btnRegistrarse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionRegistrar();
+//				actionRegistrar();
+				new Registro(login);
+				
 			}
 		});
 		
@@ -66,10 +69,10 @@ public class Login extends JDialog {
 		
 		// Labels nombre de usuario, contrasenia y login
 		JLabel lblNombreUsuario = new JLabel("Nombre de Usuario");
-		lblNombreUsuario.setBounds(27, 65, 140, 16);
+		lblNombreUsuario.setBounds(27, 52, 140, 16);
 
 		JLabel lblContrasenia = new JLabel("Contraseña");
-		lblContrasenia.setBounds(27, 92, 117, 16);
+		lblContrasenia.setBounds(27, 79, 117, 16);
 
 		JLabel lblLogin = new JLabel("Login");
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
@@ -97,22 +100,6 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Llama al proceso de registro del usuario, y muestra un error en caso de fallar. 
-	 * @param nombreUsuario
-	 * @param contrasenia
-	 * @return verdadero o falso segun el exito del registro.
-	 */
-	public boolean registrarUsuario(String nombreUsuario, char[] contrasenia) {
-		Sesion sesion = new Sesion(nombreUsuario, contrasenia);
-		boolean registroCorrectamente = sesion.registrarUsuario();
-		if (!registroCorrectamente) {
-			lblErrorRegistro.setText("Error al registrar. Usuario en uso");
-			lblErrorRegistro.setVisible(true);
-		}
-		return registroCorrectamente;
-	}
-
-	/**
 	 * Llama al proceso de inicio de sesion, y muestra un error en caso de fallar. 
 	 * @param nombreUsuario
 	 * @param contrasenia
@@ -126,15 +113,6 @@ public class Login extends JDialog {
 			lblErrorRegistro.setVisible(true);
 		}
 		return inicioCorrectamente;
-	}
-	
-	/**
-	 * Inicia la validacion del usuario y la contrasenia, y llama al proceso de registro de usuario.
-	 */
-	private void actionRegistrar() {
-		if (!camposLoginVacios() && registrarUsuario(txtNombreUsuario.getText(), txtContrasenia.getPassword())) {
-			cerrarDialogo();
-		}
 	}
 	
 	/**
