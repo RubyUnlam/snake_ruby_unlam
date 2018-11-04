@@ -29,6 +29,12 @@ public class Usuario {
 		this.email = email;
 	}
 
+	public Usuario(String nombreUsuario, String contrasenia, String email) {
+		this.nombreUsuario = nombreUsuario;
+		this.contrasenia = contrasenia;
+		this.email = email;
+	}
+
 	public Usuario(String nombreUsuario, String contrasenia) {
 		this.nombreUsuario = nombreUsuario;
 		this.contrasenia = contrasenia;

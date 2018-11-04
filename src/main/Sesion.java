@@ -17,13 +17,16 @@ import org.hibernate.Transaction;
 public class Sesion {
 
 	private Usuario usuario;
-	private SessionFactory factory;
+	// TODO: Esto podría ejecutarse al iniciar el servidor. 
+	private SessionFactory factory = SesionSingleton.getSessionFactory();
 	private Session session;
 	private Transaction tx;
-
+	public Sesion(String nombreUsuario, char[] contraseniaChar, String email) {
+		session = factory.openSession();
+		String contrasenia = new String(contraseniaChar);
+		this.usuario = new Usuario(nombreUsuario, contrasenia, email);
+	}
 	public Sesion(String nombreUsuario, char[] contraseniaChar) {
-		// TODO: Esto podría ejecutarse al iniciar el servidor. 
-		factory = SesionSingleton.getSessionFactory();
 		session = factory.openSession();
 		String contrasenia = new String(contraseniaChar);
 		this.usuario = new Usuario(nombreUsuario, contrasenia);
