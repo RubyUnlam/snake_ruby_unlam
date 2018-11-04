@@ -83,7 +83,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
         
     }
 
-	private Comestible generarManzana() { //TODO: rever para cuando se spawnee mas de una manzana
+	private Comestible generarManzana() {
 		boolean ubicacionOcupada = false;
 		Comestible manzana;
 		do {
