@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,13 +7,9 @@ import java.awt.event.KeyListener;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
-import static main.Juego.initTime;
-
-
-public class Campo extends Observable implements KeyListener, ActionListener {
+public class Campo implements KeyListener, ActionListener, Observado {
 	
 	private Timer timer;
 	private int delay = 100;
@@ -29,12 +23,12 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
 	private int keyEventLEFT = KeyEvent.VK_LEFT;
 
-	public Observer observer;
+	private List<Observador> observadores = new ArrayList<>();
 	
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
-		this.comestibles = new ConcurrentLinkedQueue();
+		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		timer = new Timer(delay, this);
 		timer.start();
 	}
@@ -82,7 +76,11 @@ public class Campo extends Observable implements KeyListener, ActionListener {
                 jugador.checkearColision(jugador2);
             }
         }
-        observer.update(this, "dibuja");
+        
+        for (Observador observador : observadores) {
+        	observador.dibujar(this);
+        }
+        
     }
 
 	private Comestible generarManzana() { //TODO: rever para cuando se spawnee mas de una manzana
@@ -103,25 +101,18 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 		} while (ubicacionOcupada);
 		return manzana;
 	}
-
-    @Override
-    public void addObserver(Observer observer){
-        this.observer = observer;
-        observer.update(this, "campo");
-    }
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
 		int teclaPresionada = e.getKeyCode();
 		if (teclaPresionada == keyEventUP) {
-			serpientes.get(0).mirarArriba();
+			serpientes.get(0).mirar(Direccion.ARRIBA.name());
 		} else if (teclaPresionada == keyEventDOWN) {
-			serpientes.get(0).mirarAbajo();
+			serpientes.get(0).mirar(Direccion.ABAJO.name());
 		} else if (teclaPresionada == keyEventRIGTH) {
-            initTime = System.currentTimeMillis();
-			serpientes.get(0).mirarDerecha();
+            serpientes.get(0).mirar(Direccion.DERECHA.name());
 		} else if (teclaPresionada == keyEventLEFT) {
-			serpientes.get(0).mirarIzquierda();
+			serpientes.get(0).mirar(Direccion.IZQUIERDA.name());
 		}
 	}
 
@@ -133,6 +124,15 @@ public class Campo extends Observable implements KeyListener, ActionListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub	
+	}
+
+	/**
+	 * Metodo para agregar un observador a la lista.
+	 * Cada jugador deberia ser un observador
+	 */
+	@Override
+	public void agregarObservador(Observador observador) {
+		observadores.add(observador);
 	}
 
 }
