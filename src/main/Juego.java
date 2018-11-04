@@ -13,6 +13,7 @@ public class Juego {
 		List<Serpiente> serpientesIA = new ArrayList<>();
 		
 		Servidor servidor = new Servidor(12000, serpientes);
+
 		servidor.start();
 
         Campo campo = new Campo(serpientes, serpientesIA);

@@ -18,8 +18,8 @@ public class Servidor extends Thread {
     	this.serpientes = serpientes;
         try {
 			this.serverSocket = new ServerSocket(puerto);
+			System.out.println("Creado el server");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
         this.chatEscritura = new ChatEscrituraServidor();
@@ -29,6 +29,8 @@ public class Servidor extends Thread {
     public void run() {
         try {
             while (true) {
+
+            System.out.println("Esperando jugadores");
 
             Socket jugador = serverSocket.accept();
 

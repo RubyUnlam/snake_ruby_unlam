@@ -1,8 +1,9 @@
 package main;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UbicacionesDTO {
+public class UbicacionesDTO implements Serializable {
 
 	private List<List<Ubicacion>> serpientes;
 	private List<Ubicacion> comestibles;
