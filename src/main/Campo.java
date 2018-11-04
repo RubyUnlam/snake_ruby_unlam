@@ -23,35 +23,18 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
 	private int keyEventLEFT = KeyEvent.VK_LEFT;
 
-	private List<Observador> observadores = new ArrayList<>();
+	private Observador observador;
 	
 	Campo(List<Serpiente> jugadores, List<Serpiente> serpientesIA) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		timer = new Timer(delay, this);
+	}
+	
+	public void comenzarJuego() {
 		timer.start();
 	}
-
-	public List<Ubicacion> notificarUbicacionesSerpientes() {
-	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
-	    for(Serpiente serpientes : serpientes){
-	        ubicacionesActuales.addAll(serpientes.getUbicaciones());
-        }
-        for(Serpiente serpientesIA : serpientesIA){
-            ubicacionesActuales.addAll(serpientesIA.getUbicaciones());
-        }
-
-        return ubicacionesActuales;
-    }
-
-    public List<Ubicacion> notificarUbicacionesComestibles() {
-	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
-        for (Comestible comestible : comestibles) {
-            ubicacionesActuales.add(comestible.getUbicacion());
-        }
-        return ubicacionesActuales;
-    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -76,12 +59,25 @@ public class Campo implements KeyListener, ActionListener, Observado {
             }
         }
         
-        for (Observador observador : observadores) {
-        	observador.dibujar(this);
+    	notificarUbicacionesSerpientes();
+    }
+	
+	public void notificarUbicacionesSerpientes() {
+	    List<List<Ubicacion>> ubicacionesActuales = new ArrayList<>();
+	    for(Serpiente serpientes : serpientes){
+	    	ubicacionesActuales.add(serpientes.getUbicaciones());
+        }
+        for(Serpiente serpientesIA : serpientesIA){
+            ubicacionesActuales.add(serpientesIA.getUbicaciones());
         }
         
-    }
+        List<Ubicacion> ubicacionesActualesComestibles = new ArrayList<>();
+        for (Comestible comestible : comestibles) {
+        	ubicacionesActualesComestibles.add(comestible.getUbicacion());
+        }
 
+        observador.dibujar(new UbicacionesDTO(ubicacionesActuales, ubicacionesActualesComestibles));
+    }
 	
 	@Override
 	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
@@ -113,7 +109,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	 */
 	@Override
 	public void agregarObservador(Observador observador) {
-		observadores.add(observador);
+		this.observador = observador;
 	}
 
 }
