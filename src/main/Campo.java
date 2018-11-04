@@ -1,7 +1,5 @@
 package main;
 
-import static main.Juego.initTime;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -95,14 +93,13 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
 		int teclaPresionada = e.getKeyCode();
 		if (teclaPresionada == keyEventUP) {
-			serpientes.get(0).mirarArriba();
+			serpientes.get(0).mirar(Direccion.ARRIBA.name());
 		} else if (teclaPresionada == keyEventDOWN) {
-			serpientes.get(0).mirarAbajo();
+			serpientes.get(0).mirar(Direccion.ABAJO.name());
 		} else if (teclaPresionada == keyEventRIGTH) {
-            initTime = System.currentTimeMillis();
-			serpientes.get(0).mirarDerecha();
+            serpientes.get(0).mirar(Direccion.DERECHA.name());
 		} else if (teclaPresionada == keyEventLEFT) {
-			serpientes.get(0).mirarIzquierda();
+			serpientes.get(0).mirar(Direccion.IZQUIERDA.name());
 		}
 	}
 

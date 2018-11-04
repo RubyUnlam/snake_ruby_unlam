@@ -3,11 +3,7 @@ package main;
 import static java.util.Objects.nonNull;
 import static utilidades.Constantes.ALTURA_VENTANA;
 import static utilidades.Constantes.ANCHO_VENTANA;
-import static utilidades.Constantes.MIRAR_ABAJO;
-import static utilidades.Constantes.MIRAR_ARRIBA;
-import static utilidades.Constantes.MIRAR_DERECHA;
-import static utilidades.Constantes.MIRAR_IZQUIERDA;
-import static utilidades.Constantes.NO_MIRAR;
+import static utilidades.Constantes.VELOCIDAD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +13,25 @@ public class Serpiente {
 	private Estado estado;
 	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
-	private int mirandoX;
-	private int mirandoY;
-
-	private int velocidad = 20;
+	private Direccion direccion;
 	
 	public Serpiente(){
 		estado = new Normal();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
-		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
 		crecer();
-		mirarIzquierda();
+		this.direccion = Direccion.IZQUIERDA;
 	}
 	
 	public Serpiente(Ubicacion cabeza){
 		estado = new Normal();
 		ubicaciones.add(cabeza);
-		ubicaciones.add(new Ubicacion(cabeza.getX() + velocidad, cabeza.getY()));
+		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
 		crecer();
-		mirarIzquierda();
+		this.direccion = Direccion.IZQUIERDA;
 	}
 
 	private void morir() {
@@ -66,55 +59,13 @@ public class Serpiente {
 		estado = estado.checkearColision(comestible);
 	}
 	
-	public void checkearColision(Serpiente serpiente) { //TODO ESTADOS; MUERTO NO HACE NADA
+	public void checkearColision(Serpiente serpiente) {
 		estado = estado.checkearColision(serpiente);
 	}
 	
-	public void mirarDerecha() { 
-		if (mirandoX != MIRAR_IZQUIERDA && noEs180GradosEnX(MIRAR_DERECHA)) {
-			mirandoX = MIRAR_DERECHA;
-			mirandoY = NO_MIRAR;
-		}
-	}
-	
-	public void mirarIzquierda() {
-		if (mirandoX != MIRAR_DERECHA && noEs180GradosEnX(MIRAR_IZQUIERDA)) {
-			mirandoX = MIRAR_IZQUIERDA;
-			mirandoY = NO_MIRAR;			
-		}
-	}
-	
-	public void mirarArriba() {
-		if (mirandoY != MIRAR_ABAJO && noEs180GradosEnY(MIRAR_ARRIBA)) {
-			mirandoX = NO_MIRAR;
-			mirandoY = MIRAR_ARRIBA;			
-		}
-	}
-	
-	public void mirarAbajo() {
-		if (mirandoY != MIRAR_ARRIBA && noEs180GradosEnY(MIRAR_ABAJO)) {
-			mirandoX = NO_MIRAR;
-			mirandoY = MIRAR_ABAJO;			
-		}
-	}
-	
-	private boolean noEs180GradosEnX(int direccion) {
-		if (!ubicaciones.isEmpty()) {
-			int cabeza = ubicaciones.get(0).getX();
-			int cuello = ubicaciones.get(1).getX();
-			return ((cabeza + (direccion * velocidad)) != cuello);
-		}
-		return false;
-	}
-	
-	private boolean noEs180GradosEnY(int direccion) {
-		if (!ubicaciones.isEmpty()) {
-			int cabeza = ubicaciones.get(0).getY();
-			int cuello = ubicaciones.get(1).getY();
-			return ((cabeza + (direccion * velocidad)) != cuello);
-		}
-		return false;
-	}
+	public void mirar(String mirarA) {
+		this.direccion = direccion.cambiarDireccion(mirarA, this);
+	}	
 	
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
@@ -128,8 +79,8 @@ public class Serpiente {
 					ubicaciones.set(i, ubicaciones.get(i-1));
 			}
 			Ubicacion cabeza = ubicaciones.get(0);
-			int x = cabeza.getX() + (mirandoX * velocidad);
-			int y = cabeza.getY() + (mirandoY * velocidad);
+			int x = cabeza.getX() + (direccion.getMirandoX() * VELOCIDAD);
+			int y = cabeza.getY() + (direccion.getMirandoY() * VELOCIDAD);
 			
 			if (x == ANCHO_VENTANA) {
 				x = 0;
