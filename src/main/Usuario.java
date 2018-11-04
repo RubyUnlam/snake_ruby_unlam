@@ -15,16 +15,25 @@ public class Usuario {
 
 	@Column(name="Password")
 	private String contrasenia;
-
+	
+	@Column(name = "Email")
+	private String email;
+	
 	public Usuario() {
 		
 	}
-	
+
+	public Usuario(String nombreUsuario, String contrasenia, String email) {
+		this.nombreUsuario = nombreUsuario;
+		this.contrasenia = contrasenia;
+		this.email = email;
+	}
+
 	public Usuario(String nombreUsuario, String contrasenia) {
 		this.nombreUsuario = nombreUsuario;
 		this.contrasenia = contrasenia;
 	}
-
+	
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
@@ -35,6 +44,10 @@ public class Usuario {
 
 	public String getContrasenia() {
 		return contrasenia;
+	}
+	
+	public String getEmail() {
+		return email;
 	}
 
 	public void setContrasenia(String contrasenia) {
