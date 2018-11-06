@@ -23,10 +23,10 @@ public class Juego {
 		
 		
 		List<Serpiente> serpientes = new ArrayList<>();
-		serpientes.add(new Serpiente());
+//		serpientes.add(new Serpiente());
 
 		List<SerpienteIA> serpientesIA = new ArrayList<>();
-		serpientesIA.add(new SerpienteIA(100));
+		serpientesIA.add(new SerpienteIA(80));
 		
         Ui ui = new Ui();
 

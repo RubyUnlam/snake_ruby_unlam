@@ -120,10 +120,10 @@ public class Serpiente {
 		return  ubicaciones.get(0);
 	}
 	
-	protected String comprobarEstado() {
+	protected boolean estaMuerto() {
 		if( ubicaciones.isEmpty())
-			return "Muerto";
-		return "Vivo";
+			return true;
+		return false;
 	}
 	
 	class Normal implements Estado {
@@ -133,7 +133,7 @@ public class Serpiente {
 			for(int i = ubicaciones.size() - 1 ; i > 0 ; i--) {
 					ubicaciones.set(i, ubicaciones.get(i-1));
 			}
-			Ubicacion cabeza = ubicaciones.get(0);
+			Ubicacion cabeza = getUbicacionCabeza();
 			int x = cabeza.getX() + (mirandoX * velocidad);
 			int y = cabeza.getY() + (mirandoY * velocidad);
 			
@@ -155,7 +155,7 @@ public class Serpiente {
 		
 		@Override
 		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
-			Ubicacion cabeza = ubicaciones.get(0);
+			Ubicacion cabeza = getUbicacionCabeza();
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
 			if(!serpiente.getUbicaciones().isEmpty()) {
 				if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
@@ -175,7 +175,7 @@ public class Serpiente {
 
 		@Override
 		public Estado checkearColision(Comestible comestible) {
-			if(nonNull(comestible) && !ubicaciones.isEmpty() && ubicaciones.get(0).equals(comestible.getUbicacion())) {
+			if(nonNull(comestible) && !ubicaciones.isEmpty() && getUbicacionCabeza().equals(comestible.getUbicacion())) {
 				crecer();
 				comestible.setComida(true);
 			}

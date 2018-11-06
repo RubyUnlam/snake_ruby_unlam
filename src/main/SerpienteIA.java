@@ -13,12 +13,11 @@ public class SerpienteIA extends Serpiente{
 
 	public void cambiarMirada(Comestible comestible) {
 		
-		if( comprobarEstado() == "Muerto") {
+		if(estaMuerto()) {
 			return;
 		}
 		
-		Random random = new Random();
-		int probabilidadCaminoOptimo = random.nextInt()*100;
+		int probabilidadCaminoOptimo = (int) Math.floor(Math.random() * 101);
 		
 		if( probabilidadCaminoOptimo <= dificultad ) {
 			caminoOptimoIA(comestible);
@@ -29,8 +28,8 @@ public class SerpienteIA extends Serpiente{
 	}
 	
 	private void caminoRandomIA() {
-		Random random = new Random();
-		int probabilidadDelCamino = random.nextInt()*100;
+		
+		int probabilidadDelCamino = (int) Math.floor(Math.random() * 101);
 		
 		if(probabilidadDelCamino >= 85) {
 			mirarAbajo();
