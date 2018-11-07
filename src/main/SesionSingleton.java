@@ -13,6 +13,7 @@ public class SesionSingleton {
 		if (factory == null) {
 			factory = new Configuration().configure("hibernate.cfg.xml")
 					.addAnnotatedClass(Usuario.class)
+					.addAnnotatedClass(Sala.class)
 					.buildSessionFactory();
 		}
 		return factory;

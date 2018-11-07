@@ -18,7 +18,7 @@ public class Juego {
 		ventana.setBounds(0, 0, ANCHO_VENTANA, ALTURA_VENTANA);
 		ventana.setResizable(false);
 		ventana.setLocationRelativeTo(null);
-		
+			
 		List<Serpiente> serpientes = new ArrayList<>();
 		serpientes.add(new Serpiente());
 
