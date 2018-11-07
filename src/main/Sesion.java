@@ -66,8 +66,14 @@ public class Sesion {
 	public static List<Sala> buscarSalas() {
 		session = factory.openSession();
 		System.out.println("Devolviendo lista de salas: ");
-		Query q = session.createQuery("select s from Sala s where s.cantidadJugadoresActivos > 0");
+		Query q = session.createQuery("select s from Sala s");
 		return q.getResultList();
+	}
+	
+	public void conectarJugadorSala(JugadorSala jugadorSala) {
+		tx = session.beginTransaction();
+		session.saveOrUpdate(jugadorSala);
+		tx.commit();
 	}
 
 	public boolean iniciarSesion(Usuario usuario) {
@@ -122,7 +128,6 @@ public class Sesion {
 		}
 
 		return nombreValido;
-
 	}
 
 	public boolean registrarUsuario(Usuario usuario) {
