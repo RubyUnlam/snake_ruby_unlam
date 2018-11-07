@@ -1,15 +1,17 @@
 package main;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class Ui extends JPanel implements Observador {
 
-    private ImageIcon fondoDefault;
+	private static final long serialVersionUID = 1L;
+	private ImageIcon fondoDefault;
     private String fondoPath = "src/imagenes/fondo.png"; //TODO HACERLO VARIABLE
     private List<Ubicacion> ubicacionesSerpientes = new ArrayList<>();
     private List<Ubicacion> ubicacionesComestibles= new ArrayList<>();
