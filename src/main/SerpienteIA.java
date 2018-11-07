@@ -1,14 +1,13 @@
 package main;
 
-import java.util.Random;
-
-public class SerpienteIA extends Serpiente{
+public class SerpienteIA extends Serpiente {
 	
 	private int dificultad; //por ciento
 	
 	public SerpienteIA(int dificultad) {
 		super();
 		this.dificultad = dificultad;
+		this.direccion = Direccion.IZQUIERDA;
 	}
 
 	public void cambiarMirada(Comestible comestible) {
@@ -32,13 +31,13 @@ public class SerpienteIA extends Serpiente{
 		int probabilidadDelCamino = (int) Math.floor(Math.random() * 101);
 		
 		if(probabilidadDelCamino >= 85) {
-			mirarAbajo();
+			mirar(Direccion.ABAJO.name());
 		}else if( probabilidadDelCamino >= 70) {
-			mirarArriba();
+			mirar(Direccion.ARRIBA.name());
 		}else if( probabilidadDelCamino >= 55) {
-			mirarDerecha();
+			mirar(Direccion.DERECHA.name());
 		}else if( probabilidadDelCamino >= 40) {
-			mirarIzquierda();
+			mirar(Direccion.IZQUIERDA.name());
 		}
 		return;
 	}
@@ -62,17 +61,25 @@ public class SerpienteIA extends Serpiente{
 		
 		if( diferenciaDeEjes > 0 ) {
 			// X > Y
-			if( direccionEnX == 1 )  mirarIzquierda();
-			else mirarDerecha();
+			if( direccionEnX == 1 ) {
+				mirar(Direccion.IZQUIERDA.name());
+			} else {
+				mirar(Direccion.DERECHA.name());;
+			}
 			return;
 		}
 		
 		// X < Y  o  X == Y (decido ir a por Y)
 		if(direccionEnY == 1) {
-			mirarArriba();
+			mirar(Direccion.ARRIBA.name());
 		}
 		else {
-			mirarAbajo();
+			mirar(Direccion.ABAJO.name());
 		}
 	}
+	
+	public void mirar(String mirarA) {
+		this.direccion = direccion.cambiarDireccion(mirarA, this);
+	}
+	
 }
