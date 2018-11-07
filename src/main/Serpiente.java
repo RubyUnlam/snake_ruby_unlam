@@ -13,7 +13,7 @@ public class Serpiente {
 	private Estado estado;
 	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
-	private Direccion direccion;
+	protected Direccion direccion;
 	
 	public Serpiente(){
 		estado = new Normal();
@@ -71,6 +71,16 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
+	//Para SerpientaIA 
+		
+	protected Ubicacion getUbicacionCabeza() {
+		return  ubicaciones.get(0);
+	}
+	
+	protected boolean estaMuerto() {
+		return ubicaciones.isEmpty();
+	}
+	
 	class Normal implements Estado {
 
 		@Override
@@ -98,35 +108,34 @@ public class Serpiente {
 			return this;
 		}	
 		
-
-
 		@Override
 		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
-			Ubicacion cabeza = ubicaciones.get(0);
+			Ubicacion cabeza = getUbicacionCabeza();
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
-				serpiente.morir();
-				return morir();
-			} //verifico si no chocaron sus cabezas
-			
-			for (int i = 1; i < cuerpo.size(); i++) {
-				Ubicacion actual = cuerpo.get(i);
-				if (cabeza.equals(actual)) {
-					return morir(); 
-				}
-			} //si choca contra algo, muere			
+			if(!serpiente.getUbicaciones().isEmpty()) {
+				if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !Serpiente.this.equals(serpiente)) {
+					serpiente.morir();
+					return morir();
+				} //verifico si no chocaron sus cabezas
+				
+				for (int i = 1; i < cuerpo.size(); i++) { // cuerpo de la otra serpiente, ya sea otra o si misma
+					Ubicacion actual = cuerpo.get(i);
+					if (cabeza.equals(actual)) { 
+						return morir(); 
+					}
+				} //si choca contra algo, muere			
+			}
 			return this;
 		}
 
 		@Override
 		public Estado checkearColision(Comestible comestible) {
-			if(nonNull(comestible) && !ubicaciones.isEmpty() && ubicaciones.get(0).equals(comestible.getUbicacion())) {
+			if(nonNull(comestible) && !ubicaciones.isEmpty() && getUbicacionCabeza().equals(comestible.getUbicacion())) {
 				crecer();
 				comestible.setComida(true);
 			}
 			return this;
 		}
-
 
 		@Override
 		public Estado morir() {
@@ -157,7 +166,9 @@ public class Serpiente {
 		public Estado morir() {
 			return this;
 		}
+		
 	}
+
 	
 	
 }

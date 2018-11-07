@@ -1,12 +1,12 @@
 package main;
 
+import static utilidades.Constantes.ALTURA_VENTANA;
+import static utilidades.Constantes.ANCHO_VENTANA;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
-
-import static utilidades.Constantes.ALTURA_VENTANA;
-import static utilidades.Constantes.ANCHO_VENTANA;
 
 public class Juego {
 
@@ -22,8 +22,9 @@ public class Juego {
 		List<Serpiente> serpientes = new ArrayList<>();
 		serpientes.add(new Serpiente());
 
-		List<Serpiente> serpientesIA = new ArrayList<>();
-		
+		List<SerpienteIA> serpientesIA = new ArrayList<>();
+		serpientesIA.add(new SerpienteIA(20));
+
         Ui ui = new Ui();
         
         Campo campo = new Campo(serpientes, serpientesIA);
