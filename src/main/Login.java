@@ -33,9 +33,9 @@ public class Login extends JDialog {
 		
 		// Propiedades del JDialog para el login.
 		getContentPane().setLayout(null);
-		setVisible(true);
 		setBounds(0, 0, 330, 190);
 		setLocationRelativeTo(menu);
+		setVisible(true);
 		
 		// Cuadro de texto para el nombre del usuario.
 		txtNombreUsuario = new JTextField();

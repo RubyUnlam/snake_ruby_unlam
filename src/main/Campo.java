@@ -83,9 +83,6 @@ public class Campo implements KeyListener, ActionListener, Observado {
         	observador.dibujar(this);
         }
         
-        if(serpientes.isEmpty()) {
-        	// TODO: Cerrar ventana del juego y volver al menu, previamente mostrar mensaje de victoria/derrota/puntajes
-        }
     }
 
 	
