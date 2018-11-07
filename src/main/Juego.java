@@ -1,12 +1,12 @@
 package main;
 
+import static utilidades.Constantes.ALTURA_VENTANA;
+import static utilidades.Constantes.ANCHO_VENTANA;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
-
-import static utilidades.Constantes.ALTURA_VENTANA;
-import static utilidades.Constantes.ANCHO_VENTANA;
 
 public class Juego {
 
