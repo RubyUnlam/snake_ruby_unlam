@@ -61,19 +61,6 @@ public class Sesion {
 			session.close();
 		}
 	}
-	
-	public static List<Sala> buscarSalas() {
-		session = factory.openSession();
-		System.out.println("Devolviendo lista de salas: ");
-		Query q = session.createQuery("select s from Sala s");
-		return q.getResultList();
-	}
-	
-	public void conectarJugadorSala(JugadorSala jugadorSala) {
-		tx = session.beginTransaction();
-		session.saveOrUpdate(jugadorSala);
-		tx.commit();
-	}
 
 	public boolean iniciarSesion(Usuario usuario) {
 
@@ -132,47 +119,6 @@ public class Sesion {
 	public boolean registrarUsuario(Usuario usuario) {
 		tx = session.beginTransaction();
 		session.saveOrUpdate(usuario);
-		tx.commit();
-		return true;
-	}
-	
-	public boolean crearSala(Sala sala) {
-			try {
-				if (nombreSalaValido(sala)) {
-					return crearSalaValida(sala);
-				}
-			} catch (HibernateException e) {
-				return false;
-			} finally {
-				session.close();
-			}
-			return false;
-	}
-	
-	public boolean nombreSalaValido(Sala sala) {
-		boolean nombreValido = false;
-
-		System.out.println("Verificando existencia de nombre de sala: " + sala.getNombreSala());
-
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Sala> cq = cb.createQuery(Sala.class);
-		cq.from(Sala.class);
-		Root<Sala> ru = cq.from(Sala.class);
-		cq.select(ru).where(cb.like(ru.get("nombreSala"), sala.getNombreSala()));
-
-		try {
-			session.createQuery(cq).getSingleResult();
-		} catch (NoResultException e) {
-			System.out.println("El nombre de sala está disponible para ser registrado");
-			nombreValido = true;
-		}
-
-		return nombreValido;
-	}
-
-	public boolean crearSalaValida(Sala sala) {
-		tx = session.beginTransaction();
-		session.saveOrUpdate(sala);
 		tx.commit();
 		return true;
 	}
