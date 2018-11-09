@@ -18,7 +18,6 @@ import org.hibernate.Transaction;
 public class Sesion {
 
 	private Usuario usuario;
-	// TODO: Esto podría ejecutarse al iniciar el servidor. 
 	private static SessionFactory factory = SesionSingleton.getSessionFactory();
 	private static Session session;
 	private Transaction tx;

@@ -18,16 +18,16 @@ public class Juego {
 		ventana.setBounds(0, 0, ANCHO_VENTANA, ALTURA_VENTANA);
 		ventana.setResizable(false);
 		ventana.setLocationRelativeTo(null);
-			
+		
 		List<Serpiente> serpientes = new ArrayList<>();
 		
 		for (int i = 0; i < sala.getCantidadJugadores(); i++) {
 			serpientes.add(new Serpiente());			
 		}
 		
-		List<Serpiente> serpientesIA = new ArrayList<>();			
+		List<SerpienteIA> serpientesIA = new ArrayList<>();			
 		for (int i = 0; i < sala.getCantidadIA(); i++) {
-			serpientesIA.add(new Serpiente());
+			serpientesIA.add(new SerpienteIA(sala.getDificultadIA()));
 		}
 		
         Ui ui = new Ui();
