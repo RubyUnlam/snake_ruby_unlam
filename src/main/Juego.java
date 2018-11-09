@@ -13,6 +13,7 @@ public class Juego {
     public static long initTime;
 
 	public static void iniciar(Sala sala) {
+		
 		JFrame ventana = new JFrame("Snake");
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setBounds(0, 0, ANCHO_VENTANA, ALTURA_VENTANA);

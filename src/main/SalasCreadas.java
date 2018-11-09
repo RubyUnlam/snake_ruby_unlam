@@ -15,43 +15,44 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.JPasswordField;
 
 public class SalasCreadas extends JDialog {
 
+	private static final long serialVersionUID = -2515309292855432466L;
+
 	private Menu ventanaMenu;
+	private List<Sala> listaSalas;
+	private DefaultListModel<String> listModel = new DefaultListModel<>();
 
 	private JLabel lblValorCantidadMaximaJugadores;
 	private JLabel lblValorCantidadIA;
 	private JLabel lblDificultadIA;
 	private JLabel lblValorCreador;
-	private JPanel pnlDetallesSala;
 	private JLabel lblCantidadMaxJugadores;
 	private JLabel lblDificultad;
 	private JLabel lblCantidadIA;
 	private JLabel lblCreador;
-	private JList<String> lstSalas;
-
-	List<Sala> listaSalas;
-	DefaultListModel<String> listModel = new DefaultListModel<>();
-	private JPasswordField pswSala;
-
 	private JLabel lblPasswordSala;
-
-	private JButton btnConectar;
 	private JLabel lblInformativo;
+	private JPanel pnlDetallesSala;
+	private JList<String> lstSalas;
+	private JPasswordField pswSala;
+	private JButton btnConectar;
+
 
 	public SalasCreadas(Menu menu) {
+		
 		ventanaMenu = menu;
 		setBounds(100, 100, 412, 289);
 		setLocationRelativeTo(menu);
+		
 		JLabel lblSalasCreadas = new JLabel("Salas creadas");
 		lblSalasCreadas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSalasCreadas.setBounds(6, 5, 400, 16);
-		setVisible(true);
 
 		JPanel pnlSalas = new JPanel();
 		pnlSalas.setLayout(null);
@@ -60,22 +61,22 @@ public class SalasCreadas extends JDialog {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 200, 190);
-		pnlSalas.add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		pnlSalas.add(scrollPane);
 
 		lstSalas = new JList<String>();
 		lstSalas.setBounds(0, 0, 200, 149);
 		lstSalas.setModel(listModel);
 		lstSalas.setEnabled(false);
+		lstSalas.setBackground(new Color(255, 240, 245));
+		scrollPane.setViewportView(lstSalas);
 		lstSalas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				actionDetalleSala();
+				mostrarDetalleSala();
 			}
 		});
-		lstSalas.setBackground(new Color(255, 240, 245));
-		scrollPane.setViewportView(lstSalas);
 
 		pnlDetallesSala = new JPanel();
 		pnlDetallesSala.setBackground(new Color(255, 240, 245));
@@ -135,43 +136,39 @@ public class SalasCreadas extends JDialog {
 		pnlDetallesSala.add(lblValorCreador);
 
 		btnConectar = new JButton("Conectar");
-		btnConectar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				conectarmeASala();
-			}
-		});
 		btnConectar.setEnabled(false);
 		btnConectar.setBounds(289, 236, 117, 29);
-
-		getContentPane().add(pnlDetallesSala);
-		getContentPane().add(btnConectar);
-		getContentPane().setLayout(null);
-		getContentPane().add(lblSalasCreadas);
-		getContentPane().add(pnlSalas);
-
+		btnConectar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				conectarASala();
+			}
+		});
+		
 		pswSala = new JPasswordField();
 		pswSala.setEnabled(false);
 		pswSala.setBounds(138, 236, 142, 26);
-		getContentPane().add(pswSala);
 
 		lblPasswordSala = new JLabel("Ingrese Password");
 		lblPasswordSala.setEnabled(false);
 		lblPasswordSala.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPasswordSala.setBounds(6, 240, 129, 16);
-		getContentPane().add(lblPasswordSala);
 
 		lblInformativo = new JLabel("");
 		lblInformativo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInformativo.setBounds(6, 21, 400, 16);
-		getContentPane().add(lblInformativo);
 
+		getContentPane().add(pswSala);
+		getContentPane().add(lblPasswordSala);
+		getContentPane().add(lblInformativo);
+		getContentPane().add(pnlDetallesSala);
+		getContentPane().add(btnConectar);
+		getContentPane().setLayout(null);
+		getContentPane().add(lblSalasCreadas);
+		getContentPane().add(pnlSalas);
+		
 		actualizarSalas();
 
-		if (listaSalas.size() > 0) {
-			lstSalas.setEnabled(true);
-			btnConectar.setEnabled(true);
-		}
-
+		setVisible(true);
 	}
 
 	private void actualizarSalas() {
@@ -180,9 +177,13 @@ public class SalasCreadas extends JDialog {
 		for (Sala sala : listaSalas) {
 			listModel.addElement(sala.getNombreSala());
 		}
+		if (listaSalas.size() > 0) {
+			lstSalas.setEnabled(true);
+			btnConectar.setEnabled(true);
+		}
 	}
 
-	private void conectarmeASala() {
+	private void conectarASala() {
 		if (!lstSalas.isSelectionEmpty()) {
 			Sala sala = listaSalas.get(lstSalas.getSelectedIndex());
 			if (!sala.getContrasenia().isEmpty() && pswSala.getPassword().length == 0) {
@@ -201,13 +202,15 @@ public class SalasCreadas extends JDialog {
 		pswSala.setEnabled(true);
 	}
 
-	private void actionDetalleSala() {
+	private void mostrarDetalleSala() {
 		if (lstSalas.isEnabled()) {
+			Sala sala = listaSalas.get(lstSalas.getSelectedIndex());
+
 			lblPasswordSala.setEnabled(false);
 			pswSala.setEnabled(false);
 			pswSala.setText("");
 			mostrarMensajeInformativo("");
-			Sala sala = listaSalas.get(lstSalas.getSelectedIndex());
+			
 			lblDificultadIA.setText(String.valueOf(sala.getDificultadIA()));
 			lblValorCantidadMaximaJugadores.setText(String.valueOf(sala.getCantidadJugadores()));
 			lblValorCantidadIA.setText(String.valueOf(sala.getCantidadIA()));
@@ -216,6 +219,7 @@ public class SalasCreadas extends JDialog {
 			lblCantidadMaxJugadores.setVisible(true);
 			lblCantidadIA.setVisible(true);
 			lblCreador.setVisible(true);
+			
 			if (!sala.getContrasenia().isEmpty()) {
 				pedirPassword();
 			}

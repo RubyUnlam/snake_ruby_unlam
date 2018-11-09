@@ -21,99 +21,43 @@ public class Menu extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private String usuarioActual;
+	private Sala salaActual;
+	private List<Sala> listaSalas;
+	private JList<String> lstJugadores;
+	private DefaultListModel<String> listModel;
+
 	private JPanel contentPane;
 	private JPanel pnlDetallesSala;
 	private JButton btnIniciarSesion;
 	private JButton btnJugar;
 	private JButton btnCrearSala;
-	private JButton btnIngresarALaSala;
+	private JButton btnVerSalasCreadas;
+	private JButton btnSalirSala;
 	private JLabel lblUsuario;
 	private JLabel lblValorCantidadMaximaJugadores;
 	private JLabel lblValorCantidadIA;
 	private JLabel lblValorNombreSala;
 	private JLabel lblValorCreador;
-	private JLabel lvlDetalleSala;
-	private JLabel lvlJugadoresEnSala;
+	private JLabel lblDetalleSala;
+	private JLabel lblJugadoresEnSala;
 	private JLabel lblConfiguracionJuego;
-	private JList<String> lstJugadores;
 	private JLabel lblCantidadMaxJugadores;
 	private JLabel lblCantidadIA;
 	private JLabel lblCreador;
 	private JLabel lblNombreSala;
-	private JButton btnSalirSala;
-	private Sala salaActual;
-	private List<Sala> listaSalas;
-	private DefaultListModel<String> listModel;
-	private List<String> listUsuarios;
 
 	public Menu() {
 		setResizable(false);
 		setTitle("Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 410, 416);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(204, 204, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
-
-		listModel = new DefaultListModel<>();
-
-		lblUsuario = new JLabel("Debe iniciar sesion para poder ingresar a las salas.");
-		lblUsuario.setLocation(10, 30);
-		lblUsuario.setBounds(6, 50, 398, 20);
-		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-
-		btnIniciarSesion = new JButton("Iniciar Sesion");
-		btnIniciarSesion.setBounds(6, 15, 398, 23);
-		btnIniciarSesion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				abrirLogin();
-			}
-		});
-
-		btnJugar = new JButton("Jugar");
-		btnJugar.setBounds(54, 365, 106, 23);
-		btnJugar.setEnabled(false);
-		btnJugar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Juego.iniciar(salaActual);
-			}
-		});
-
-		btnCrearSala = new JButton("Crear sala");
-		btnCrearSala.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				abrirCreacionSalas();
-			}
-		});
-		btnCrearSala.setBounds(6, 82, 200, 70);
-		btnCrearSala.setEnabled(false);
-
-		btnIngresarALaSala = new JButton("Ver salas creadas\n");
-		btnIngresarALaSala.setEnabled(false);
-		btnIngresarALaSala.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				verSalas();
-			}
-		});
-		btnIngresarALaSala.setBounds(204, 82, 200, 70);
-
 		setLocationRelativeTo(null);
-
-		contentPane.add(lblUsuario);
-		contentPane.add(btnCrearSala);
-		contentPane.add(btnIngresarALaSala);
-		contentPane.add(btnIniciarSesion);
-		contentPane.add(btnJugar);
-
-		setContentPane(contentPane);
-
+		
 		JPanel pnlJugadores = new JPanel();
-		pnlJugadores.setForeground(Color.WHITE);
 		pnlJugadores.setBounds(5, 210, 200, 150);
-		contentPane.add(pnlJugadores);
 		pnlJugadores.setLayout(null);
 
+		listModel = new DefaultListModel<>();
 		lstJugadores = new JList<String>();
 		lstJugadores.setBackground(new Color(255, 240, 245));
 		lstJugadores.setBounds(0, 0, 200, 149);
@@ -124,8 +68,12 @@ public class Menu extends JFrame {
 		pnlDetallesSala.setBackground(new Color(255, 240, 245));
 		pnlDetallesSala.setLayout(null);
 		pnlDetallesSala.setBounds(205, 210, 200, 150);
-		contentPane.add(pnlDetallesSala);
 
+		lblUsuario = new JLabel("Debe iniciar sesion para poder ingresar a las salas.");
+		lblUsuario.setLocation(10, 30);
+		lblUsuario.setBounds(6, 50, 398, 20);
+		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		lblCantidadMaxJugadores = new JLabel("Cantidad maxima de jugadores");
 		lblCantidadMaxJugadores.setFont(new Font("Lucida Grande", Font.BOLD, 10));
 		lblCantidadMaxJugadores.setHorizontalAlignment(SwingConstants.CENTER);
@@ -177,36 +125,82 @@ public class Menu extends JFrame {
 		lblValorCreador.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		lblValorCreador.setBounds(6, 132, 188, 18);
 		pnlDetallesSala.add(lblValorCreador);
+		
+		lblDetalleSala = new JLabel("DETALLES DE LA SALA");
+		lblDetalleSala.setBounds(0, 163, 411, 15);
+		lblDetalleSala.setForeground(new Color(0, 0, 0));
+		lblDetalleSala.setHorizontalAlignment(SwingConstants.CENTER);
 
-		btnSalirSala = new JButton("Salir de la sala");
-		btnSalirSala.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionSalirSala();
-			}
-		});
-		btnSalirSala.setEnabled(false);
-		btnSalirSala.setBounds(251, 365, 122, 23);
-		contentPane.add(btnSalirSala);
-
-		lvlDetalleSala = new JLabel("DETALLES DE LA SALA");
-		lvlDetalleSala.setBounds(0, 163, 411, 15);
-		contentPane.add(lvlDetalleSala);
-		lvlDetalleSala.setForeground(new Color(0, 0, 0));
-		lvlDetalleSala.setHorizontalAlignment(SwingConstants.CENTER);
-
-		lvlJugadoresEnSala = new JLabel("Jugadores en esta sala");
-		lvlJugadoresEnSala.setHorizontalAlignment(SwingConstants.CENTER);
-		lvlJugadoresEnSala.setForeground(new Color(0, 0, 0));
-		lvlJugadoresEnSala.setBounds(6, 190, 200, 16);
-		contentPane.add(lvlJugadoresEnSala);
+		lblJugadoresEnSala = new JLabel("Jugadores en esta sala");
+		lblJugadoresEnSala.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJugadoresEnSala.setForeground(new Color(0, 0, 0));
+		lblJugadoresEnSala.setBounds(6, 190, 200, 16);
 
 		lblConfiguracionJuego = new JLabel("Configuracion del juego");
 		lblConfiguracionJuego.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConfiguracionJuego.setForeground(new Color(0, 0, 0));
 		lblConfiguracionJuego.setBounds(204, 190, 200, 16);
+
+		btnIniciarSesion = new JButton("Iniciar Sesion");
+		btnIniciarSesion.setBounds(6, 15, 398, 23);
+		btnIniciarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrirLogin();
+			}
+		});
+
+		btnJugar = new JButton("Jugar");
+		btnJugar.setBounds(54, 365, 106, 23);
+		btnJugar.setEnabled(false);
+		btnJugar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Juego.iniciar(salaActual);
+			}
+		});
+
+		btnCrearSala = new JButton("Crear sala");
+		btnCrearSala.setBounds(6, 82, 200, 70);
+		btnCrearSala.setEnabled(false);
+		btnCrearSala.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrirCreacionSalas();
+			}
+		});
+
+		btnVerSalasCreadas = new JButton("Ver salas creadas\n");
+		btnVerSalasCreadas.setEnabled(false);
+		btnVerSalasCreadas.setBounds(204, 82, 200, 70);
+		btnVerSalasCreadas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirSalasCreadas();
+			}
+		});
+		
+		btnSalirSala = new JButton("Salir de la sala");
+		btnSalirSala.setEnabled(false);
+		btnSalirSala.setBounds(251, 365, 122, 23);
+		btnSalirSala.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				salirSala();
+			}
+		});
+						
+		contentPane = new JPanel();
+		contentPane.add(pnlJugadores);
+		contentPane.setBackground(new Color(204, 204, 255));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(null);
+		contentPane.add(pnlDetallesSala);
+		contentPane.add(btnSalirSala);
+		contentPane.add(lblDetalleSala);
+		contentPane.add(lblUsuario);
+		contentPane.add(btnCrearSala);
+		contentPane.add(btnVerSalasCreadas);
+		contentPane.add(btnIniciarSesion);
+		contentPane.add(btnJugar);
+		contentPane.add(lblJugadoresEnSala);
 		contentPane.add(lblConfiguracionJuego);
-				
-		listaSalas = new ArrayList<>();
+		setContentPane(contentPane);
 	}
 
 	private void abrirLogin() {
@@ -217,8 +211,13 @@ public class Menu extends JFrame {
 		new CreacionSala(this);
 	}
 
+	public void abrirSalasCreadas() {
+		new SalasCreadas(this);
+	}
+
 	public void loggeado(String usuario) {
-		btnIngresarALaSala.setEnabled(true);
+		listaSalas = new ArrayList<>();
+		btnVerSalasCreadas.setEnabled(true);
 		btnCrearSala.setEnabled(true);
 		usuarioActual = usuario;
 		lblUsuario.setText("Sesión iniciada. Usuario: " + usuarioActual);
@@ -226,61 +225,55 @@ public class Menu extends JFrame {
 	}
 
 	public void crearMiSala(Sala sala) {
-		lblValorNombreSala.setText(sala.getNombreSala());
-		lblValorCantidadMaximaJugadores.setText(String.valueOf(sala.getCantidadJugadores()));
-		lblValorCantidadIA.setText(String.valueOf(sala.getCantidadIA()));
-		lblValorCreador.setText(usuarioActual);
-		
-		lstJugadores.setEnabled(true);
-		pnlDetallesSala.setEnabled(true);
+		salaActual = sala;		
+		listaSalas.add(salaActual);
 		btnSalirSala.setEnabled(true);
 		btnJugar.setEnabled(true);
-		
-		lblValorCantidadIA.setVisible(true);
-		lblValorCantidadMaximaJugadores.setVisible(true);
-		lblValorCreador.setVisible(true);
-		lblValorNombreSala.setVisible(true);
-		
-		lblNombreSala.setVisible(true);
-		lblCantidadMaxJugadores.setVisible(true);
-		lblCantidadIA.setVisible(true);
-		lblCreador.setVisible(true);
-		
-		btnSalirSala.setEnabled(true);
-		btnJugar.setEnabled(true);
-		
-		listaSalas.add(sala);
-		listModel.removeAllElements();
-		listModel.addElement(usuarioActual);
-		
-		salaActual = sala;
+		actualizarJugadoresYDetalles();
 	}
 
 	public void conectadoASala(Sala sala) {
-		lblValorNombreSala.setText(sala.getNombreSala());
-		lblValorCantidadMaximaJugadores.setText(String.valueOf(sala.getCantidadJugadores()));
-		lblValorCantidadIA.setText(String.valueOf(sala.getCantidadIA()));
-		lblValorCreador.setText(sala.getNombreCreador());
-		lblNombreSala.setVisible(true);
-		lblCantidadMaxJugadores.setVisible(true);
-		lblCantidadIA.setVisible(true);
-		lblCreador.setVisible(true);
-		lblValorCantidadIA.setVisible(true);
-		lblValorCantidadMaximaJugadores.setVisible(true);
-		lblValorCreador.setVisible(true);
-		lblValorNombreSala.setVisible(true);
-		lstJugadores.setEnabled(true);
-		pnlDetallesSala.setEnabled(true);
-		btnSalirSala.setEnabled(true);
-		btnJugar.setEnabled(true);
 		salaActual = sala;
-		listModel.removeAllElements();
-		listModel.addElement(usuarioActual);			
+		actualizarJugadoresYDetalles();
 		// TODO: Agregar logica para recibir otros jugadores con cliente servidor
 	}
-
-	public void verSalas() {
-		new SalasCreadas(this);
+	
+	public void salirSala() {
+		listModel.removeAllElements();
+		cambiarEstadoDetallesSala(false);
+	}
+	
+	private void actualizarJugadoresYDetalles() {
+		limpiarListaJugadores();
+		actualizarDetallesSalaActual();
+		cambiarEstadoDetallesSala(true);
+	}
+	
+	private void limpiarListaJugadores() {
+		listModel.removeAllElements();
+		listModel.addElement(usuarioActual);
+	}
+	
+	private void actualizarDetallesSalaActual() {
+		lblValorNombreSala.setText(salaActual.getNombreSala());
+		lblValorCantidadMaximaJugadores.setText(String.valueOf(salaActual.getCantidadJugadores()));
+		lblValorCantidadIA.setText(String.valueOf(salaActual.getCantidadIA()));
+		lblValorCreador.setText(salaActual.getNombreCreador());
+	}
+	
+	private void cambiarEstadoDetallesSala(boolean estado) {
+		lblValorCantidadIA.setVisible(estado);
+		lblValorCantidadMaximaJugadores.setVisible(estado);
+		lblValorCreador.setVisible(estado);
+		lblValorNombreSala.setVisible(estado);
+		lblCantidadIA.setVisible(estado);
+		lblCantidadMaxJugadores.setVisible(estado);
+		lblCreador.setVisible(estado);
+		lblNombreSala.setVisible(estado);
+		lstJugadores.setEnabled(estado);
+		pnlDetallesSala.setEnabled(estado);
+		btnJugar.setEnabled(estado);
+		btnSalirSala.setEnabled(estado);
 	}
 
 	public String getUsuarioActual() {
@@ -291,24 +284,11 @@ public class Menu extends JFrame {
 		return listaSalas;
 	}
 	
-	public void actionSalirSala() {
-		listModel.removeAllElements();
-		lblValorCantidadIA.setVisible(false);
-		lblValorCantidadMaximaJugadores.setVisible(false);
-		lblValorCreador.setVisible(false);
-		lblValorNombreSala.setVisible(false);
-		lblCantidadIA.setVisible(false);
-		lblCantidadMaxJugadores.setVisible(false);
-		lblCreador.setVisible(false);
-		lblNombreSala.setVisible(false);
-		lstJugadores.setEnabled(false);
-		pnlDetallesSala.setEnabled(false);
-		btnJugar.setEnabled(false);
-		btnSalirSala.setEnabled(false);
-	}
-	
+	//Inicia el menu del juego.
 	public static void main(String[] args) {
-		new SesionSingleton().getSessionFactory();
+		//Inicializo una instancia de SessionFactory al iniciar la aplicacion.
+		SesionSingleton.getSessionFactory();
+		//Genero el menu
 		new Menu().setVisible(true);
 	}
 }

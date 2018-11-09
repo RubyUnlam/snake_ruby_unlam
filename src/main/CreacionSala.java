@@ -19,7 +19,9 @@ import javax.swing.SwingConstants;
 public class CreacionSala extends JDialog {
 
 	private static final long serialVersionUID = 3146453246362725770L;
-	
+
+	private Menu ventanaMenu;
+
 	private JTextField txtNombreSala;
 	private JTextField txtMapa;
 	private JTextField txtTiempo;
@@ -28,7 +30,6 @@ public class CreacionSala extends JDialog {
 	private JComboBox<Integer> cmbIA;
 	private JComboBox<Integer> cmbJugadores;
 	private JSpinner spinner;
-	private Menu ventanaMenu;
 
 	/**
 	 * Create the dialog.
@@ -38,8 +39,8 @@ public class CreacionSala extends JDialog {
 		ventanaMenu = menu;
 		
 		setBounds(100, 100, 356, 260);
-		setVisible(true);
 		setLocationRelativeTo(menu);
+		
 		JLabel lblNombreSala = new JLabel("Nombre de la sala");
 		lblNombreSala.setBounds(6, 33, 135, 16);
 
@@ -57,6 +58,9 @@ public class CreacionSala extends JDialog {
 
 		JLabel lblMapa = new JLabel("Mapa");
 		lblMapa.setBounds(6, 173, 61, 16);
+
+		JLabel lblDificultad = new JLabel("Dificultad");
+		lblDificultad.setBounds(233, 117, 69, 16);
 
 		txtNombreSala = new JTextField();
 		txtNombreSala.setBounds(168, 28, 182, 26);
@@ -76,7 +80,7 @@ public class CreacionSala extends JDialog {
 		btnCrearSala.setBounds(115, 202, 117, 30);
 		btnCrearSala.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionCrearSala();
+				crearSala();
 			}
 		});
 
@@ -104,9 +108,6 @@ public class CreacionSala extends JDialog {
 		SpinnerModel spinnerModel = new SpinnerNumberModel(50, 0, 100, 5);
 		spinner.setModel(spinnerModel);
 		
-		JLabel lblDificultad = new JLabel("Dificultad");
-		lblDificultad.setBounds(233, 117, 69, 16);
-		
 		getContentPane().setLayout(null);
 		getContentPane().add(lblNombreSala);
 		getContentPane().add(lblPassword);
@@ -116,6 +117,7 @@ public class CreacionSala extends JDialog {
 		getContentPane().add(lblMapa);
 		getContentPane().add(btnCrearSala);
 		getContentPane().add(lblCreacionDeSala);
+		getContentPane().add(lblDificultad);
 		getContentPane().add(txtNombreSala);
 		getContentPane().add(txtMapa);
 		getContentPane().add(txtTiempo);
@@ -124,19 +126,19 @@ public class CreacionSala extends JDialog {
 		getContentPane().add(cmbIA);
 		getContentPane().add(cmbJugadores);
 		getContentPane().add(spinner);
-		getContentPane().add(lblDificultad);
 
+		setVisible(true);
 	}
 
 	/**
 	 * Inicia la validacion del usuario y la contrasenia, y llama al proceso de
-	 * creaciom de sala.
+	 * creacion de sala.
 	 */
-	private void actionCrearSala() {
+	private void crearSala() {
 		String password = String.valueOf(txtContrasenia.getPassword());
 		Sala sala = new Sala(txtNombreSala.getText(), password,
 				(int) cmbJugadores.getSelectedItem(), (int) cmbIA.getSelectedItem(),
-				ventanaMenu.getUsuarioActual(), (int)spinner.getValue());
+				ventanaMenu.getUsuarioActual(), (int) spinner.getValue());
 		if (!camposCreacionSalaVacios() && cantidadJugadoresValida() && crearSala(sala)) {
 			dispose();
 			ventanaMenu.crearMiSala(sala);
@@ -161,7 +163,7 @@ public class CreacionSala extends JDialog {
 	 * @return
 	 */
 	private boolean cantidadJugadoresValida() {
-		int cantidadTotalJugadores = (int)cmbIA.getSelectedItem() + (int)cmbJugadores.getSelectedItem();
+		int cantidadTotalJugadores = (int) cmbIA.getSelectedItem() + (int) cmbJugadores.getSelectedItem();
 		if (cantidadTotalJugadores > 4) {
 			mostrarMensajeInformativo("Cantidad de jugadores mayor a 4");
 			return false;
@@ -169,15 +171,7 @@ public class CreacionSala extends JDialog {
 		return true;
 	}
 
-	/**
-	 * Llama al proceso de creacion de sala, y muestra un error en caso de fallar.
-	 * @param nombreSala
-	 * @param contrasenia
-	 * @return verdadero o falso segun el exito de la creacion.
-	 */
 	public boolean crearSala(Sala sala) {
-//		Sesion sesion = new Sesion();
-//		boolean creoCorrectamente = sesion.crearSala(sala);
 		if (!ventanaMenu.getListaSalas().contains(sala)) {
 			return true;
 		} else {
@@ -185,7 +179,7 @@ public class CreacionSala extends JDialog {
 			return false;
 		}
 	}
-		
+
 	/**
 	 * Muestra mensaje de error o informativo.
 	 * @param mensaje
