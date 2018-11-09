@@ -48,7 +48,8 @@ public class Sesion {
 	public static boolean iniciarSesion(Usuario usuario) {
 
 		boolean existeCuenta = true;
-
+		
+		//TODO: cambiar por logger.
 		System.out.println("Validando inicio de sesión: " + usuario.getNombreUsuario());
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -80,7 +81,7 @@ public class Sesion {
 	public static boolean nombreUsuarioValido(String nombreUsuario) {
 
 		boolean nombreValido = false;
-
+		//TODO: cambiar por logger.
 		System.out.println("Verificando existencia de nombre de usuario: " + nombreUsuario);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -92,6 +93,7 @@ public class Sesion {
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
+			//TODO: cambiar por logger.
 			System.out.println("El nombre de usuario está disponible para ser registrado");
 			nombreValido = true;
 		}

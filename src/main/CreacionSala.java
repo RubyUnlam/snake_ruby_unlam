@@ -155,6 +155,7 @@ public class CreacionSala extends JDialog {
 			mostrarMensajeInformativo("Nombre de sala es obligatorio");
 			return true;
 		}
+		// TODO: validacion de tiempo y mapas cuando se agreguen.
 		return false;
 	}
 	

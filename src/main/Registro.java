@@ -127,8 +127,7 @@ public class Registro extends JDialog {
 	 * @return verdadero o falso segun el exito del registro.
 	 */
 	public boolean registrarUsuario(String nombreUsuario, char[] contrasenia, String email) {
-		String password = String.valueOf(contrasenia);
-		boolean registroCorrectamente = Sesion.registrarUsuario(nombreUsuario, password, email);
+		boolean registroCorrectamente = Sesion.registrarUsuario(nombreUsuario, String.valueOf(contrasenia), email);
 		if (!registroCorrectamente) {
 			lblInformativo.setText("Error al registrar. Usuario en uso");
 			lblInformativo.setVisible(true);
