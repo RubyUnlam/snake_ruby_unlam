@@ -12,7 +12,8 @@ public class Juego {
 
     public static long initTime;
 
-	public static void iniciar() {
+	public static void iniciar(Sala sala) {
+		
 		JFrame ventana = new JFrame("Snake");
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setBounds(0, 0, ANCHO_VENTANA, ALTURA_VENTANA);
@@ -20,11 +21,16 @@ public class Juego {
 		ventana.setLocationRelativeTo(null);
 		
 		List<Serpiente> serpientes = new ArrayList<>();
-		serpientes.add(new Serpiente());
-
-		List<SerpienteIA> serpientesIA = new ArrayList<>();
-		serpientesIA.add(new SerpienteIA(20));
-
+		
+		for (int i = 0; i < sala.getCantidadJugadores(); i++) {
+			serpientes.add(new Serpiente());			
+		}
+		
+		List<SerpienteIA> serpientesIA = new ArrayList<>();			
+		for (int i = 0; i < sala.getCantidadIA(); i++) {
+			serpientesIA.add(new SerpienteIA(sala.getDificultadIA()));
+		}
+		
         Ui ui = new Ui();
         
         Campo campo = new Campo(serpientes, serpientesIA);

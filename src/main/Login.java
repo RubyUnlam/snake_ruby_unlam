@@ -29,6 +29,7 @@ public class Login extends JDialog {
 	 * @param menu para poder acceder a los componentes del JFrame principal.
 	 */
 	public Login(Menu menu) {
+		
 		ventanaMenu = menu;
 		
 		// Propiedades del JDialog para el login.
@@ -103,9 +104,8 @@ public class Login extends JDialog {
 	 * @param contrasenia
 	 * @return verdadero o falso segun el exito del inicio de sesion.
 	 */
-	public boolean iniciarSesion(String nombreUsuario, char[] contrasenia) {
-		Sesion sesion = new Sesion(nombreUsuario, contrasenia);
-		boolean inicioCorrectamente = sesion.iniciarSesion();
+	public boolean iniciarSesion(String nombreUsuario, String contrasenia) {		
+		boolean inicioCorrectamente = Sesion.iniciarSesion(nombreUsuario, contrasenia);
 		if (!inicioCorrectamente) {
 			lblErrorRegistro.setText("Error al loggear. Verifique los datos");
 			txtContrasenia.setText("");
@@ -120,7 +120,8 @@ public class Login extends JDialog {
 	 * al iniciar correctamente la sesion.
 	 */
 	private void actionIniciarSesion() {
-		if (!camposLoginVacios() && iniciarSesion(txtNombreUsuario.getText(), txtContrasenia.getPassword())) {
+		String contrasenia = String.valueOf(txtContrasenia.getPassword());
+		if (!camposLoginVacios() && iniciarSesion(txtNombreUsuario.getText(), contrasenia)) {
 			cerrarDialogo();
 		}
 	}

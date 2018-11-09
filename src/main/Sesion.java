@@ -11,30 +11,18 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class Sesion {
 
-	private Usuario usuario;
-	// TODO: Esto podría ejecutarse al iniciar el servidor. 
-	private SessionFactory factory = SesionSingleton.getSessionFactory();
-	private Session session;
-	private Transaction tx;
-	public Sesion(String nombreUsuario, char[] contraseniaChar, String email) {
-		session = factory.openSession();
-		String contrasenia = new String(contraseniaChar);
-		this.usuario = new Usuario(nombreUsuario, contrasenia, email);
-	}
-	public Sesion(String nombreUsuario, char[] contraseniaChar) {
-		session = factory.openSession();
-		String contrasenia = new String(contraseniaChar);
-		this.usuario = new Usuario(nombreUsuario, contrasenia);
-	}
+	private static Session session;
+	private static Transaction tx;
 
-	public boolean registrarUsuario() {
+	public static boolean registrarUsuario(String nombreUsuario, String contrasenia, String email) {
+		session = SesionSingleton.getSessionFactory().openSession();
+		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
 		try {
-			if (nombreUsuarioValido(usuario)) {
+			if (nombreUsuarioValido(nombreUsuario)) {
 				return registrarUsuario(usuario);
 			}
 		} catch (HibernateException e) {
@@ -45,8 +33,9 @@ public class Sesion {
 		return false;
 	}
 
-	public boolean iniciarSesion() {
-		session = factory.openSession();
+	public static boolean iniciarSesion(String nombreUsuario, String contrasenia) {
+		session = SesionSingleton.getSessionFactory().openSession();
+		Usuario usuario = new Usuario(nombreUsuario, contrasenia);
 		try {
 			return iniciarSesion(usuario);
 		} catch (HibernateException e) {
@@ -56,28 +45,29 @@ public class Sesion {
 		}
 	}
 
-	public boolean iniciarSesion(Usuario usuario) {
+	public static boolean iniciarSesion(Usuario usuario) {
 
 		boolean existeCuenta = true;
-
+		
+		//TODO: cambiar por logger.
 		System.out.println("Validando inicio de sesión: " + usuario.getNombreUsuario());
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
 		cq.from(Usuario.class);
-		Root<Usuario> ru = cq.from(Usuario.class);		
+		Root<Usuario> ru = cq.from(Usuario.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		if (usuario.getNombreUsuario() == null || !usuario.getNombreUsuario().isEmpty()) {
-			predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));			
+			predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
 		}
-		
+
 		if (usuario.getContrasenia() == null || !usuario.getContrasenia().isEmpty()) {
-			predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));			
+			predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));
 		}
 
 		cq.select(ru).where(predicates.toArray(new Predicate[] {}));
-		
+
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
@@ -88,30 +78,30 @@ public class Sesion {
 
 	}
 
-	public boolean nombreUsuarioValido(Usuario usuario) {
+	public static boolean nombreUsuarioValido(String nombreUsuario) {
 
 		boolean nombreValido = false;
-
-		System.out.println("Verificando existencia de nombre de usuario: " + usuario.getNombreUsuario());
+		//TODO: cambiar por logger.
+		System.out.println("Verificando existencia de nombre de usuario: " + nombreUsuario);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
 		cq.from(Usuario.class);
 		Root<Usuario> ru = cq.from(Usuario.class);
-		cq.select(ru).where(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
+		cq.select(ru).where(cb.like(ru.get("nombreUsuario"), nombreUsuario));
 
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
+			//TODO: cambiar por logger.
 			System.out.println("El nombre de usuario está disponible para ser registrado");
 			nombreValido = true;
 		}
 
 		return nombreValido;
-
 	}
 
-	public boolean registrarUsuario(Usuario usuario) {
+	public static boolean registrarUsuario(Usuario usuario) {
 		tx = session.beginTransaction();
 		session.saveOrUpdate(usuario);
 		tx.commit();

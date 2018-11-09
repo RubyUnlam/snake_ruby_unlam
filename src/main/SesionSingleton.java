@@ -4,9 +4,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class SesionSingleton {
+	
 	public static SessionFactory factory;
 
-	private SesionSingleton() {
+	public SesionSingleton() {
+		
 	}
 
 	public static synchronized SessionFactory getSessionFactory() {
@@ -17,4 +19,5 @@ public class SesionSingleton {
 		}
 		return factory;
 	}
+	
 }
