@@ -8,15 +8,17 @@ import static utilidades.Constantes.VELOCIDAD;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serpiente {
+public class Serpiente{
 
-	private Estado estado;
+	protected Estado estado;
+	private Colision verificadorColisiones;
 	
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	protected Direccion direccion;
 	
 	public Serpiente(){
 		estado = new Normal();
+		verificadorColisiones = new Colision();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
@@ -27,6 +29,7 @@ public class Serpiente {
 	
 	public Serpiente(Ubicacion cabeza){
 		estado = new Normal();
+		verificadorColisiones = new Colision();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
@@ -34,7 +37,7 @@ public class Serpiente {
 		this.direccion = Direccion.IZQUIERDA;
 	}
 
-	private void morir() {
+	public void morir() {
 		estado = estado.morir();
 	}
 	
@@ -42,7 +45,7 @@ public class Serpiente {
 		estado = this.estado.moverse();
 	}
 
-	private void crecer() {
+	protected void crecer() {
 		int cola = ubicaciones.size() - 1;
 		Ubicacion uCola = ubicaciones.get(cola);
 		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
@@ -55,13 +58,13 @@ public class Serpiente {
 		return ultimaPos + (ultimaPos - anteUltimaPos);
 	}
 	
-	public void checkearColision(Comestible comestible) {
-		estado = estado.checkearColision(comestible);
-	}
+	/*public void checkearColision(Comestible comestible) {
+		verificadorColisiones = verificadorColisiones.checkearColision(comestible);
+	}*/
 	
-	public void checkearColision(Serpiente serpiente) {
-		estado = estado.checkearColision(serpiente);
-	}
+	/*public void checkearColision(Serpiente serpiente) {
+		estado = verificadorColisiones.checkearColision(serpiente);
+	}*/
 	
 	public void mirar(String mirarA) {
 		this.direccion = direccion.cambiarDireccion(mirarA, this);
@@ -108,7 +111,7 @@ public class Serpiente {
 			return this;
 		}	
 		
-		@Override
+		/*@Override
 		public Estado checkearColision(Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
 			Ubicacion cabeza = getUbicacionCabeza();
 			List<Ubicacion> cuerpo = serpiente.getUbicaciones();
@@ -126,16 +129,16 @@ public class Serpiente {
 				} //si choca contra algo, muere			
 			}
 			return this;
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public Estado checkearColision(Comestible comestible) {
 			if(nonNull(comestible) && !ubicaciones.isEmpty() && getUbicacionCabeza().equals(comestible.getUbicacion())) {
 				crecer();
 				comestible.setComida(true);
 			}
 			return this;
-		}
+		}*/
 
 		@Override
 		public Estado morir() {
@@ -152,7 +155,7 @@ public class Serpiente {
 			return this;
 		}
 
-		@Override
+		/*@Override
 		public Estado checkearColision(Serpiente serpiente) {
 			return this;
 		}
@@ -160,7 +163,7 @@ public class Serpiente {
 		@Override
 		public Estado checkearColision(Comestible comestible) {
 			return this;
-		}
+		}*/
 		
 		@Override
 		public Estado morir() {
