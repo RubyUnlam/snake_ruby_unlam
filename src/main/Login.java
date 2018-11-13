@@ -34,8 +34,9 @@ public class Login extends JDialog {
 		
 		// Propiedades del JDialog para el login.
 		getContentPane().setLayout(null);
-		setBounds(0, 0, 330, 190);
+		setBounds(0, 0, 340, 200);
 		setLocationRelativeTo(menu);
+		setTitle("Login");
 		setVisible(true);
 		
 		// Cuadro de texto para el nombre del usuario.
@@ -48,7 +49,7 @@ public class Login extends JDialog {
 		txtContrasenia.setBounds(158, 74, 149, 26);
 		txtContrasenia.setColumns(10);
 
-		// Botón de registro.
+		// Boton de registro.
 		JButton btnRegistrarse = new JButton("Registrarse");
 		btnRegistrarse.setBounds(27, 120, 117, 29);
 		btnRegistrarse.addActionListener(new ActionListener() {
@@ -58,7 +59,7 @@ public class Login extends JDialog {
 			}
 		});
 		
-		// Botón de inicio de sesion.
+		// Boton de inicio de sesion.
 		btnIniciarSesion = new JButton("Mandale Mecha");
 		btnIniciarSesion.setBounds(168, 120, 140, 29);
 		btnIniciarSesion.addActionListener(new ActionListener() {
@@ -71,7 +72,7 @@ public class Login extends JDialog {
 		JLabel lblNombreUsuario = new JLabel("Nombre de Usuario");
 		lblNombreUsuario.setBounds(27, 52, 140, 16);
 
-		JLabel lblContrasenia = new JLabel("Contraseña");
+		JLabel lblContrasenia = new JLabel("Password");
 		lblContrasenia.setBounds(27, 79, 117, 16);
 
 		JLabel lblLogin = new JLabel("Login");
@@ -171,7 +172,7 @@ public class Login extends JDialog {
 	}
 	
 	public void actualizarUsuario(String usuarioRegistrado) {
-		lblErrorRegistro.setText("Usuario registrado. Ingrese contraseña");
+		lblErrorRegistro.setText("Usuario registrado. Ingrese su password");
 		lblErrorRegistro.setForeground(Color.BLUE);
 		lblErrorRegistro.setVisible(true);
 		txtNombreUsuario.setText(usuarioRegistrado);
