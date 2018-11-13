@@ -23,8 +23,5 @@ public class RegistroUsuario {
 
 		public void setRegistroEfectivo(boolean registroEfectivo) {
 			this.registroEfectivo = registroEfectivo;
-		}
-		
-		
-		
+		}		
 }

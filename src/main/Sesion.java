@@ -32,13 +32,14 @@ public class Sesion {
 		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);	
 		RegistroUsuario registroMail = mailUsuarioValido(email);
 		RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
-			if (!registroUsername.esRegistroEfectivo()) {
-				return registroUsername;				
-			}
+		
+		if (!registroUsername.esRegistroEfectivo()) {
+			return registroUsername;				
+		}
 			
-			if(!registroMail.esRegistroEfectivo()) {
-				return registroMail;
-			}
+		if(!registroMail.esRegistroEfectivo()) {
+			return registroMail;
+		}
 			
 		registrarUsuario(usuario);
 		session.close();
@@ -73,12 +74,9 @@ public class Sesion {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
 			//TODO: cambiar por logger.
-			System.out.println("El mail esta disponible para ser registrado");
-			
-			if(e instanceof NoResultException) {
-				registro.setRegistroEfectivo(true);
-				return registro;
-			}
+			//System.out.println("El mail esta disponible para ser registrado");
+			registro.setRegistroEfectivo(true);
+			return registro;
 		}
 		registro.setMensaje("El mail se encuentra en uso");
 		return registro;
@@ -146,11 +144,8 @@ public class Sesion {
 		} catch (NoResultException e) {
 			//TODO: cambiar por logger.
 			//System.out.println("El usuario esta disponible para ser registrado");
-			
-			if(e instanceof NoResultException) {
-				registro.setRegistroEfectivo(true);	
-				return registro;
-			} 
+			registro.setRegistroEfectivo(true);	
+			return registro;
 		}
 		registro.setMensaje("Nombre de usuario en uso.");
 		return registro;
