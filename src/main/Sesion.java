@@ -18,19 +18,70 @@ public class Sesion {
 	private static Session session;
 	private static Transaction tx;
 
-	public static boolean registrarUsuario(String nombreUsuario, String contrasenia, String email) {
+	/**
+	 * Verifica que el usuario y mail no esten en uso, y que este ultimo sea valido.
+	 * Si alguno no cumpliera con esas condiciones, devuelve una cadena con el mensaje de error.
+	 * @param nombreUsuario
+	 * @param contrasenia
+	 * @param email
+	 * @return
+	 */
+	
+	public static RegistroUsuario registrarUsuario(String nombreUsuario, String contrasenia, String email) {
 		session = SesionSingleton.getSessionFactory().openSession();
-		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
-		try {
-			if (nombreUsuarioValido(nombreUsuario)) {
-				return registrarUsuario(usuario);
+		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);	
+		RegistroUsuario registroMail = mailUsuarioValido(email);
+		RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
+			if (!registroUsername.esRegistroEfectivo()) {
+				return registroUsername;				
 			}
-		} catch (HibernateException e) {
-			return false;
-		} finally {
-			session.close();
+			
+			if(!registroMail.esRegistroEfectivo()) {
+				return registroMail;
+			}
+			
+		registrarUsuario(usuario);
+		session.close();
+		return registroUsername;
+	}
+
+	/**
+	 * Verifica que el mail no se encuentre en la base de datos, y que contenga
+	 * al menos un punto y un arroba.
+	 * @param email
+	 * @return RegistroUsuario
+	 */
+	
+	private static RegistroUsuario mailUsuarioValido(String email) {
+		
+		RegistroUsuario registro = new RegistroUsuario("", false);
+		
+		if(!email.contains("@") || !email.contains(".")) {
+			registro.setMensaje("El mail debe contener al menos un punto y un arroba");
+			return registro;
 		}
-		return false;
+		//TODO: cambiar por logger.
+		//System.out.println("Verificando existencia de nombre de usuario: " + mailValido);
+
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
+		cq.from(Usuario.class);
+		Root<Usuario> ru = cq.from(Usuario.class);
+		cq.select(ru).where(cb.like(ru.get("email"), email));
+
+		try {
+			session.createQuery(cq).getSingleResult();
+		} catch (NoResultException e) {
+			//TODO: cambiar por logger.
+			System.out.println("El mail esta disponible para ser registrado");
+			
+			if(e instanceof NoResultException) {
+				registro.setRegistroEfectivo(true);
+				return registro;
+			}
+		}
+		registro.setMensaje("El mail se encuentra en uso");
+		return registro;
 	}
 
 	public static boolean iniciarSesion(String nombreUsuario, String contrasenia) {
@@ -50,7 +101,7 @@ public class Sesion {
 		boolean existeCuenta = true;
 		
 		//TODO: cambiar por logger.
-		System.out.println("Validando inicio de sesión: " + usuario.getNombreUsuario());
+		System.out.println("Validando inicio de sesion: " + usuario.getNombreUsuario());
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -78,11 +129,11 @@ public class Sesion {
 
 	}
 
-	public static boolean nombreUsuarioValido(String nombreUsuario) {
+	public static RegistroUsuario nombreUsuarioValido(String nombreUsuario) {
 
-		boolean nombreValido = false;
+		RegistroUsuario registro = new RegistroUsuario("", false);
 		//TODO: cambiar por logger.
-		System.out.println("Verificando existencia de nombre de usuario: " + nombreUsuario);
+		//System.out.println("Verificando existencia de nombre de usuario: " + nombreUsuario);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -94,11 +145,15 @@ public class Sesion {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
 			//TODO: cambiar por logger.
-			System.out.println("El nombre de usuario está disponible para ser registrado");
-			nombreValido = true;
+			//System.out.println("El usuario esta disponible para ser registrado");
+			
+			if(e instanceof NoResultException) {
+				registro.setRegistroEfectivo(true);	
+				return registro;
+			} 
 		}
-
-		return nombreValido;
+		registro.setMensaje("Nombre de usuario en uso.");
+		return registro;
 	}
 
 	public static boolean registrarUsuario(Usuario usuario) {

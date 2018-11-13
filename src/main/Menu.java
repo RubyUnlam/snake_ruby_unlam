@@ -50,7 +50,7 @@ public class Menu extends JFrame {
 		setResizable(false);
 		setTitle("Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 410, 416);
+		setBounds(100, 100, 425, 450);
 		setLocationRelativeTo(null);
 		
 		JPanel pnlJugadores = new JPanel();
@@ -220,7 +220,7 @@ public class Menu extends JFrame {
 		btnVerSalasCreadas.setEnabled(true);
 		btnCrearSala.setEnabled(true);
 		usuarioActual = usuario;
-		lblUsuario.setText("Sesión iniciada. Usuario: " + usuarioActual);
+		lblUsuario.setText("Sesion iniciada. Usuario: " + usuarioActual);
 		lblUsuario.setVisible(true);
 	}
 
@@ -284,11 +284,12 @@ public class Menu extends JFrame {
 		return listaSalas;
 	}
 	
-	//Inicia el menu del juego.
+	/**
+	 * Se inicia el menu del juego y el SessionFactory de la aplicacion
+	 * 
+	 */
 	public static void main(String[] args) {
-		//Inicializo una instancia de SessionFactory al iniciar la aplicacion.
 		SesionSingleton.getSessionFactory();
-		//Genero el menu
 		new Menu().setVisible(true);
 	}
 }

@@ -47,7 +47,7 @@ public class SalasCreadas extends JDialog {
 	public SalasCreadas(Menu menu) {
 		
 		ventanaMenu = menu;
-		setBounds(100, 100, 412, 289);
+		setBounds(100, 100, 450, 315);
 		setLocationRelativeTo(menu);
 		
 		JLabel lblSalasCreadas = new JLabel("Salas creadas");

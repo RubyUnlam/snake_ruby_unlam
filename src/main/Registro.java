@@ -13,6 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+
 public class Registro extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -32,9 +33,10 @@ public class Registro extends JDialog {
 	public Registro(Login login) {
 		ventanaLogin = login;
 		// Propiedades del JDialog para el registro.
+		setTitle("Registro");
 		getContentPane().setLayout(null);
 		setVisible(true);
-		setBounds(0, 0, 330, 190);
+		setBounds(0, 0, 350, 200);
 		setLocationRelativeTo(login);
 
 		// Cuadro de texto para el nombre del usuario.
@@ -59,7 +61,7 @@ public class Registro extends JDialog {
 		JLabel lblNombreUsuario = new JLabel("Nombre de Usuario");
 		lblNombreUsuario.setBounds(27, 40, 140, 16);
 
-		JLabel lblContrasenia = new JLabel("Contraseña");
+		JLabel lblContrasenia = new JLabel("Password");
 		lblContrasenia.setBounds(27, 67, 117, 16);
 
 		JLabel lblEmail = new JLabel("Email");
@@ -127,12 +129,12 @@ public class Registro extends JDialog {
 	 * @return verdadero o falso segun el exito del registro.
 	 */
 	public boolean registrarUsuario(String nombreUsuario, char[] contrasenia, String email) {
-		boolean registroCorrectamente = Sesion.registrarUsuario(nombreUsuario, String.valueOf(contrasenia), email);
-		if (!registroCorrectamente) {
-			lblInformativo.setText("Error al registrar. Usuario en uso");
+		RegistroUsuario registro = Sesion.registrarUsuario(nombreUsuario, String.valueOf(contrasenia), email);
+		if (!registro.esRegistroEfectivo()) {
+			lblInformativo.setText(registro.getMensaje());
 			lblInformativo.setVisible(true);
 		}
-		return registroCorrectamente;
+		return registro.esRegistroEfectivo();
 	}
 	
 	/**
