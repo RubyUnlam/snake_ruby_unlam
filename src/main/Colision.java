@@ -14,9 +14,9 @@ public class Colision{
 	}
 	
 	public void comprobarColision(Serpiente jugador, Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
-		Ubicacion cabeza = jugador.getUbicacionCabeza();
 		List<Ubicacion> cuerpo = serpiente.getUbicaciones();
 		if(!serpiente.getUbicaciones().isEmpty()) {
+			Ubicacion cabeza = jugador.getUbicacionCabeza();
 			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !jugador.equals(serpiente)) {
 				serpiente.morir();
 				jugador.estado.morir(jugador);

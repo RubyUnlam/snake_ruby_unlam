@@ -14,7 +14,7 @@ public class Serpiente{
 	protected Direccion direccion;
 	
 	public Serpiente(){
-		estado = new Estado();
+		estado = new Normal();
 		verificadorColisiones = new Colision();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
@@ -25,7 +25,7 @@ public class Serpiente{
 	}
 	
 	public Serpiente(Ubicacion cabeza){
-		estado = new Estado();
+		estado = new Normal();
 		verificadorColisiones = new Colision();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
@@ -77,7 +77,7 @@ public class Serpiente{
 		return  ubicaciones.get(0);
 	}
 	
-	protected boolean estaMuerto() {
+	public boolean estaMuerto() {
 		return ubicaciones.isEmpty();
 	}
 }
