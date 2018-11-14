@@ -1,16 +1,21 @@
 package main;
 
+import java.awt.Color;
+
 public abstract class Comestible {
-	
+
+	private Color color;
 	private Ubicacion ubicacion;
 	private boolean comida = false;
 	
-	Comestible(){
+	Comestible(Color color){
 		this.ubicacion = new Ubicacion();
+		this.color = color;
 	}
 	
-	Comestible(Ubicacion ubicacion) {
+	Comestible(Ubicacion ubicacion, Color color) {
 		this.ubicacion = ubicacion;
+		this.color = color;
 	}
 
 	public Ubicacion getUbicacion() {
@@ -23,6 +28,10 @@ public abstract class Comestible {
 
 	public void setComida(boolean comida) {
 		this.comida = comida;
+	}
+	
+	public Color obtenerColor() {
+		return this.color;
 	}
 	
 }

@@ -1,11 +1,13 @@
 package main;
 
+import java.awt.Color;
+
 public class SerpienteIA extends Serpiente {
 	
 	private int dificultad; //por ciento
 	
-	public SerpienteIA(int dificultad) {
-		super();
+	public SerpienteIA(int dificultad, Color color) {
+		super(color);
 		this.dificultad = dificultad;
 		this.direccion = Direccion.IZQUIERDA;
 	}

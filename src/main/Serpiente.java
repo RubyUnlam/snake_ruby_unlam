@@ -5,17 +5,19 @@ import static utilidades.Constantes.ALTURA_VENTANA;
 import static utilidades.Constantes.ANCHO_VENTANA;
 import static utilidades.Constantes.VELOCIDAD;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Serpiente {
 
 	private Estado estado;
-	
+	private Color color;
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	protected Direccion direccion;
 	
-	public Serpiente(){
+	public Serpiente(Color color){
+		this.color = color;
 		estado = new Normal();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
@@ -25,7 +27,8 @@ public class Serpiente {
 		this.direccion = Direccion.IZQUIERDA;
 	}
 	
-	public Serpiente(Ubicacion cabeza){
+	public Serpiente(Ubicacion cabeza, Color color){
+		this.color = color;
 		estado = new Normal();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
@@ -71,8 +74,10 @@ public class Serpiente {
 		return ubicaciones;
 	}
 	
-	//Para SerpientaIA 
-		
+	public Color obtenerColor() {
+		return this.color;
+	}
+	
 	protected Ubicacion getUbicacionCabeza() {
 		return  ubicaciones.get(0);
 	}
