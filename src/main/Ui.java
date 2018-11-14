@@ -39,6 +39,10 @@ public class Ui extends JPanel implements Observador {
         g.dispose();
     }
 
+    /**
+     * Dibuja un circulo de 20x20 por cada dibujable en la lista
+     * aDibujar y luego limpia la lista
+     */
     private void dibujar(Graphics g) {
     	for (Dibujable dibujable : aDibujar) {
     		List<Ubicacion> ubicaciones = dibujable.obtenerZonaDeDibujo();

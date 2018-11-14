@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Clase que representa un elemento dibujable por el campo
+ * @author gonrodriguez
+ *
+ */
 public class Dibujable {
 	
 	private Color color;

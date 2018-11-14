@@ -36,6 +36,10 @@ public class Campo implements KeyListener, ActionListener, Observado {
 		timer.start();
 	}
 
+	/**
+	 * Genera un dibujable por cada serpiente y comestible en el campo
+	 * @return una lista de dibujables
+	 */
 	public List<Dibujable> notificarDibujables() {
 	    List<Dibujable> dibujables = new ArrayList<>();
 	    for(Serpiente serpientes : serpientes){
