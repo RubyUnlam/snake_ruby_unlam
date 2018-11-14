@@ -9,6 +9,8 @@ import main.Serpiente;
 import main.Ubicacion;
 import static utilidades.Constantes.*;
 
+import java.awt.Color;
+
 public class SerpienteTest {
 	
 	/**
@@ -16,7 +18,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseNoCrece() {
-		Serpiente serpiente = new Serpiente();
+		Serpiente serpiente = new Serpiente(Color.BLUE);
 		
 		int tamanioInicial = serpiente.getUbicaciones().size(); 
 		serpiente.moverse();
@@ -30,7 +32,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzana() {
-		Serpiente serpiente = new Serpiente();
+		Serpiente serpiente = new Serpiente(Color.BLUE);
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 p�xeles delante de la serpiente
 		
@@ -47,7 +49,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzanaSinEstarEnPosicion() {
-		Serpiente serpiente = new Serpiente();
+		Serpiente serpiente = new Serpiente(Color.BLUE);
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
 		
@@ -63,7 +65,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseSeMueve() {
-		Serpiente serpiente = new Serpiente();
+		Serpiente serpiente = new Serpiente(Color.BLUE);
 		
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Ubicacion hombro = serpiente.getUbicaciones().get(1);
@@ -83,8 +85,8 @@ public class SerpienteTest {
 	 * */
 	@Test
 	public void testChocarContraOtraSerpienteMata() {
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60));
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60));
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60), Color.BLUE);
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60), Color.BLUE);
 		
 		
 		int tamanioInicial = serpienteUno.getUbicaciones().size();
@@ -101,8 +103,8 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testChocarContraOtraCabezaMuerenAmbas() {
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40)); 
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60));
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40), Color.BLUE); 
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60), Color.BLUE);
 		
 		
 		int tamanioInicialUno = serpienteUno.getUbicaciones().size();
@@ -124,7 +126,7 @@ public class SerpienteTest {
 	@Test
 	public void testChocarConsigoMisma() {
 		Ubicacion cabeza = new Ubicacion(140, 140);
-		Serpiente serpiente = new Serpiente(cabeza);
+		Serpiente serpiente = new Serpiente(cabeza, Color.BLUE);
 		
 		serpiente.checkearColision(new Manzana(cabeza));
 		serpiente.mirar("abajo");
@@ -145,7 +147,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoIzquierda() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, 50));
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, 50), Color.BLUE);
 		
 		serpiente.moverse();
 		
@@ -157,7 +159,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoDerecha() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA, 50));
+		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA, 50), Color.BLUE);
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		serpiente.mirar("derecha");
@@ -171,7 +173,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoArriba() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, 0));
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, 0), Color.BLUE);
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		
@@ -182,7 +184,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoAbajo() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA));
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA), Color.BLUE);
 		serpiente.mirar("abajo");
 		serpiente.moverse();
 		
