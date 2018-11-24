@@ -8,14 +8,12 @@ import java.util.List;
 public class Serpiente{
 
 	protected Estado estado;
-	private Colision verificadorColisiones;
 	
 	List<Ubicacion> ubicaciones = new ArrayList<>();
 	protected Direccion direccion;
 	
 	public Serpiente(){
 		estado = new Normal();
-		verificadorColisiones = new Colision();
 		Ubicacion cabeza = new Ubicacion();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
@@ -26,7 +24,6 @@ public class Serpiente{
 	
 	public Serpiente(Ubicacion cabeza){
 		estado = new Normal();
-		verificadorColisiones = new Colision();
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();
@@ -54,14 +51,6 @@ public class Serpiente{
 	private int calcularPosicionAnterior(int ultimaPos, int anteUltimaPos) {
 		return ultimaPos + (ultimaPos - anteUltimaPos);
 	}
-	
-	public void comprobarColision(Comestible comestible) {
-		verificadorColisiones.comprobarColision(this, comestible);
-	}
-	
-//	public void comprobarColision(Serpiente serpiente) {
-//		verificadorColisiones.comprobarColision(this, serpiente);
-//	}
 	
 	public void mirar(String mirarA) {
 		this.direccion = direccion.cambiarDireccion(mirarA, this);

@@ -72,38 +72,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
         	jugadorIA.moverse();
         }
         
-        colisionador.comprobarColisiones(serpientes, serpientesIA);
-        
-        for (Serpiente jugador : serpientes) {
-        	for (Comestible comestible : comestibles) {
-                jugador.comprobarColision(comestible);
-                if (comestible.fueComida()) {
-                    comestibles.remove(comestible);
-                }
-            }
-        	
-//            for (Serpiente jugador2 : serpientes) {
-//                jugador.comprobarColision(jugador2);
-//            }
-//            for (Serpiente jugadorIA : serpientesIA) {
-//            	jugador.comprobarColision(jugadorIA);
-//            }
-        }
-        // LA serpiente jugador muere bien
-        for (Serpiente jugadorIA : serpientesIA) {
-        	for (Comestible comestible : comestibles) {
-                jugadorIA.comprobarColision(comestible);
-                if (comestible.fueComida()) {
-                    comestibles.remove(comestible);
-                }
-            }
-//        	 for (Serpiente jugador2 : serpientes) {
-//                 jugadorIA.comprobarColision(jugador2);
-//             }
-//             for (Serpiente jugadorIA2 : serpientesIA) {
-//             	jugadorIA.comprobarColision(jugadorIA2);
-//             }
-        }
+        colisionador.comprobarColisiones(serpientes, serpientesIA, comestibles);
         
         for (Observador observador : observadores) {
         	observador.dibujar(this);

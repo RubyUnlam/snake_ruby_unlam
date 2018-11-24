@@ -1,38 +1,27 @@
 package main;
 
-import static java.util.Objects.nonNull;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class Colision{
 	
-	public void comprobarColision(Serpiente serpiente, Comestible comestible) {
-		if(nonNull(comestible) && !serpiente.getUbicaciones().isEmpty() && serpiente.getUbicacionCabeza().equals(comestible.getUbicacion())) {
-			serpiente.crecer();
-			comestible.setComida(true);
+	public void comprobarColisionComestible(Serpiente serpiente, Queue<Comestible> comestibles) {
+		Ubicacion cabezaSerpiente = serpiente.getUbicacionCabeza();
+		
+		for (Comestible comestible : comestibles) {
+			if( cabezaSerpiente.equals(comestible.getUbicacion()) ) {
+				serpiente.crecer();
+				comestible.setComida(true);
+			}
+			
+			if (comestible.fueComida()) {
+                comestibles.remove(comestible);
+            }
 		}
 	}
 	
-//	public void comprobarColision(Serpiente jugador, Serpiente serpiente) { //TODO colisiones entre mas de 2 serpientes.
-//		List<Ubicacion> cuerpo = serpiente.getUbicaciones();
-//		if(!serpiente.getUbicaciones().isEmpty()) {
-//			Ubicacion cabeza = jugador.getUbicacionCabeza();
-//			if(cabeza.equals(serpiente.getUbicaciones().get(0)) && !jugador.equals(serpiente)) {
-//				serpiente.morir();
-//				jugador.estado.morir(jugador);
-//			} //verifico si no chocaron sus cabezas
-//			
-//			for (int i = 1; i < cuerpo.size(); i++) { // cuerpo de la otra serpiente, ya sea otra o si misma
-//				Ubicacion actual = cuerpo.get(i);
-//				if (cabeza.equals(actual)) { 
-//					jugador.estado.morir(jugador); 
-//				}
-//			} //si choca contra algo, muere			
-//		}
-//	}
-	
-	public void comprobarColisiones(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA) {
+	public void comprobarColisiones(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, Queue<Comestible> comestibles) {
 		List<Serpiente> jugadoresParaEliminar = new ArrayList<Serpiente>();;
 		List<Serpiente> jugadoresTotales = new ArrayList<Serpiente>();
 		
@@ -44,6 +33,8 @@ public class Colision{
 			
 			if( jugador1.estaMuerto() )
 				continue;
+			
+			comprobarColisionComestible(jugador1, comestibles);
 			
 			Ubicacion cabezaJugador1 = jugador1.getUbicacionCabeza();
 			
