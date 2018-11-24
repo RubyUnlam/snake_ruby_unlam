@@ -1,10 +1,11 @@
 package main;
 
 import java.net.Socket;
+import java.util.List;
 
 public interface Observador {
 
-	public void dibujar(UbicacionesDTO campo);
-	public void agregarJugador(Socket jugador);
+	void dibujar(List<Dibujable> dibujable);
+	void agregarJugador(Socket jugador);
 	
 }

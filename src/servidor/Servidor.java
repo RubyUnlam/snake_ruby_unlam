@@ -2,27 +2,25 @@ package servidor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
+import main.Flujo;
+import main.Sala;
 import main.Serpiente;
 
 public class Servidor extends Thread {
 	
-	private ChatEscrituraServidor chatEscritura;
-	private List<Serpiente> serpientes;
-	private int puerto;
 	private ServerSocket serverSocket;
+	private List<Sala> salas = new ArrayList<>();
 
-    public Servidor(int puerto, List<Serpiente> serpientes) {
-    	this.puerto = puerto;
-    	this.serpientes = serpientes;
+    public Servidor(int puerto) {
         try {
 			this.serverSocket = new ServerSocket(puerto);
 			System.out.println("Creado el server");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-        this.chatEscritura = new ChatEscrituraServidor();
     }
     
     @Override
@@ -36,15 +34,7 @@ public class Servidor extends Thread {
 
             System.out.println("Alguien ha ingresado");
 
-            this.chatEscritura.agregarJugador(jugador);
-            
-            Serpiente serpiente = new Serpiente();
-            
-            serpientes.add(serpiente);
-
-            ChatLecturaServidor chatLectura = new ChatLecturaServidor(jugador, serpiente);
-            
-            chatLectura.start();            
+            new Flujo(jugador, salas).start();
 
             }
             
@@ -54,13 +44,8 @@ public class Servidor extends Thread {
         	try {
 				this.serverSocket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
-    }
-    
-    public ChatEscrituraServidor getEscribir() {
-    	return chatEscritura;
     }
 }
