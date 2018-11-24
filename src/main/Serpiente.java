@@ -59,9 +59,9 @@ public class Serpiente{
 		verificadorColisiones.comprobarColision(this, comestible);
 	}
 	
-	public void comprobarColision(Serpiente serpiente) {
-		verificadorColisiones.comprobarColision(this, serpiente);
-	}
+//	public void comprobarColision(Serpiente serpiente) {
+//		verificadorColisiones.comprobarColision(this, serpiente);
+//	}
 	
 	public void mirar(String mirarA) {
 		this.direccion = direccion.cambiarDireccion(mirarA, this);

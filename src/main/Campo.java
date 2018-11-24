@@ -20,6 +20,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
+	private Colision colisionador;
 	
 	private int keyEventUP = KeyEvent.VK_UP;
 	private int keyEventDOWN = KeyEvent.VK_DOWN;
@@ -32,6 +33,7 @@ public class Campo implements KeyListener, ActionListener, Observado {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
+		this.colisionador = new Colision();
 		timer = new Timer(delay, this);
 		timer.start();
 	}
@@ -69,7 +71,9 @@ public class Campo implements KeyListener, ActionListener, Observado {
         	jugadorIA.cambiarMirada(comestibles.peek());
         	jugadorIA.moverse();
         }
-
+        
+        colisionador.comprobarColisiones(serpientes, serpientesIA);
+        
         for (Serpiente jugador : serpientes) {
         	for (Comestible comestible : comestibles) {
                 jugador.comprobarColision(comestible);
@@ -78,12 +82,12 @@ public class Campo implements KeyListener, ActionListener, Observado {
                 }
             }
         	
-            for (Serpiente jugador2 : serpientes) {
-                jugador.comprobarColision(jugador2);
-            }
-            for (Serpiente jugadorIA : serpientesIA) {
-            	jugador.comprobarColision(jugadorIA);
-            }
+//            for (Serpiente jugador2 : serpientes) {
+//                jugador.comprobarColision(jugador2);
+//            }
+//            for (Serpiente jugadorIA : serpientesIA) {
+//            	jugador.comprobarColision(jugadorIA);
+//            }
         }
         // LA serpiente jugador muere bien
         for (Serpiente jugadorIA : serpientesIA) {
@@ -93,12 +97,12 @@ public class Campo implements KeyListener, ActionListener, Observado {
                     comestibles.remove(comestible);
                 }
             }
-        	 for (Serpiente jugador2 : serpientes) {
-                 jugadorIA.comprobarColision(jugador2);
-             }
-             for (Serpiente jugadorIA2 : serpientesIA) {
-             	jugadorIA.comprobarColision(jugadorIA2);
-             }
+//        	 for (Serpiente jugador2 : serpientes) {
+//                 jugadorIA.comprobarColision(jugador2);
+//             }
+//             for (Serpiente jugadorIA2 : serpientesIA) {
+//             	jugadorIA.comprobarColision(jugadorIA2);
+//             }
         }
         
         for (Observador observador : observadores) {
