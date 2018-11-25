@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import servidor.ManejadorMovimiento;
 
+import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,8 +12,6 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-
-import java.awt.Color;
 
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
@@ -65,6 +64,9 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 	        				dataOutputStream.writeUTF(gson.toJson(salas));
 	        				break;
 	        			case "crear_sala":
+	        			    Sala salaACrear = gson.fromJson(dataInputStream.readUTF(), Sala.class);
+                            RespuestaCreacionSala respuesta = crearSala(salaACrear);
+                            dataOutputStream.writeUTF(gson.toJson(respuesta));
 	        				break;
 	        			case "unirse_a_sala":
 	        				break;
@@ -82,5 +84,60 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
         ManejadorMovimiento chatLectura = new ManejadorMovimiento(conexion, serpiente);
         chatLectura.start();
+    }
+
+    /**
+     * Dada una sala, devuelve si se puede crear
+     * @param salaACrear
+     * @return
+     */
+
+    private RespuestaCreacionSala crearSala(Sala salaACrear) {
+        if (camposCreacionSalaVacios(salaACrear)){
+            String mensaje = "Rellene todos los campos";
+            return new RespuestaCreacionSala(false, mensaje);
+        }
+
+        if(!cantidadJugadoresValida(salaACrear)){
+            String mensaje = "La cantidad total de jugadores debe ser a lo sumo 4";
+            return new RespuestaCreacionSala(false, mensaje);
+        }
+
+        if(nombreUsado(salaACrear.getNombreSala())){
+            String mensaje = "Ya existe una sala con ese nombre";
+            return new RespuestaCreacionSala(false, mensaje);
+        }
+        this.salas.add(salaACrear);
+        return new RespuestaCreacionSala(true, this.salas);
+    }
+
+    /**
+     * Devuelve false si la cantidad de jugadores no es válida
+     * @param salaACrear
+     * @return
+     */
+    private boolean cantidadJugadoresValida(Sala salaACrear) {
+       return salaACrear.getCantidadJugadores() + salaACrear.getCantidadIA() <= 4;
+    }
+
+    /**
+     * Devuelve false si el nombre de la sala ya existe en la lista
+     * @param nombreSala
+     * @return
+     */
+    private boolean nombreUsado(String nombreSala) {
+        for(Sala sala : this.salas){
+            if(sala.getNombreSala().equals(nombreSala)) { return true;}
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve true si los campos de la sala se encuentran vacíos
+     * @param salaACrear
+     * @return
+     */
+    private boolean camposCreacionSalaVacios(Sala salaACrear) {
+            return salaACrear.getContrasenia().isEmpty() || salaACrear.getNombreSala().isEmpty();
     }
 }
