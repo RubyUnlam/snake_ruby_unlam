@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 
 public class Campo implements ActionListener, Observado {
-	
+
 	private Timer timer;
 	private int delay = 100;
 	
@@ -92,30 +92,6 @@ public class Campo implements ActionListener, Observado {
 			}
 		}
 	}
-
-//	@Override
-//	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
-//		int teclaPresionada = e.getKeyCode();
-//		if (teclaPresionada == keyEventUP) {
-//			serpientes.get(0).mirar(Direccion.ARRIBA.name());
-//		} else if (teclaPresionada == keyEventDOWN) {
-//			serpientes.get(0).mirar(Direccion.ABAJO.name());
-//		} else if (teclaPresionada == keyEventRIGTH) {
-//            serpientes.get(0).mirar(Direccion.DERECHA.name());
-//		} else if (teclaPresionada == keyEventLEFT) {
-//			serpientes.get(0).mirar(Direccion.IZQUIERDA.name());
-//		}
-//	}
-//
-//	@Override
-//	public void keyReleased(KeyEvent e) {
-//		// TODO Auto-generated method stub
-//	}
-//
-//	@Override
-//	public void keyTyped(KeyEvent e) {
-//		// TODO Auto-generated method stub
-//	}
 
 	/**
 	 * Metodo para agregar un observador a la lista.

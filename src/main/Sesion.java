@@ -28,7 +28,6 @@ public class Sesion {
 	 * @param email
 	 * @return
 	 */
-
 	public static RegistroUsuario registrarUsuario(String nombreUsuario, String contrasenia, String email) {
 		session = SesionSingleton.getSessionFactory().openSession();
 		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
@@ -56,7 +55,6 @@ public class Sesion {
 	 * @param email
 	 * @return RegistroUsuario
 	 */
-
 	private static RegistroUsuario mailUsuarioValido(String email) {
 
 		RegistroUsuario registro = new RegistroUsuario("", false);
