@@ -1,5 +1,8 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Sala {
 
 	private String nombreSala;
@@ -13,6 +16,8 @@ public class Sala {
 	private String nombreCreador;
 
 	private int dificultadIA;
+
+	private List<Jugador> jugadores = new ArrayList<>();
 
 	public Sala() {
 
@@ -77,6 +82,19 @@ public class Sala {
 			return false;
 		return true;
 	}
+
+	public void agregarJugador(Jugador jugador) {
+		jugadores.add(jugador);
+	}
+
+	public void removerJugador(Jugador jugador) {
+		jugadores.remove(jugador);
+	}
+
+	public List<Jugador> getJugadores() {
+		return jugadores;
+	}
+
 
 	// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
 	// private int mapa;

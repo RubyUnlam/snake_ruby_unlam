@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.google.gson.Gson;
 import main.Serpiente;
 
 public class ManejadorMovimiento extends Thread {
@@ -21,7 +22,9 @@ public class ManejadorMovimiento extends Thread {
             DataInputStream entrada = new DataInputStream(socket.getInputStream());
 
             while (true) {
+                System.out.println("Escuchando movimientos");
                 String mandanmeMecha = entrada.readUTF();
+                System.out.println(mandanmeMecha);
                 serpiente.mirar(mandanmeMecha);
             }
 

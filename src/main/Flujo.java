@@ -18,6 +18,8 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     private Socket conexion;
     private List<Sala> salas;
     private Gson gson = new Gson();
+    private Jugador jugador;
+    private String salaActual = "";
 
     public Flujo(Socket conexion, List<Sala> salas) {
         this.conexion = conexion;
@@ -36,8 +38,9 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             
             //------------------------REGISTRO-------------------------------//
 
+            Usuario usuario;
             do {
-                Usuario usuario = gson.fromJson(dataInputStream.readUTF(), Usuario.class);
+                usuario = gson.fromJson(dataInputStream.readUTF(), Usuario.class);
                 if (isNull(usuario.getEmail())) {
                     boolean registroValido = Sesion.iniciarSesion(usuario);
                     if (!registroValido) {
@@ -52,38 +55,94 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             } while (!registroUsuario.esRegistroEfectivo());
             
             //------------------------REGISTRO-------------------------------//
-            
+
+            //------------------------MENU-------------------------------//
+            this.jugador = new Jugador(usuario.getNombreUsuario(), conexion);
+
             
             String opcion = dataInputStream.readUTF();
             
-            while (!"jugar".equals(opcion)) { //TODO CONSTANTE
+            while (!"salir".equals(opcion)) { //TODO CONSTANTE
             	if (nonNull(opcion)) {
             		switch (opcion) {
 	        			case "ver_salas":
-	        				System.out.println("enviando salas");
-	        				dataOutputStream.writeUTF(gson.toJson(salas));
+	        				dataOutputStream.writeUTF(gson.toJson(new RespuestaAccionConSala(true, salas)));
 	        				break;
 	        			case "crear_sala":
 	        			    Sala salaACrear = gson.fromJson(dataInputStream.readUTF(), Sala.class);
-                            RespuestaCreacionSala respuesta = crearSala(salaACrear);
+	        			    if (!salaActual.isEmpty()) {
+                                salirDeSalaActual(salaActual);
+                            }
+                            RespuestaAccionConSala respuesta = crearSala(salaACrear);
                             dataOutputStream.writeUTF(gson.toJson(respuesta));
 	        				break;
 	        			case "unirse_a_sala":
-	        				break;
+                            Sala salaAUnirse = gson.fromJson(dataInputStream.readUTF(), Sala.class);
+                            if (!salaActual.isEmpty()) {
+                                salirDeSalaActual(salaActual);
+                            }
+                            RespuestaAccionConSala respuestaAccionConSala = unirseASala(salaAUnirse);
+                            dataOutputStream.writeUTF(gson.toJson(respuestaAccionConSala));
+                            break;
+                        case "salir_de_sala":
+                            salirDeSalaActual(salaActual);
+                            salaActual = "";
+                            break;
+                        case "jugar":
+                            if (!salaActual.isEmpty()) {
+                                iniciarJuego(salaActual);
+                            }
+                            break;
             		}
             	}
-            	System.out.println("Leyendo");
         		opcion = dataInputStream.readUTF();
             }
+
+            //------------------------MENU-------------------------------//
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
 
-        ManejadorMovimiento chatLectura = new ManejadorMovimiento(conexion, serpiente);
-        chatLectura.start();
+    private void iniciarJuego(String nombreDeSala) {
+        for (Sala sala : this.salas) {
+            if (sala.getNombreSala().equals(nombreDeSala) && sala.getNombreCreador().equals(jugador.getNombre())) {
+                Juego.iniciar(sala);
+            }
+        }
+    }
+
+    private void salirDeSalaActual(String nombreDeSala) {
+        for (Sala sala : this.salas) {
+            if (sala.getNombreSala().equals(nombreDeSala)) {
+                sala.removerJugador(jugador);
+            }
+        }
+    }
+
+    /**
+     * Dada una sala a unirse busca esta entre las salas existentes. Si la encuentra y la
+     * contraseña concuerda une al jugador y responde de manera correcta. En otro caso
+     * devuelve el mensaje de error correspondiente.
+     * @param salaAUnirse
+     * @return
+     */
+    private RespuestaAccionConSala unirseASala(Sala salaAUnirse) {
+        for (Sala sala : this.salas) {
+            if (sala.getNombreSala().equals(salaAUnirse.getNombreSala())) {
+                if (isNull(sala.getContrasenia()) || sala.getContrasenia().equals(salaAUnirse.getContrasenia())) {
+                    sala.agregarJugador(jugador);
+                    this.salaActual = sala.getNombreSala();
+                    return new RespuestaAccionConSala(true, this.salas);
+                } else {
+                    return new RespuestaAccionConSala(false, "Contraseña invalida");
+                }
+            }
+        }
+        return new RespuestaAccionConSala(false, "Sala no encontrada");
     }
 
     /**
@@ -91,24 +150,22 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
      * @param salaACrear
      * @return
      */
-
-    private RespuestaCreacionSala crearSala(Sala salaACrear) {
-        if (camposCreacionSalaVacios(salaACrear)){
-            String mensaje = "Rellene todos los campos";
-            return new RespuestaCreacionSala(false, mensaje);
+    private RespuestaAccionConSala crearSala(Sala salaACrear) {
+        if (salaACrear.getNombreSala().isEmpty()){
+            return new RespuestaAccionConSala(false, "El nombre no puede estar vacío");
         }
 
         if(!cantidadJugadoresValida(salaACrear)){
-            String mensaje = "La cantidad total de jugadores debe ser a lo sumo 4";
-            return new RespuestaCreacionSala(false, mensaje);
+            return new RespuestaAccionConSala(false, "La cantidad total de jugadores debe ser a lo sumo 4");
         }
 
         if(nombreUsado(salaACrear.getNombreSala())){
-            String mensaje = "Ya existe una sala con ese nombre";
-            return new RespuestaCreacionSala(false, mensaje);
+            return new RespuestaAccionConSala(false, "Ya existe una sala con ese nombre");
         }
+        salaACrear.agregarJugador(jugador);
+        this.salaActual = salaACrear.getNombreSala();
         this.salas.add(salaACrear);
-        return new RespuestaCreacionSala(true, this.salas);
+        return new RespuestaAccionConSala(true, this.salas);
     }
 
     /**
@@ -127,17 +184,11 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
      */
     private boolean nombreUsado(String nombreSala) {
         for(Sala sala : this.salas){
-            if(sala.getNombreSala().equals(nombreSala)) { return true;}
+            if(sala.getNombreSala().equals(nombreSala)) {
+                return true;
+            }
         }
         return false;
     }
 
-    /**
-     * Devuelve true si los campos de la sala se encuentran vacíos
-     * @param salaACrear
-     * @return
-     */
-    private boolean camposCreacionSalaVacios(Sala salaACrear) {
-            return salaACrear.getContrasenia().isEmpty() || salaACrear.getNombreSala().isEmpty();
-    }
 }
