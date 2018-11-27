@@ -35,6 +35,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             DataOutputStream dataOutputStream = new DataOutputStream(conexion.getOutputStream());
             DataInputStream dataInputStream = new DataInputStream(conexion.getInputStream());
             RegistroUsuario registroUsuario = null;
+            Boolean sesionIniciada = false;
             
             //------------------------REGISTRO-------------------------------//
 
@@ -47,12 +48,13 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
                         registroUsuario = new RegistroUsuario("login invalido", registroValido);
                     } else {
                         registroUsuario = new RegistroUsuario("", registroValido);
+                        sesionIniciada = true;
                     }
                 } else {
                     registroUsuario = Sesion.registrarUsuario(usuario.getNombreUsuario(), usuario.getContrasenia(), usuario.getEmail());
                 }
                 dataOutputStream.writeUTF(gson.toJson(registroUsuario));
-            } while (!registroUsuario.esRegistroEfectivo());
+            } while (!sesionIniciada);
             
             //------------------------REGISTRO-------------------------------//
 

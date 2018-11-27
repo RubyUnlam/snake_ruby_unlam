@@ -63,9 +63,6 @@ public class Sesion {
 			registro.setMensaje("El mail debe contener al menos un punto y un arroba");
 			return registro;
 		}
-		// TODO: cambiar por logger.
-		// System.out.println("Verificando existencia de nombre de usuario: " +
-		// mailValido);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -76,8 +73,6 @@ public class Sesion {
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			// TODO: cambiar por logger.
-			// System.out.println("El mail esta disponible para ser registrado");
 			registro.setRegistroEfectivo(true);
 			return registro;
 		}
@@ -89,9 +84,6 @@ public class Sesion {
 		session = SesionSingleton.getSessionFactory().openSession();
 
 		boolean existeCuenta = true;
-
-		// TODO: cambiar por logger.
-		System.out.println("Validando inicio de sesion: " + usuario.getNombreUsuario());
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
