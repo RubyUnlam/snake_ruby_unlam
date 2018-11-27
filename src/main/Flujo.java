@@ -87,6 +87,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
                         case "salir_de_sala":
                             salirDeSalaActual(salaActual);
                             salaActual = "";
+                            dataOutputStream.writeUTF("");
                             break;
                         case "jugar":
                             if (!salaActual.isEmpty()) {
