@@ -124,6 +124,10 @@ public class Sala {
 		this.cuentaRegresiva = new CountDownLatch(1);
 	}
 
+	public int getJugadoresEnSala(){
+		return jugadores.size();
+	}
+
 // TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
 	// private int mapa;
 	//

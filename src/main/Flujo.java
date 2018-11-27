@@ -131,15 +131,40 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
         for (Sala sala : this.sincronizadorDeSalas.obtenerSalas()) {
             if (sala.getNombreSala().equals(salaAUnirse.getNombreSala())) {
                 if (isNull(sala.getContrasenia()) || sala.getContrasenia().equals(salaAUnirse.getContrasenia())) {
-                    sala.agregarJugador(jugador);
-                    this.salaActual = sala.getNombreSala();
-                    return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
+                    if(hayEspacio(sala)){
+                        sala.agregarJugador(jugador);
+                        this.salaActual = sala.getNombreSala();
+                        return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
+                    } else {
+                        return generarRespuestaDeError("Sala llena");
+                    }
                 } else {
-                    return new RespuestaAccionConSala(false, "Contraseña invalida");
+                    return generarRespuestaDeError("Contraseña invalida");
                 }
             }
         }
-        return new RespuestaAccionConSala(false, "Sala no encontrada");
+        return generarRespuestaDeError("Sala no encontrada");
+    }
+
+    /**
+     * Dado un mensaje de error, devuelve una respuesta con ese mensaje y con el campo accion
+     * valida en false.
+     * @param mensaje
+     * @return
+     */
+
+    private RespuestaAccionConSala generarRespuestaDeError(String mensaje){
+        return new RespuestaAccionConSala(false, mensaje);
+    }
+
+    /**
+     * Dada una sala, verifica si todavía hay espacio para meter a otro jugador
+     * @param sala
+     * @return
+     */
+
+    private boolean hayEspacio(Sala sala) {
+        return  sala.getCantidadJugadores() - sala.getJugadoresEnSala() > 0;
     }
 
     /**
