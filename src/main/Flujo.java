@@ -72,17 +72,11 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 	        				break;
 	        			case "crear_sala":
 	        			    Sala salaACrear = gson.fromJson(dataInputStream.readUTF(), Sala.class);
-	        			    if (!salaActual.isEmpty()) {
-                                salirDeSalaActual(salaActual);
-                            }
                             RespuestaAccionConSala respuesta = crearSala(salaACrear);
                             dataOutputStream.writeUTF(gson.toJson(respuesta));
 	        				break;
 	        			case "unirse_a_sala":
                             Sala salaAUnirse = gson.fromJson(dataInputStream.readUTF(), Sala.class);
-                            if (!salaActual.isEmpty()) {
-                                salirDeSalaActual(salaActual);
-                            }
                             RespuestaAccionConSala respuestaAccionConSala = unirseASala(salaAUnirse);
                             dataOutputStream.writeUTF(gson.toJson(respuestaAccionConSala));
                             break;
