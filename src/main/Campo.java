@@ -38,24 +38,25 @@ public class Campo implements KeyListener, ActionListener, Observado {
 		timer.start();
 	}
 
-	public List<Ubicacion> notificarUbicacionesSerpientes() {
-	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
+	/**
+	 * Genera un dibujable por cada serpiente y comestible en el campo
+	 * @return una lista de dibujables
+	 */
+	public List<Dibujable> notificarDibujables() {
+	    List<Dibujable> dibujables = new ArrayList<>();
 	    for(Serpiente serpientes : serpientes){
-	        ubicacionesActuales.addAll(serpientes.getUbicaciones());
+	    	dibujables.add(new Dibujable(serpientes));
         }
+	    
         for(Serpiente serpientesIA : serpientesIA){
-            ubicacionesActuales.addAll(serpientesIA.getUbicaciones());
+        	dibujables.add(new Dibujable(serpientesIA));
         }
-
-        return ubicacionesActuales;
-    }
-
-    public List<Ubicacion> notificarUbicacionesComestibles() {
-	    List<Ubicacion> ubicacionesActuales = new ArrayList<>();
+        
         for (Comestible comestible : comestibles) {
-            ubicacionesActuales.add(comestible.getUbicacion());
+        	dibujables.add(new Dibujable(comestible));
         }
-        return ubicacionesActuales;
+
+        return dibujables;
     }
 
 	@Override

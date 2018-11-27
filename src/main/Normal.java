@@ -37,7 +37,7 @@ public class Normal implements Estado{
 	}
 	
 	public Estado morir(Serpiente serpiente) {
-		serpiente.ubicaciones = new ArrayList<>();
+		serpiente.setUbicaciones(new ArrayList<>());
 		return new Muerto();
 	}
 }

@@ -38,7 +38,7 @@ public class CreacionSala extends JDialog {
 		
 		ventanaMenu = menu;
 		
-		setBounds(100, 100, 356, 260);
+		setBounds(100, 100, 380, 300);
 		setLocationRelativeTo(menu);
 		
 		JLabel lblNombreSala = new JLabel("Nombre de la sala");
