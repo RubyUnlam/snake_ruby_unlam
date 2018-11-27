@@ -6,16 +6,19 @@ import servidor.ManejadorVisual;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
     public static void iniciar(Sala sala) {
 
+        CountDownLatch cuentaRegresiva = new CountDownLatch(1);
+
         List<Serpiente> serpientes = new ArrayList<>();
         List<SerpienteIA> serpientesIA = new ArrayList<>();
         ManejadorVisual manejadorVisual = new ManejadorVisual();
 
-        Campo campo = new Campo(serpientes, serpientesIA);
+        Campo campo = new Campo(serpientes, serpientesIA, cuentaRegresiva);
         campo.agregarObservador(manejadorVisual);
 
         for (Jugador jugador : sala.getJugadores()) {
@@ -31,6 +34,11 @@ public class Juego {
 
         campo.comenzarJuego();
 
+        try {
+            cuentaRegresiva.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

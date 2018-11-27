@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class Sala {
 
@@ -19,9 +20,7 @@ public class Sala {
 
 	private List<Jugador> jugadores = new ArrayList<>();
 
-	public Sala() {
-
-	}
+	private transient CountDownLatch cuentaRegresiva = new CountDownLatch(1);
 
 	public Sala(String nombreSala, String contrasenia, int cantidadJugadores, int cantidadIA, String nombreCreador,
 			int dificultadIA) {
@@ -85,6 +84,9 @@ public class Sala {
 
 	public void agregarJugador(Jugador jugador) {
 		jugadores.add(jugador);
+		for (int i = 0; i < jugadores.size() -1; i++) {
+			jugadores.get(i).notificarActualizacionDeSala(this);
+		}
 	}
 
 	public void removerJugador(Jugador jugador) {

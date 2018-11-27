@@ -16,14 +16,14 @@ import static java.util.Objects.nonNull;
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
     private Socket conexion;
-    private List<Sala> salas;
+    private SincronizadorDeSalas sincronizadorDeSalas;
     private Gson gson = new Gson();
     private Jugador jugador;
     private String salaActual = "";
 
-    public Flujo(Socket conexion, List<Sala> salas) {
+    public Flujo(Socket conexion, SincronizadorDeSalas sincronizadorDeSalas) {
         this.conexion = conexion;
-        this.salas = salas;
+        this.sincronizadorDeSalas = sincronizadorDeSalas;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             	if (nonNull(opcion)) {
             		switch (opcion) {
 	        			case "ver_salas":
-	        				dataOutputStream.writeUTF(gson.toJson(new RespuestaAccionConSala(true, salas)));
+	        				dataOutputStream.writeUTF(gson.toJson(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas())));
 	        				break;
 	        			case "crear_sala":
 	        			    Sala salaACrear = gson.fromJson(dataInputStream.readUTF(), Sala.class);
@@ -108,7 +108,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     }
 
     private void iniciarJuego(String nombreDeSala) {
-        for (Sala sala : this.salas) {
+        for (Sala sala : this.sincronizadorDeSalas.obtenerSalas()) {
             if (sala.getNombreSala().equals(nombreDeSala) && sala.getNombreCreador().equals(jugador.getNombre())) {
                 Juego.iniciar(sala);
             }
@@ -116,7 +116,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     }
 
     private void salirDeSalaActual(String nombreDeSala) {
-        for (Sala sala : this.salas) {
+        for (Sala sala : this.sincronizadorDeSalas.obtenerSalas()) {
             if (sala.getNombreSala().equals(nombreDeSala)) {
                 sala.removerJugador(jugador);
             }
@@ -131,12 +131,12 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
      * @return
      */
     private RespuestaAccionConSala unirseASala(Sala salaAUnirse) {
-        for (Sala sala : this.salas) {
+        for (Sala sala : this.sincronizadorDeSalas.obtenerSalas()) {
             if (sala.getNombreSala().equals(salaAUnirse.getNombreSala())) {
                 if (isNull(sala.getContrasenia()) || sala.getContrasenia().equals(salaAUnirse.getContrasenia())) {
                     sala.agregarJugador(jugador);
                     this.salaActual = sala.getNombreSala();
-                    return new RespuestaAccionConSala(true, this.salas);
+                    return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
                 } else {
                     return new RespuestaAccionConSala(false, "Contraseña invalida");
                 }
@@ -164,8 +164,8 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
         }
         salaACrear.agregarJugador(jugador);
         this.salaActual = salaACrear.getNombreSala();
-        this.salas.add(salaACrear);
-        return new RespuestaAccionConSala(true, this.salas);
+        this.sincronizadorDeSalas.agregarSala(salaACrear);
+        return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
     }
 
     /**
@@ -183,7 +183,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
      * @return
      */
     private boolean nombreUsado(String nombreSala) {
-        for(Sala sala : this.salas){
+        for(Sala sala : this.sincronizadorDeSalas.obtenerSalas()){
             if(sala.getNombreSala().equals(nombreSala)) {
                 return true;
             }

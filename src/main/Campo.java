@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
@@ -16,23 +17,30 @@ public class Campo implements ActionListener, Observado {
 
 	private Timer timer;
 	private int delay = 100;
+	private CountDownLatch cuentaRegresiva;
 	
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
+	private int ciclos;
 
 	private Observador observador;
 	
-	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA) {
+	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch cuentaRegresiva) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
+        this.cuentaRegresiva = cuentaRegresiva;
 		timer = new Timer(delay, this);
 	}
 	
 	public void comenzarJuego() {
 		timer.start();
 	}
+
+	public void terminarJuego() {
+	    timer.stop();
+    }
 
 	/**
 	 * Genera un dibujable por cada serpiente y comestible en el campo
@@ -73,6 +81,12 @@ public class Campo implements ActionListener, Observado {
 		chequearColisiones(serpientesIA);
 
 		notificarDibujables();
+
+        //TODO CONDICION DE FIN DE JUEGO
+        if (ciclos > 50) {
+            this.cuentaRegresiva.countDown();
+        }
+        ciclos++;
     }
 
 	private void chequearColisiones(List<? extends Serpiente> serpientes) {
