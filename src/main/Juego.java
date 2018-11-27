@@ -10,9 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
-    public static void iniciar(Sala sala) {
-
-        CountDownLatch cuentaRegresiva = new CountDownLatch(1);
+    public static void iniciar(Sala sala, CountDownLatch cuentaRegresiva ) {
 
         List<Serpiente> serpientes = new ArrayList<>();
         List<SerpienteIA> serpientesIA = new ArrayList<>();
@@ -35,6 +33,7 @@ public class Juego {
         campo.comenzarJuego();
 
         try {
+            System.out.println("Esperando");
             cuentaRegresiva.await();
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -20,7 +20,7 @@ public class Sala {
 
 	private List<Jugador> jugadores = new ArrayList<>();
 
-	private transient CountDownLatch cuentaRegresiva = new CountDownLatch(1);
+	private transient CountDownLatch cuentaRegresiva;
 
 	public Sala(String nombreSala, String contrasenia, int cantidadJugadores, int cantidadIA, String nombreCreador,
 			int dificultadIA) {
@@ -87,18 +87,44 @@ public class Sala {
 		for (int i = 0; i < jugadores.size() -1; i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
+		if (jugadores.size() == (cantidadJugadores + cantidadIA)) {
+			generarJuego();
+		}
 	}
 
 	public void removerJugador(Jugador jugador) {
 		jugadores.remove(jugador);
+		for (int i = 0; i < jugadores.size(); i++) {
+			jugadores.get(i).notificarActualizacionDeSala(this);
+		}
+	}
+
+	public void generarJuego() {
+		new Thread(){
+			@Override
+			public void run() {
+				for (int i = 0; i < jugadores.size(); i++) {
+					jugadores.get(i).cerrarActualizacionDeSala();
+				}
+				System.out.println(cuentaRegresiva);
+				Juego.iniciar(Sala.this, cuentaRegresiva);
+			}
+		}.start();
 	}
 
 	public List<Jugador> getJugadores() {
 		return jugadores;
 	}
 
+	public CountDownLatch obtenerCuentaRegresiva() {
+		return cuentaRegresiva;
+	}
 
-	// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
+	public void crearCuentaRegresiva() {
+		this.cuentaRegresiva = new CountDownLatch(1);
+	}
+
+// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
 	// private int mapa;
 	//
 	// private int tiempo;

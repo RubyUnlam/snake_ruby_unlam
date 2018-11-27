@@ -48,4 +48,12 @@ public class Jugador {
             e.printStackTrace();
         }
     }
+
+    public void cerrarActualizacionDeSala() {
+        try {
+            dataOutputStream.writeUTF("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

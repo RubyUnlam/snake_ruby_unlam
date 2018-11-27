@@ -111,7 +111,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     private void iniciarJuego(String nombreDeSala) {
         for (Sala sala : this.sincronizadorDeSalas.obtenerSalas()) {
             if (sala.getNombreSala().equals(nombreDeSala) && sala.getNombreCreador().equals(jugador.getNombre())) {
-                Juego.iniciar(sala);
+                Juego.iniciar(sala, null);
             }
         }
     }
@@ -164,6 +164,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             return new RespuestaAccionConSala(false, "Ya existe una sala con ese nombre");
         }
         salaACrear.agregarJugador(jugador);
+        salaACrear.crearCuentaRegresiva();
         this.salaActual = salaACrear.getNombreSala();
         this.sincronizadorDeSalas.agregarSala(salaACrear);
         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
