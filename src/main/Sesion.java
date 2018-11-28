@@ -114,9 +114,6 @@ public class Sesion {
 	public static RegistroUsuario nombreUsuarioValido(String nombreUsuario) {
 
 		RegistroUsuario registro = new RegistroUsuario("", false);
-		// TODO: cambiar por logger.
-		// System.out.println("Verificando existencia de nombre de usuario: " +
-		// nombreUsuario);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -127,8 +124,6 @@ public class Sesion {
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			// TODO: cambiar por logger.
-			// System.out.println("El usuario esta disponible para ser registrado");
 			registro.setRegistroEfectivo(true);
 			return registro;
 		}

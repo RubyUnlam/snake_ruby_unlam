@@ -19,7 +19,6 @@ public class Servidor extends Thread {
     public Servidor(int puerto) {
         try {
 			this.serverSocket = new ServerSocket(puerto);
-
 			System.out.println("Creado el server");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -30,15 +29,8 @@ public class Servidor extends Thread {
     public void run() {
         try {
             while (true) {
-
-            System.out.println("Esperando jugadores");
-
             Socket jugador = serverSocket.accept();
-
-            System.out.println("Alguien ha ingresado");
-
             new Flujo(jugador, sincronizadorDeSalas).start();
-
             }
             
         } catch (IOException e) {

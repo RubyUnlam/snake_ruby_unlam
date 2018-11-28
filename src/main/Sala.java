@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -17,6 +18,10 @@ public class Sala {
 	private String nombreCreador;
 
 	private int dificultadIA;
+
+	private int cantidadDeListos;
+
+	private ActualizacionDelJuego actualizacionDelJuego = new ActualizacionDelJuego(false, Collections.EMPTY_LIST, "");
 
 	private List<Jugador> jugadores = new ArrayList<>();
 
@@ -87,16 +92,27 @@ public class Sala {
 		for (int i = 0; i < jugadores.size() -1; i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
-		if (jugadores.size() == (cantidadJugadores + cantidadIA)) {
+	}
+
+	public void iniciar() {
+		System.out.println("listos: " + cantidadDeListos + " jugadores: " + jugadores.size());
+		if (cantidadDeListos == jugadores.size()) {
 			generarJuego();
 		}
 	}
 
+	public void darListo() {
+		cantidadDeListos++;
+	}
+
 	public void removerJugador(Jugador jugador) {
 		jugadores.remove(jugador);
+		cantidadDeListos--;
 		for (int i = 0; i < jugadores.size(); i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
+		cuentaRegresiva.countDown();
+		crearCuentaRegresiva();
 	}
 
 	public void generarJuego() {
@@ -106,7 +122,9 @@ public class Sala {
 				for (int i = 0; i < jugadores.size(); i++) {
 					jugadores.get(i).cerrarActualizacionDeSala();
 				}
-				System.out.println(cuentaRegresiva);
+				for (int i = 0; i < jugadores.size(); i++) {
+					jugadores.get(i).cerrarActualizacionDeSala();
+				}
 				Juego.iniciar(Sala.this, cuentaRegresiva);
 			}
 		}.start();
@@ -128,7 +146,15 @@ public class Sala {
 		return jugadores.size();
 	}
 
-// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
+	public void reiniciarSala() {
+		cantidadDeListos = 0;
+	}
+
+	public void setActualizacionDelJuego(ActualizacionDelJuego actualizacionDelJuego) {
+		this.actualizacionDelJuego = actualizacionDelJuego;
+	}
+
+	// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
 	// private int mapa;
 	//
 	// private int tiempo;

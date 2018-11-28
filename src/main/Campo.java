@@ -2,9 +2,8 @@ package main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -17,20 +16,21 @@ public class Campo implements ActionListener, Observado {
 
 	private Timer timer;
 	private int delay = 100;
-	private CountDownLatch cuentaRegresiva;
+	private CountDownLatch finDelJuego;
 	
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
 	private int ciclos;
+	private ActualizacionDelJuego actualizacionDelJuego;
 
 	private Observador observador;
 	
-	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch cuentaRegresiva) {
+	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch finDelJuego) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
-        this.cuentaRegresiva = cuentaRegresiva;
+        this.finDelJuego = finDelJuego;
 		timer = new Timer(delay, this);
 	}
 	
@@ -42,25 +42,9 @@ public class Campo implements ActionListener, Observado {
 	    timer.stop();
     }
 
-	/**
-	 * Genera un dibujable por cada serpiente y comestible en el campo
-	 * @return una lista de dibujables
-	 */
-	public void notificarDibujables() {
-	    List<Dibujable> dibujables = new ArrayList<>();
-	    for(Serpiente serpientes : serpientes){
-	    	dibujables.add(new Dibujable(serpientes));
-        }
-	    
-        for(Serpiente serpientesIA : serpientesIA){
-        	dibujables.add(new Dibujable(serpientesIA));
-        }
-        
-        for (Comestible comestible : comestibles) {
-        	dibujables.add(new Dibujable(comestible));
-        }
 
-		observador.dibujar(dibujables);
+	public void notificarDibujables(ActualizacionDelJuego actualizacion) {
+		observador.dibujar(actualizacion);
     }
 
 	@Override
@@ -80,16 +64,45 @@ public class Campo implements ActionListener, Observado {
 		chequearColisiones(serpientes);
 		chequearColisiones(serpientesIA);
 
-		notificarDibujables();
+        prepararActualizacionDelJuego();
 
-        //TODO CONDICION DE FIN DE JUEGO
-        if (ciclos > 50) {
-            this.cuentaRegresiva.countDown();
-        }
         ciclos++;
+        notificarDibujables(actualizacionDelJuego);
     }
 
-	private void chequearColisiones(List<? extends Serpiente> serpientes) {
+    private void prepararActualizacionDelJuego() {
+        //TODO CONDICION DE FIN DE JUEGO
+        List<Dibujable> dibujables = prepararDibujables();
+        if (ciclos > 50) {
+            terminarJuego();
+            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, "Peter"); //TODO LEVANTAR NOMBRE DEL GANADOR
+            this.finDelJuego.countDown();
+        } else {
+            actualizacionDelJuego = new ActualizacionDelJuego(dibujables); //TODO LEVANTAR NOMBRE DEL GANADOR
+        }
+    }
+
+    /**
+     * Genera un dibujable por cada serpiente y comestible en el campo
+     * @return una lista de dibujables
+     */
+    private List<Dibujable> prepararDibujables() {
+        List<Dibujable> dibujables = new ArrayList<>();
+        for(Serpiente serpientes : serpientes){
+            dibujables.add(new Dibujable(serpientes));
+        }
+
+        for(Serpiente serpientesIA : serpientesIA){
+            dibujables.add(new Dibujable(serpientesIA));
+        }
+
+        for (Comestible comestible : comestibles) {
+            dibujables.add(new Dibujable(comestible));
+        }
+        return dibujables;
+    }
+
+    private void chequearColisiones(List<? extends Serpiente> serpientes) {
 		for (Serpiente jugador : serpientes) {
 			for (Comestible comestible : comestibles) {
 				jugador.checkearColision(comestible);
@@ -115,4 +128,8 @@ public class Campo implements ActionListener, Observado {
 	public void agregarObservador(Observador observador) {
 		this.observador = observador;
 	}
+
+    public ActualizacionDelJuego obtenerResultadoDelJuego() {
+        return actualizacionDelJuego;
+    }
 }

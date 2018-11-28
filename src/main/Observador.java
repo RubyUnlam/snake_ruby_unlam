@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Observador {
 
-	void dibujar(List<Dibujable> dibujable);
+	void dibujar(ActualizacionDelJuego actualizacion);
 	void agregarJugador(Socket jugador);
 	
 }

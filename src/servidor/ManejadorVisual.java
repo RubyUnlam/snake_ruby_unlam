@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import main.ActualizacionDelJuego;
 import main.Dibujable;
 import main.Observador;
 
@@ -17,10 +18,10 @@ public class ManejadorVisual implements Observador {
     private List<DataOutputStream> salidas = new ArrayList<>();
     private Gson gson = new Gson();
 
-    public void dibujar(List<Dibujable> dibujable) {
+    public void dibujar(ActualizacionDelJuego actualizacion) {
         try {
             for (DataOutputStream entrada : salidas) {
-                entrada.writeUTF(gson.toJson(dibujable));
+                entrada.writeUTF(gson.toJson(actualizacion));
             }
         } catch (IOException e) {
             e.printStackTrace();
