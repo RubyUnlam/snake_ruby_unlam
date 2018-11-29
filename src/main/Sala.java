@@ -69,7 +69,7 @@ public class Sala {
 	 */
 	public void agregarJugador(Jugador jugador) {
 		jugadores.add(jugador);
-		notificarActualizacionAJugadores(jugadores.size() - 1);
+		notificarActualizacionAJugadores(getJugadoresEnSala() - 1);
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class Sala {
 			cantidadDeListos--;
 			jugador.setEstaListo(false);
 		}
-		intentarIniciarElJuego();
 
+		notificarActualizacionAJugadores(getJugadoresEnSala() - 1);
 	}
 
 	/**
@@ -123,8 +123,6 @@ public class Sala {
 	public void intentarIniciarElJuego() {
 		if (esValidoIniciarElJuego()) {
 			generarJuego();
-		} else {
-			notificarActualizacionAJugadores(getCantidadJugadores());
 		}
 	}
 
