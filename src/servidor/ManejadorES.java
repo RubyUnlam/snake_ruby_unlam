@@ -1,5 +1,7 @@
 package servidor;
 
+import com.google.gson.Gson;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,6 +11,7 @@ public class ManejadorES {
 
     private DataInputStream entrada;
     private DataOutputStream salida;
+    private Gson gson = new Gson();
 
     public ManejadorES(Socket socket) {
         try {
@@ -19,11 +22,15 @@ public class ManejadorES {
         }
     }
 
-    public String escuchar() throws IOException {
-        return entrada.readUTF();
+    public <T> T escuchar(Class<T> clazz) throws IOException {
+        return gson.fromJson(entrada.readUTF(), clazz);
     }
 
-    public void enviar(String mensaje) throws IOException {
+    public <T> void enviar(T mensaje) throws IOException {
+        salida.writeUTF(gson.toJson(mensaje));
+    }
+
+    public void enviarString(String mensaje) throws IOException {
         salida.writeUTF(mensaje);
     }
 }

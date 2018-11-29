@@ -9,7 +9,6 @@ import static java.util.Objects.isNull;
 
 public class IngresoAlJuego {
 
-    private Gson gson = new Gson();
     private ManejadorES manejadorES;
 
     public IngresoAlJuego(ManejadorES manejadorES) {
@@ -23,7 +22,7 @@ public class IngresoAlJuego {
         Usuario usuario;
         do {
             RegistroUsuario registroUsuario;
-            usuario = gson.fromJson(manejadorES.escuchar(), Usuario.class);
+            usuario = manejadorES.escuchar(Usuario.class);
             if (isNull(usuario.getEmail())) {
                 boolean registroValido = Sesion.iniciarSesion(usuario);
                 if (!registroValido) {
@@ -35,7 +34,7 @@ public class IngresoAlJuego {
             } else {
                 registroUsuario = Sesion.registrarUsuario(usuario.getNombreUsuario(), usuario.getContrasenia(), usuario.getEmail());
             }
-            manejadorES.enviar(gson.toJson(registroUsuario));
+            manejadorES.enviar(registroUsuario);
         } while (!sesionIniciada);
         return usuario;
     }

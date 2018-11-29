@@ -12,12 +12,11 @@ import main.Observador;
 public class ManejadorVisual implements Observador {
 
     private List<ManejadorES> manejadores = new ArrayList<>();
-    private Gson gson = new Gson();
 
     public void dibujar(ActualizacionDelJuego actualizacion) {
         try {
             for (ManejadorES manejadorES : manejadores) {
-                manejadorES.enviar(gson.toJson(actualizacion));
+                manejadorES.enviar(actualizacion);
             }
         } catch (IOException e) {
             e.printStackTrace();
