@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import servidor.ManejadorES;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
@@ -17,6 +18,7 @@ public class MenuPrincipal {
     public static final String UNIRSE_A_SALA = "unirse_a_sala";
     public static final String SALIR_DE_SALA = "salir_de_sala";
     public static final String JUGAR = "jugar";
+    public static final String CAMBIAR_COLOR = "cambiar_color";
 
     private Jugador jugador;
     private Sala salaActual;
@@ -51,12 +53,23 @@ public class MenuPrincipal {
                     case JUGAR:
                         iniciarJuego();
                         break;
+                    case CAMBIAR_COLOR:
+                        cambiarColor();
+                        break;
                 }
                 opcion = manejadorES.escuchar(String.class);
             }
         } catch(IOException e) {
             this.jugar(); //TODO ALTA FLASHEADA ESTA
         }
+    }
+
+    /**
+     * Se setea en el jugador el color enviado por el cliente
+     * @throws IOException
+     */
+    private void cambiarColor() throws IOException {
+        jugador.setColor(manejadorES.escuchar(Color.class));
     }
 
     /**
