@@ -95,7 +95,6 @@ public class Sala {
 	}
 
 	public void iniciar() {
-		System.out.println("listos: " + cantidadDeListos + " jugadores: " + jugadores.size());
 		if (cantidadDeListos == jugadores.size()) {
 			generarJuego();
 		}
@@ -107,7 +106,10 @@ public class Sala {
 
 	public void removerJugador(Jugador jugador) {
 		jugadores.remove(jugador);
-		cantidadDeListos--;
+		if (jugador.getEstaListo()) {
+			cantidadDeListos--;
+		}
+
 		for (int i = 0; i < jugadores.size(); i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
@@ -119,9 +121,6 @@ public class Sala {
 		new Thread(){
 			@Override
 			public void run() {
-				for (int i = 0; i < jugadores.size(); i++) {
-					jugadores.get(i).cerrarActualizacionDeSala();
-				}
 				for (int i = 0; i < jugadores.size(); i++) {
 					jugadores.get(i).cerrarActualizacionDeSala();
 				}

@@ -26,7 +26,7 @@ public class Juego {
             Serpiente serpiente = new Serpiente(jugador.getColor());
             serpientes.add(serpiente);
             manejadorVisual.agregarJugador(jugador.getConexion());
-            new ManejadorMovimiento(jugador.getConexion(), serpiente).start();
+            new ManejadorMovimiento(jugador.getConexion(), serpiente, jugador.getCountDownLatch()).start();
 
         }
 

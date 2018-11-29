@@ -73,7 +73,7 @@ public class Campo implements ActionListener, Observado {
     private void prepararActualizacionDelJuego() {
         //TODO CONDICION DE FIN DE JUEGO
         List<Dibujable> dibujables = prepararDibujables();
-        if (ciclos > 50) {
+        if (ciclos > 20) {
             terminarJuego();
             actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, "Peter"); //TODO LEVANTAR NOMBRE DEL GANADOR
             this.finDelJuego.countDown();

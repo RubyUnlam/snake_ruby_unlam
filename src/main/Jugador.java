@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 
 public class Jugador {
 
@@ -13,6 +14,8 @@ public class Jugador {
     private transient Socket conexion;
     private Color color = Color.BLUE;
     private transient DataOutputStream dataOutputStream;
+    private transient boolean estaListo;
+    private CountDownLatch countDownLatch;
 
     public Jugador(String nombre, Socket conexion) {
         this.nombre = nombre;
@@ -49,11 +52,27 @@ public class Jugador {
         }
     }
 
+    public boolean getEstaListo() {
+        return estaListo;
+    }
+
+    public void setEstaListo(boolean estaListo) {
+        this.estaListo = estaListo;
+    }
+
     public void cerrarActualizacionDeSala() {
         try {
             dataOutputStream.writeUTF("");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
+    }
+
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
     }
 }

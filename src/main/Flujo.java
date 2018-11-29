@@ -1,12 +1,14 @@
 package main;
 
 import com.google.gson.Gson;
+import servidor.ManejadorMovimiento;
 
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -18,6 +20,8 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     private Gson gson = new Gson();
     private Jugador jugador;
     private Sala salaActual;
+    private boolean saleDelPartido = false;
+    private CountDownLatch countDownLatch;
 
     public Flujo(Socket conexion, SincronizadorDeSalas sincronizadorDeSalas) {
         this.conexion = conexion;
@@ -65,39 +69,59 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             while (!"salir".equals(opcion)) { //TODO CONSTANTE
                 switch (opcion) {
                     case "ver_salas":
-                        System.out.println("ver salas");
                         dataOutputStream.writeUTF(gson.toJson(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas())));
                         break;
                     case "crear_sala":
-                        Sala salaACrear = gson.fromJson(dataInputStream.readUTF(), Sala.class);
+                        String json = dataInputStream.readUTF();
+                        System.out.println(json);
+                        Sala salaACrear = gson.fromJson(json, Sala.class);
                         RespuestaAccionConSala respuesta = crearSala(salaACrear);
                         dataOutputStream.writeUTF(gson.toJson(respuesta));
                         break;
                     case "unirse_a_sala":
-                        Sala salaAUnirse = gson.fromJson(dataInputStream.readUTF(), Sala.class);
+                        String json1 = dataInputStream.readUTF();
+                        System.out.println(json1);
+                        Sala salaAUnirse = gson.fromJson(json1, Sala.class);
                         RespuestaAccionConSala respuestaAccionConSala = unirseASala(salaAUnirse);
                         dataOutputStream.writeUTF(gson.toJson(respuestaAccionConSala));
                         break;
                     case "salir_de_sala":
                         salaActual.removerJugador(jugador);
                         salaActual = null;
-                        dataOutputStream.writeUTF("");
+                        if (!saleDelPartido) {
+                            dataOutputStream.writeUTF("");
+                        } else {
+                            System.out.println("acaba de salir de un partido");
+                        }
+                        saleDelPartido = false;
                         break;
                     case "jugar":
                         if (nonNull(salaActual)) {
                             try {
+                                countDownLatch = new CountDownLatch(1);
+                                jugador.setCountDownLatch(countDownLatch);
+                                jugador.setEstaListo(true);
                                 salaActual.darListo();
                                 salaActual.iniciar();
                                 salaActual.obtenerCuentaRegresiva().await();
-                                System.out.println("Termino el juego");
+                                System.out.println("Esperando fin de movimientos");
+                                countDownLatch.await();
+                                sincronizadorDeSalas.eliminarSala(salaActual);
+                                saleDelPartido = true;
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                         break;
+                    default:
+                        System.out.println(opcion);
+                        break;
                 }
+                System.out.println("VOLVI AL MENU");
                 opcion = dataInputStream.readUTF();
             }
+
+            System.out.println("SALI FUERA DEL MENU");
 
             //------------------------MENU-------------------------------//
 
