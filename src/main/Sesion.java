@@ -20,49 +20,49 @@ public class Sesion {
 
 	/**
 	 * Verifica que el usuario y mail no esten en uso, y que este ultimo sea valido.
-	 * Si alguno no cumpliera con esas condiciones, devuelve una cadena con el mensaje de error.
+	 * Si alguno no cumpliera con esas condiciones, devuelve una cadena con el
+	 * mensaje de error.
+	 * 
 	 * @param nombreUsuario
 	 * @param contrasenia
 	 * @param email
 	 * @return
 	 */
-	
 	public static RegistroUsuario registrarUsuario(String nombreUsuario, String contrasenia, String email) {
 		session = SesionSingleton.getSessionFactory().openSession();
-		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);	
+		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
 		RegistroUsuario registroMail = mailUsuarioValido(email);
-		RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
 		
-		if (!registroUsername.esRegistroEfectivo()) {
-			return registroUsername;				
-		}
-			
-		if(!registroMail.esRegistroEfectivo()) {
+		if (!registroMail.esRegistroEfectivo()) {
 			return registroMail;
 		}
-			
+		
+		RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
+
+		if (!registroUsername.esRegistroEfectivo()) {
+			return registroUsername;
+		}
+
 		registrarUsuario(usuario);
 		session.close();
 		return registroUsername;
 	}
 
 	/**
-	 * Verifica que el mail no se encuentre en la base de datos, y que contenga
-	 * al menos un punto y un arroba.
+	 * Verifica que el mail no se encuentre en la base de datos, y que contenga al
+	 * menos un punto y un arroba.
+	 * 
 	 * @param email
 	 * @return RegistroUsuario
 	 */
-	
 	private static RegistroUsuario mailUsuarioValido(String email) {
-		
+
 		RegistroUsuario registro = new RegistroUsuario("", false);
-		
-		if(!email.contains("@") || !email.contains(".")) {
+
+		if (!email.contains("@") || !email.contains(".")) {
 			registro.setMensaje("El mail debe contener al menos un punto y un arroba");
 			return registro;
 		}
-		//TODO: cambiar por logger.
-		//System.out.println("Verificando existencia de nombre de usuario: " + mailValido);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -73,8 +73,6 @@ public class Sesion {
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			//TODO: cambiar por logger.
-			//System.out.println("El mail esta disponible para ser registrado");
 			registro.setRegistroEfectivo(true);
 			return registro;
 		}
@@ -82,24 +80,10 @@ public class Sesion {
 		return registro;
 	}
 
-	public static boolean iniciarSesion(String nombreUsuario, String contrasenia) {
-		session = SesionSingleton.getSessionFactory().openSession();
-		Usuario usuario = new Usuario(nombreUsuario, contrasenia);
-		try {
-			return iniciarSesion(usuario);
-		} catch (HibernateException e) {
-			return false;
-		} finally {
-			session.close();
-		}
-	}
-
 	public static boolean iniciarSesion(Usuario usuario) {
+		session = SesionSingleton.getSessionFactory().openSession();
 
 		boolean existeCuenta = true;
-		
-		//TODO: cambiar por logger.
-		System.out.println("Validando inicio de sesion: " + usuario.getNombreUsuario());
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -130,8 +114,6 @@ public class Sesion {
 	public static RegistroUsuario nombreUsuarioValido(String nombreUsuario) {
 
 		RegistroUsuario registro = new RegistroUsuario("", false);
-		//TODO: cambiar por logger.
-		//System.out.println("Verificando existencia de nombre de usuario: " + nombreUsuario);
 
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
@@ -142,9 +124,7 @@ public class Sesion {
 		try {
 			session.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			//TODO: cambiar por logger.
-			//System.out.println("El usuario esta disponible para ser registrado");
-			registro.setRegistroEfectivo(true);	
+			registro.setRegistroEfectivo(true);
 			return registro;
 		}
 		registro.setMensaje("Nombre de usuario en uso.");
