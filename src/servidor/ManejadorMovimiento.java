@@ -1,20 +1,19 @@
 package servidor;
 
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
 import main.Serpiente;
 
 public class ManejadorMovimiento extends Thread {
 
-    private Socket socket;
+    public static final String FINALIZAR = "finalizar";
+    private ManejadorES manejadorES;
     private Serpiente serpiente;
     private CountDownLatch countDownLatch;
 
-    public ManejadorMovimiento(Socket socket, Serpiente serpiente, CountDownLatch countDownLatch) {
-        this.socket = socket;
+    public ManejadorMovimiento(ManejadorES manejadorES, Serpiente serpiente, CountDownLatch countDownLatch) {
+        this.manejadorES = manejadorES;
         this.serpiente = serpiente;
         this.countDownLatch = countDownLatch;
     }
@@ -22,12 +21,11 @@ public class ManejadorMovimiento extends Thread {
     @Override
     public void run() {
         try {
-            DataInputStream entrada = new DataInputStream(socket.getInputStream());
             boolean finDelJuego = false;
             while (!finDelJuego) {
-                String mandameMecha = entrada.readUTF();
+                String mandameMecha = manejadorES.escuchar();
                 System.out.println(mandameMecha);
-                if (!"finalizar".equals(mandameMecha)) {
+                if (!FINALIZAR.equals(mandameMecha)) {
                     serpiente.mirar(mandameMecha);
                 } else {
                     finDelJuego = true;

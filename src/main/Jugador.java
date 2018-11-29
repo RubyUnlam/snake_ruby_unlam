@@ -1,6 +1,7 @@
 package main;
 
 import com.google.gson.Gson;
+import servidor.ManejadorES;
 
 import java.awt.*;
 import java.io.DataOutputStream;
@@ -10,26 +11,21 @@ import java.util.concurrent.CountDownLatch;
 
 public class Jugador {
 
+    private Gson gson = new Gson();
     private String nombre;
-    private transient Socket conexion;
+    private transient ManejadorES manejadorES;
     private Color color = Color.BLUE;
-    private transient DataOutputStream dataOutputStream;
     private transient boolean estaListo;
-    private CountDownLatch countDownLatch;
+    private transient CountDownLatch escuchandoTeclas;
 
-    public Jugador(String nombre, Socket conexion) {
+    public Jugador(String nombre, ManejadorES manejadorES) {
         this.nombre = nombre;
-        this.conexion = conexion;
-        this.color = color;
-        try {
-            this.dataOutputStream = new DataOutputStream(conexion.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.manejadorES = manejadorES;
+//        this.color = color;
     }
 
-    public Socket getConexion() {
-        return conexion;
+    public ManejadorES getManejador() {
+        return manejadorES;
     }
 
     public Color getColor() {
@@ -46,7 +42,7 @@ public class Jugador {
 
     public void notificarActualizacionDeSala(Sala sala) {
         try {
-            dataOutputStream.writeUTF(new Gson().toJson(sala));
+            manejadorES.enviar(gson.toJson(sala));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,17 +58,17 @@ public class Jugador {
 
     public void cerrarActualizacionDeSala() {
         try {
-            dataOutputStream.writeUTF("");
+            manejadorES.enviar("");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public CountDownLatch getCountDownLatch() {
-        return countDownLatch;
+    public CountDownLatch obtenerEscuchandoTeclas() {
+        return escuchandoTeclas;
     }
 
-    public void setCountDownLatch(CountDownLatch countDownLatch) {
-        this.countDownLatch = countDownLatch;
+    public void setEscuchandoTeclas(CountDownLatch escuchandoTeclas) {
+        this.escuchandoTeclas = escuchandoTeclas;
     }
 }

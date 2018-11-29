@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
-    public static void iniciar(Sala sala, CountDownLatch cuentaRegresiva) {
+    public static void iniciar(Sala sala, CountDownLatch partidoTerminado) { //TODO VER SI LO SEPARAMOS EN METODOS
 
         List<Serpiente> serpientes = new ArrayList<>();
         List<SerpienteIA> serpientesIA = new ArrayList<>();
@@ -25,9 +25,8 @@ public class Juego {
         for (Jugador jugador : sala.getJugadores()) {
             Serpiente serpiente = new Serpiente(jugador.getColor());
             serpientes.add(serpiente);
-            manejadorVisual.agregarJugador(jugador.getConexion());
-            new ManejadorMovimiento(jugador.getConexion(), serpiente, jugador.getCountDownLatch()).start();
-
+            manejadorVisual.agregarJugador(jugador.getManejador());
+            new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
         }
 
         for (int i = 0; i < sala.getCantidadIA(); i++) {
@@ -38,9 +37,7 @@ public class Juego {
 
         try {
             finDelJuego.await();
-            sala.setActualizacionDelJuego(campo.obtenerResultadoDelJuego());
-            sala.reiniciarSala();
-            cuentaRegresiva.countDown();
+            partidoTerminado.countDown();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
