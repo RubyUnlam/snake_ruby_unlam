@@ -20,18 +20,27 @@ public class Sala {
 
 	private int cantidadDeListos;
 
+	private int tiempo;
+
 	private List<Jugador> jugadores = new ArrayList<>();
+
+	private String modoDeJuego;
+
+	private int puntajeAAlcanzar;
 
 	private transient CountDownLatch partidoTerminado; //TODO CAMBIARLE EL NOMBRE POR ALGO TAL VEZ MAS DESCRIPTIVO
 
 	public Sala(String nombreSala, String contrasenia, int cantidadJugadores, int cantidadIA, String nombreCreador,
-			int dificultadIA) {
+			int dificultadIA, String modoDeJuego, int tiempo, int puntaje) {
 		this.nombreSala = nombreSala;
 		this.contrasenia = contrasenia;
 		this.cantidadJugadores = cantidadJugadores;
 		this.cantidadIA = cantidadIA;
 		this.nombreCreador = nombreCreador;
 		this.dificultadIA = dificultadIA;
+		this.modoDeJuego = modoDeJuego;
+		this.tiempo = tiempo;
+		this.puntajeAAlcanzar = puntaje;
 	}
 
 	public String getNombreSala() {
@@ -115,7 +124,7 @@ public class Sala {
 		if (esValidoIniciarElJuego()) {
 			generarJuego();
 		} else {
-			notificarActualizacionAJugadores(getCantidadJugadores() - 1);
+			notificarActualizacionAJugadores(getCantidadJugadores());
 		}
 	}
 
@@ -186,7 +195,17 @@ public class Sala {
 
 	// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
 	// private int mapa;
-	//
-	// private int tiempo;
 
+	public int getTiempo() {
+		return tiempo;
+	}
+
+	public String getModoDeJuego() {
+		return modoDeJuego;
+	}
+
+	public int getPuntajeAAlcanzar() {
+		return puntajeAAlcanzar;
+	}
 }
+

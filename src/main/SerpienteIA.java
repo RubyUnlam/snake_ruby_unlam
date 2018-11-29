@@ -6,8 +6,8 @@ public class SerpienteIA extends Serpiente {
 	
 	private int dificultad; //por ciento
 	
-	public SerpienteIA(int dificultad, Color color) {
-		super(color);
+	public SerpienteIA(int dificultad, Color color, String nombre) {
+		super(color, nombre);
 		this.dificultad = dificultad;
 		this.direccion = Direccion.IZQUIERDA;
 	}

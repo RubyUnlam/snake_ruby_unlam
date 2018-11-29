@@ -18,7 +18,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseNoCrece() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		
 		int tamanioInicial = serpiente.getUbicaciones().size(); 
 		serpiente.moverse();
@@ -32,7 +32,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzana() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 p�xeles delante de la serpiente
 		
@@ -49,7 +49,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzanaSinEstarEnPosicion() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
 		
@@ -65,7 +65,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseSeMueve() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Ubicacion hombro = serpiente.getUbicaciones().get(1);

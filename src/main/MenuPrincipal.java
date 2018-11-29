@@ -36,7 +36,7 @@ public class MenuPrincipal {
         try {
             String opcion = manejadorES.escuchar(String.class);
 
-            while (!SALIR.equals(opcion)) { //TODO CONSTANTE
+            while (!SALIR.equals(opcion)) {
                 switch (opcion) {
                     case VER_SALAS:
                         verSalas();
@@ -60,7 +60,7 @@ public class MenuPrincipal {
                 opcion = manejadorES.escuchar(String.class);
             }
         } catch(IOException e) {
-            this.jugar(); //TODO ALTA FLASHEADA ESTA
+            this.jugar(); //TODO ALTA FLASHEADA ESTA. SÍ, ALTA FLASHEADA GON.
         }
     }
 
@@ -180,8 +180,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Dada una sala, verifica si todavía hay espacio para meter a otro jugador
-     *
+     * Dada una sala, verifica si todavía hay espacio para meter a otro jugador     *
      * @param sala
      * @return
      */
@@ -205,14 +204,45 @@ public class MenuPrincipal {
             return new RespuestaAccionConSala(false, "La cantidad total de jugadores debe ser a lo sumo 4");
         }
 
+        if (salaACrear.getTiempo() < 0){
+            return new RespuestaAccionConSala(false, "El tiempo ingresado no es valido");
+        }
+
         if (nombreUsado(salaACrear.getNombreSala())) {
             return new RespuestaAccionConSala(false, "Ya existe una sala con ese nombre");
         }
+
+        if (!condicionesDeVictoriaValidas(salaACrear)){
+            return new RespuestaAccionConSala(false, "Los parametros de victoria ingresados son invalidos");
+        }
+
         this.sincronizadorDeSalas.agregarSala(salaACrear);
         this.salaActual = salaACrear;
         salaACrear.crearPartidoTerminado();
         salaACrear.agregarJugador(jugador);
         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
+    }
+
+    private boolean condicionesDeVictoriaValidas(Sala sala){
+        return sala.getModoDeJuego().equals("Puntaje") ? esPuntajeValido(sala) : esTiempoValido(sala);
+    } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
+
+    /**
+     * Verfica que el puntaje ingresado sea un numero mayor a 0.
+     * @param sala
+     * @return
+     */
+
+    private boolean esPuntajeValido(Sala sala){
+        return sala.getPuntajeAAlcanzar() > 0;
+    }
+
+    /**
+     * Verifica que el tiempo ingresado sea un numero mayor a 0.
+     * @return
+     */
+    private boolean esTiempoValido(Sala sala) {
+       return sala.getTiempo() > 0;
     }
 
     /**

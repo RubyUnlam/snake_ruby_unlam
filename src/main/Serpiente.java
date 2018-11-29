@@ -15,8 +15,10 @@ public class Serpiente {
 	private Color color;
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 	protected Direccion direccion;
+	private int puntaje = 0;
+	private String nombreDeSerpiente;
 	
-	public Serpiente(Color color){
+	public Serpiente(Color color, String nombre){
 		this.color = color;
 		estado = new Normal();
 		Ubicacion cabeza = new Ubicacion();
@@ -25,6 +27,7 @@ public class Serpiente {
 		crecer();
 		crecer();
 		this.direccion = Direccion.IZQUIERDA;
+		this.nombreDeSerpiente = nombre;
 	}
 	
 	public Serpiente(Ubicacion cabeza, Color color){
@@ -85,6 +88,14 @@ public class Serpiente {
 	protected boolean estaMuerto() {
 		return ubicaciones.isEmpty();
 	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public String getNombre(){ return nombreDeSerpiente;}
+
+	public int getPuntaje(){ return puntaje;}
 	
 	class Normal implements Estado {
 
@@ -138,6 +149,7 @@ public class Serpiente {
 			if(nonNull(comestible) && !ubicaciones.isEmpty() && getUbicacionCabeza().equals(comestible.getUbicacion())) {
 				crecer();
 				comestible.setComida(true);
+				puntaje+=10;
 			}
 			return this;
 		}
