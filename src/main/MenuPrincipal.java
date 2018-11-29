@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import servidor.ManejadorES;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
@@ -17,8 +18,8 @@ public class MenuPrincipal {
     public static final String UNIRSE_A_SALA = "unirse_a_sala";
     public static final String SALIR_DE_SALA = "salir_de_sala";
     public static final String JUGAR = "jugar";
+    public static final String CAMBIAR_COLOR = "cambiar_color";
 
-    private Gson gson = new Gson();
     private Jugador jugador;
     private Sala salaActual;
     private boolean saleDelPartido = false;
@@ -33,7 +34,7 @@ public class MenuPrincipal {
 
     public void jugar() {
         try {
-            String opcion = manejadorES.escuchar();
+            String opcion = manejadorES.escuchar(String.class);
 
             while (!SALIR.equals(opcion)) { //TODO CONSTANTE
                 switch (opcion) {
@@ -52,8 +53,11 @@ public class MenuPrincipal {
                     case JUGAR:
                         iniciarJuego();
                         break;
+                    case CAMBIAR_COLOR:
+                        cambiarColor();
+                        break;
                 }
-                opcion = manejadorES.escuchar();
+                opcion = manejadorES.escuchar(String.class);
             }
         } catch(IOException e) {
             this.jugar(); //TODO ALTA FLASHEADA ESTA
@@ -61,11 +65,19 @@ public class MenuPrincipal {
     }
 
     /**
+     * Se setea en el jugador el color enviado por el cliente
+     * @throws IOException
+     */
+    private void cambiarColor() throws IOException {
+        jugador.setColor(manejadorES.escuchar(Color.class));
+    }
+
+    /**
      * Le envia al cliente las salas disponibles en el sincronizador
      * @throws IOException
      */
     private void verSalas() throws IOException {
-        manejadorES.enviar(gson.toJson(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas())));
+        manejadorES.enviar(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas()));
     }
 
     /**
@@ -74,9 +86,9 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void crearSala() throws IOException {
-        Sala salaACrear = gson.fromJson(manejadorES.escuchar(), Sala.class);
+        Sala salaACrear = manejadorES.escuchar(Sala.class);
         RespuestaAccionConSala respuesta = crearSala(salaACrear);
-        manejadorES.enviar(gson.toJson(respuesta));
+        manejadorES.enviar(respuesta);
     }
 
     /**
@@ -85,10 +97,9 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void unirseASala() throws IOException {
-        Sala salaAUnirse = gson.fromJson(manejadorES.escuchar(), Sala.class);
+        Sala salaAUnirse = manejadorES.escuchar(Sala.class);
         RespuestaAccionConSala respuestaAccionConSala = unirseASala(salaAUnirse);
-        manejadorES.enviar(gson.toJson(respuestaAccionConSala));
-        return;
+        manejadorES.enviar(respuestaAccionConSala);
     }
 
     /**
