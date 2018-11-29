@@ -2,61 +2,52 @@ package main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
 
-public class Campo implements KeyListener, ActionListener, Observado {
-	
+public class Campo implements ActionListener, Observado {
+
 	private Timer timer;
 	private int delay = 100;
+	private CountDownLatch finDelJuego;
 	
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
 	private Colision colisionador;
 	
-	private int keyEventUP = KeyEvent.VK_UP;
-	private int keyEventDOWN = KeyEvent.VK_DOWN;
-	private int keyEventRIGTH = KeyEvent.VK_RIGHT;
-	private int keyEventLEFT = KeyEvent.VK_LEFT;
+	private int ciclos;
+	private ActualizacionDelJuego actualizacionDelJuego;
 
-	private List<Observador> observadores = new ArrayList<>();
+	private Observador observador;
 	
-	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA) {
+	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch finDelJuego) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		this.colisionador = new Colision();
+        this.finDelJuego = finDelJuego;
 		timer = new Timer(delay, this);
+	}
+	
+	public void comenzarJuego() {
 		timer.start();
 	}
 
-	/**
-	 * Genera un dibujable por cada serpiente y comestible en el campo
-	 * @return una lista de dibujables
-	 */
-	public List<Dibujable> notificarDibujables() {
-	    List<Dibujable> dibujables = new ArrayList<>();
-	    for(Serpiente serpientes : serpientes){
-	    	dibujables.add(new Dibujable(serpientes));
-        }
-	    
-        for(Serpiente serpientesIA : serpientesIA){
-        	dibujables.add(new Dibujable(serpientesIA));
-        }
-        
-        for (Comestible comestible : comestibles) {
-        	dibujables.add(new Dibujable(comestible));
-        }
+	public void terminarJuego() {
+	    timer.stop();
+    }
 
-        return dibujables;
+
+	public void notificarDibujables(ActualizacionDelJuego actualizacion) {
+		observador.dibujar(actualizacion);
     }
 
 	@Override
@@ -72,39 +63,46 @@ public class Campo implements KeyListener, ActionListener, Observado {
         	jugadorIA.cambiarMirada(comestibles.peek());
         	jugadorIA.moverse();
         }
-        
+
         colisionador.comprobarColisiones(serpientes, serpientesIA, comestibles);
         
-        for (Observador observador : observadores) {
-        	observador.dibujar(this);
-        }
-        
+        prepararActualizacionDelJuego();
+
+        ciclos++;
+        notificarDibujables(actualizacionDelJuego);
     }
 
-	
-	@Override
-	public void keyPressed(KeyEvent e) { //TODO VER COMO FUNCIONARIA ESTO EN MULTIJUGADOR
-		int teclaPresionada = e.getKeyCode();
-		if (teclaPresionada == keyEventUP) {
-			serpientes.get(0).mirar(Direccion.ARRIBA.name());
-		} else if (teclaPresionada == keyEventDOWN) {
-			serpientes.get(0).mirar(Direccion.ABAJO.name());
-		} else if (teclaPresionada == keyEventRIGTH) {
-            serpientes.get(0).mirar(Direccion.DERECHA.name());
-		} else if (teclaPresionada == keyEventLEFT) {
-			serpientes.get(0).mirar(Direccion.IZQUIERDA.name());
-		}
-	}
+    private void prepararActualizacionDelJuego() {
+        //TODO CONDICION DE FIN DE JUEGO
+        List<Dibujable> dibujables = prepararDibujables();
+        if (ciclos > 20) {
+            terminarJuego();
+            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, "Peter"); //TODO LEVANTAR NOMBRE DEL GANADOR
+            this.finDelJuego.countDown();
+        } else {
+            actualizacionDelJuego = new ActualizacionDelJuego(dibujables); //TODO LEVANTAR NOMBRE DEL GANADOR
+        }
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub	
-	}
-	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub	
-	}
+    /**
+     * Genera un dibujable por cada serpiente y comestible en el campo
+     * @return una lista de dibujables
+     */
+    private List<Dibujable> prepararDibujables() {
+        List<Dibujable> dibujables = new ArrayList<>();
+        for(Serpiente serpientes : serpientes){
+            dibujables.add(new Dibujable(serpientes));
+        }
+
+        for(Serpiente serpientesIA : serpientesIA){
+            dibujables.add(new Dibujable(serpientesIA));
+        }
+
+        for (Comestible comestible : comestibles) {
+            dibujables.add(new Dibujable(comestible));
+        }
+        return dibujables;
+    }
 
 	/**
 	 * Metodo para agregar un observador a la lista.
@@ -112,6 +110,6 @@ public class Campo implements KeyListener, ActionListener, Observado {
 	 */
 	@Override
 	public void agregarObservador(Observador observador) {
-		observadores.add(observador);
+		this.observador = observador;
 	}
 }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class Colision{
+public class Colision {
 	
-	public void comprobarColisionComestible(Serpiente serpiente, Queue<Comestible> comestibles) {
+	private void comprobarColisionComestible(Serpiente serpiente, Queue<Comestible> comestibles) {
 		Ubicacion cabezaSerpiente = serpiente.getUbicacionCabeza();
 		
 		for (Comestible comestible : comestibles) {
@@ -34,8 +34,6 @@ public class Colision{
 			if( jugador1.estaMuerto() )
 				continue;
 			
-			comprobarColisionComestible(jugador1, comestibles);
-			
 			Ubicacion cabezaJugador1 = jugador1.getUbicacionCabeza();
 			
 			for (int j = 0; j < jugadoresTotales.size(); j++) {
@@ -62,11 +60,14 @@ public class Colision{
 					}
 				}
 			}
+			if (!jugadoresParaEliminar.contains(jugador1)) {
+				comprobarColisionComestible(jugador1, comestibles);
+			}
 		}
 		eliminarJugadores(jugadoresParaEliminar);
 	}
 	
-	public void eliminarJugadores(List<Serpiente> jugadoresParaEliminar) {
+	private void eliminarJugadores(List<Serpiente> jugadoresParaEliminar) {
 		for (Serpiente jugador : jugadoresParaEliminar) {
 			jugador.morir();
 		}

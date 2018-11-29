@@ -1,44 +1,46 @@
 package main;
 
-import static utilidades.Constantes.ALTURA_VENTANA;
-import static utilidades.Constantes.ANCHO_VENTANA;
+import servidor.ManejadorMovimiento;
+import servidor.ManejadorVisual;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFrame;
+import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
-    public static long initTime;
+    public static void iniciar(Sala sala, CountDownLatch partidoTerminado) { //TODO VER SI LO SEPARAMOS EN METODOS
 
-	public static void iniciar(Sala sala) {
-		
-		JFrame ventana = new JFrame("Snake");
-		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ventana.setBounds(0, 0, ANCHO_VENTANA, ALTURA_VENTANA);
-		ventana.setResizable(false);
-		ventana.setLocationRelativeTo(null);
-		
-		List<Serpiente> serpientes = new ArrayList<>();
-		
-		for (int i = 0; i < sala.getCantidadJugadores(); i++) {
-			serpientes.add(new Serpiente(Color.BLUE));			
-		}
-		
-		List<SerpienteIA> serpientesIA = new ArrayList<>();			
-		for (int i = 0; i < sala.getCantidadIA(); i++) {
-			serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK));
-		}
-		
-        Ui ui = new Ui();
-        
-        Campo campo = new Campo(serpientes, serpientesIA);
+        List<Serpiente> serpientes = new ArrayList<>();
+        List<SerpienteIA> serpientesIA = new ArrayList<>();
 
-        campo.agregarObservador(ui);
-        ventana.setContentPane(ui);
-        ventana.setVisible(true);
+        ManejadorVisual manejadorVisual = new ManejadorVisual();
 
-	}
+        CountDownLatch finDelJuego = new CountDownLatch(1);
+
+        Campo campo = new Campo(serpientes, serpientesIA, finDelJuego);
+        campo.agregarObservador(manejadorVisual);
+
+        for (Jugador jugador : sala.getJugadores()) {
+            Serpiente serpiente = new Serpiente(jugador.getColor());
+            serpientes.add(serpiente);
+            manejadorVisual.agregarJugador(jugador.getManejador());
+            new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
+        }
+
+        for (int i = 0; i < sala.getCantidadIA(); i++) {
+            serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK));
+        }
+
+        campo.comenzarJuego();
+
+        try {
+            finDelJuego.await();
+            partidoTerminado.countDown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

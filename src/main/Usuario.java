@@ -1,9 +1,8 @@
 package main;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.awt.*;
+import java.net.Socket;
 
 @Entity
 @Table(name="USUARIOS")
@@ -18,7 +17,7 @@ public class Usuario {
 	
 	@Column(name = "Email")
 	private String email;
-	
+
 	public Usuario() {
 		
 	}
