@@ -17,21 +17,27 @@ public class Campo implements ActionListener, Observado {
 	private Timer timer;
 	private int delay = 100;
 	private CountDownLatch finDelJuego;
+	private int tiempoDeJuego;
 	
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
 	private int ciclos;
 	private ActualizacionDelJuego actualizacionDelJuego;
+	private String modoDeJuego;
+	private int puntajeAAlcanzar;
 
 	private Observador observador;
 	
-	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch finDelJuego) {
+	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch finDelJuego, int tiempoDeJuego, int puntajeAAlcanzar, String modoDeJuego) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
         this.finDelJuego = finDelJuego;
 		timer = new Timer(delay, this);
+		this.tiempoDeJuego = tiempoDeJuego * 100;
+		this.puntajeAAlcanzar = puntajeAAlcanzar;
+		this.modoDeJuego = modoDeJuego;
 	}
 	
 	public void comenzarJuego() {
@@ -66,23 +72,95 @@ public class Campo implements ActionListener, Observado {
 
         prepararActualizacionDelJuego();
 
-        ciclos++;
+        ciclos+=10;
         notificarDibujables(actualizacionDelJuego);
     }
 
     private void prepararActualizacionDelJuego() {
-        //TODO CONDICION DE FIN DE JUEGO
         List<Dibujable> dibujables = prepararDibujables();
-        if (ciclos > 20) {
+        if (partidaFinalizada()) {
             terminarJuego();
-            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, "Peter"); //TODO LEVANTAR NOMBRE DEL GANADOR
+            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, obtenerSerpienteGanadora()); //TODO LEVANTAR NOMBRE DEL GANADOR
             this.finDelJuego.countDown();
         } else {
-            actualizacionDelJuego = new ActualizacionDelJuego(dibujables); //TODO LEVANTAR NOMBRE DEL GANADOR
+            actualizacionDelJuego = new ActualizacionDelJuego(dibujables);
         }
     }
 
-    /**
+    private boolean partidaFinalizada(){
+		if(modoDeJuego.equals("Supervivencia")){
+			return terminoElTiempo() || !haySerpientesVivas() || hayUnaSerpienteViva();
+		} else {
+			return !haySerpientesVivas() || puntajeMaximoAlcanzado();
+		}
+	}
+
+	/**
+	 * Obtiene el nombre de la serpiente ganadora.
+	 * En caso de que no haya serpientes vivas, devuelve empate.
+	 * @return
+	 */
+
+	private String obtenerSerpienteGanadora() { //TODO CONTEMPLAR DIFERENTES CASOS DE GANADOR. MODIFICAR CUANDO SE MODIFIQUEN LAS COLISIONES.
+
+		if (modoDeJuego.equals("Supervivencia")) {
+			return obtenerGanadoraSupervivencia();
+		} else {
+			return obtenerGanadoraPuntaje();
+		}
+	}
+
+	/**
+	 * Devuelve el nombre de la serpiente ganadora del modo supervivencia
+	 * @return
+	 */
+	private String obtenerGanadoraSupervivencia() { //TODO HACER QUE DEVUELVA UNA LISTA CON LOS HOMBRES DE LOS GANADORES
+		if(!haySerpientesVivas()){ return "Empate";}
+
+		for(Serpiente serpiente : serpientes){
+			if(!serpiente.getUbicaciones().isEmpty()){
+				return serpiente.getNombre();
+			}
+		}
+
+		for(Serpiente serpiente : serpientesIA){
+			if(!serpiente.getUbicaciones().isEmpty()){
+				return serpiente.getNombre();
+			}
+		}
+		return "Mensaje default";
+	}
+
+	/**
+	 * Se busca la serpiente con mayor puntaje y se devuelve el nombre de la misma.
+	 * Este metodo sirve tanto para cuando una serpiente alcanza el puntaje maximo
+	 * como cuando ya no quedan serpientes en el campo.
+	 * @return
+	 */
+
+	private String obtenerGanadoraPuntaje(){
+		int puntaje = 0;
+		String nombreMayorPuntaje = "nadie. Nadie consiguio puntos.";
+		for(Serpiente serpiente : serpientes){
+			if(serpiente.getPuntaje() > puntaje){
+				puntaje = serpiente.getPuntaje();
+				nombreMayorPuntaje = serpiente.getNombre();
+			}
+		}
+
+		for(SerpienteIA serpiente : serpientesIA)
+			if(serpiente.getPuntaje() > puntaje){
+				puntaje = serpiente.getPuntaje();
+				nombreMayorPuntaje = serpiente.getNombre();
+			}
+
+		return nombreMayorPuntaje;
+	}
+
+
+
+
+	/**
      * Genera un dibujable por cada serpiente y comestible en el campo
      * @return una lista de dibujables
      */
@@ -118,6 +196,73 @@ public class Campo implements ActionListener, Observado {
 				jugador.checkearColision(jugadorIA);
 			}
 		}
+	}
+
+	/**
+	 * verifica si termino el tiempo de juego. True si termino.
+	 * @return
+	 */
+
+	private boolean	terminoElTiempo(){
+    	return ciclos > tiempoDeJuego;
+	}
+
+	/**
+	 * Verifica si quedan serpientes vivas. Devuelve true si hay 1 o más, y false en otro caso
+	 * @return
+	 */
+	private boolean haySerpientesVivas() { //TODO REFACTOR DE ESTO CUANDO SE MERGEE EL NUEVO CÓDIGO DE COLISIONES.
+		int cantidadVivas = 0;
+		for(Serpiente serpiente : serpientes){
+			if(!serpiente.getUbicaciones().isEmpty())
+				cantidadVivas++;
+		}
+
+		for(SerpienteIA serpiente : serpientesIA){
+			if(!serpiente.getUbicaciones().isEmpty()){
+				cantidadVivas++;
+			}
+		}
+		return cantidadVivas > 0;
+	}
+
+	/**
+	 * Verifica si queda solo una serpiente viva.
+	 *
+	 * @return
+	 */
+
+	private boolean hayUnaSerpienteViva(){
+		int cantidadVivas = 0;
+		for(Serpiente serpiente : serpientes){
+			if(!serpiente.getUbicaciones().isEmpty())
+				cantidadVivas++;
+		}
+
+		for(SerpienteIA serpiente : serpientesIA){
+			if(!serpiente.getUbicaciones().isEmpty()){
+				cantidadVivas++;
+			}
+		}
+		return cantidadVivas == 1;
+	}
+
+	/**
+	 *  Verifica si alguna serpiente (tanto humana como IA) alcanzo el puntaje
+	 *  necesario para ganar la partida.
+	 * @return
+	 */
+
+	private boolean puntajeMaximoAlcanzado(){
+		for(Serpiente serpiente : serpientes){
+			if(serpiente.getPuntaje() >= puntajeAAlcanzar){return true;}
+		}
+
+		for(SerpienteIA serpiente : serpientesIA){
+			if(serpiente.getPuntaje() >= puntajeAAlcanzar){return true;}
+		}
+
+		return false;
 	}
 
 	/**

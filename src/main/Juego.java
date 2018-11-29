@@ -19,18 +19,18 @@ public class Juego {
 
         CountDownLatch finDelJuego = new CountDownLatch(1);
 
-        Campo campo = new Campo(serpientes, serpientesIA, finDelJuego);
+        Campo campo = new Campo(serpientes, serpientesIA, finDelJuego, sala.getTiempo(), sala.getPuntajeAAlcanzar(), sala.getModoDeJuego());
         campo.agregarObservador(manejadorVisual);
 
         for (Jugador jugador : sala.getJugadores()) {
-            Serpiente serpiente = new Serpiente(jugador.getColor());
+            Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre());
             serpientes.add(serpiente);
             manejadorVisual.agregarJugador(jugador.getManejador());
             new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
         }
 
-        for (int i = 0; i < sala.getCantidadIA(); i++) {
-            serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK));
+        for (Integer i = 0; i < sala.getCantidadIA(); i++) {
+            serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK, "IA " + i.toString()));
         }
 
         campo.comenzarJuego();
