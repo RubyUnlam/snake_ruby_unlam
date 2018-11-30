@@ -22,6 +22,8 @@ public class Sala {
 
 	private int tiempo;
 
+	private boolean salaInactiva;
+
 	private List<Jugador> jugadores = new ArrayList<>();
 
 	private String modoDeJuego;
@@ -69,15 +71,7 @@ public class Sala {
 	 */
 	public void agregarJugador(Jugador jugador) {
 		jugadores.add(jugador);
-		notificarActualizacionAJugadores(jugadores.size() - 1);
-	}
-
-	/**
-	 * Se notifica a los jugadores el estado actual de la sala
-	 * @param cantidadDeJugadoresANotificar
-	 */
-	void notificarActualizacionAJugadores(int cantidadDeJugadoresANotificar) {
-		for (int i = 0; i < cantidadDeJugadoresANotificar; i++) {
+		for (int i = 0; i < jugadores.size() - 1; i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
 	}
@@ -113,6 +107,9 @@ public class Sala {
 			cantidadDeListos--;
 			jugador.setEstaListo(false);
 		}
+
+		salaInactiva = getJugadoresEnSala() == 0;
+		if(salaInactiva){ nombreSala = "";}
 	}
 
 	/**
@@ -121,8 +118,6 @@ public class Sala {
 	public void intentarIniciarElJuego() {
 		if (esValidoIniciarElJuego()) {
 			generarJuego();
-		} else {
-			notificarActualizacionAJugadores(getCantidadJugadores());
 		}
 	}
 
@@ -205,5 +200,9 @@ public class Sala {
 	public int getPuntajeAAlcanzar() {
 		return puntajeAAlcanzar;
 	}
+
+	public boolean estaInactiva(){ return salaInactiva;}
+
+	public void cambiarEstado(boolean b){salaInactiva = b;}
 }
 

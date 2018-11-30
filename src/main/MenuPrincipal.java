@@ -1,10 +1,11 @@
 package main;
 
-import com.google.gson.Gson;
 import servidor.ManejadorES;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static java.util.Objects.isNull;
@@ -78,7 +79,13 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void verSalas() throws IOException {
-        manejadorES.enviar(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas()));
+        List<Sala> salasAAgregar = new ArrayList<Sala>();
+        for(Sala sala : sincronizadorDeSalas.obtenerSalas()){
+            if(!sala.estaInactiva()){
+                salasAAgregar.add(sala);
+            }
+        }
+        manejadorES.enviar(new RespuestaAccionConSala(true, salasAAgregar));
     }
 
     /**
@@ -113,7 +120,9 @@ public class MenuPrincipal {
         //manejadorES.enviar(salaActual);
         if (!saleDelPartido) {
             jugador.cerrarActualizacionDeSala();
-            salaActual.notificarActualizacionAJugadores(salaActual.getJugadoresEnSala());
+            for (Jugador jugadorEnLista : salaActual.getJugadores()) {
+                jugadorEnLista.notificarActualizacionDeSala(salaActual);
+            }
         }
         salaActual = null;
         saleDelPartido = false;
@@ -133,6 +142,7 @@ public class MenuPrincipal {
                 jugador.setEscuchandoTeclas(escuchandoTeclas);
                 salaActual.darListo(jugador);
                 salaActual.intentarIniciarElJuego();
+                salaActual.cambiarEstado(true);
                 salaActual.obtenerPartidoTerminado().await();
                 saleDelPartido = true;
                 escuchandoTeclas.await();
@@ -155,8 +165,12 @@ public class MenuPrincipal {
             if (sala.getNombreSala().equals(salaAUnirse.getNombreSala())) {
                 if (isNull(sala.getContrasenia()) || sala.getContrasenia().equals(salaAUnirse.getContrasenia())) {
                     if (hayEspacio(sala)) {
-                        sala.agregarJugador(jugador);
-                        this.salaActual = sala;
+                        if(!sala.estaInactiva()){
+                            sala.agregarJugador(jugador);
+                            this.salaActual = sala;
+                        } else {
+                            return new RespuestaAccionConSala(false, "Sala con juego iniciado");
+                        }
                         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
                     } else {
                         return generarRespuestaDeError("Sala llena");
