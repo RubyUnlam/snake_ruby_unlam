@@ -1,22 +1,16 @@
 package main;
 
-import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.impl.SimpleLoggerFactory;
 import servidor.ManejadorES;
-import servidor.ManejadorMovimiento;
 
-import java.awt.*;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
-
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
     private SincronizadorDeSalas sincronizadorDeSalas;
+    private Logger logger =  new SimpleLoggerFactory().getLogger("Flujo");
     private ManejadorES manejadorES;
     private Socket conexion;
 
@@ -37,7 +31,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             conexion.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
