@@ -76,7 +76,7 @@ public class Sala {
 	 * Se notifica a los jugadores el estado actual de la sala
 	 * @param cantidadDeJugadoresANotificar
 	 */
-	private void notificarActualizacionAJugadores(int cantidadDeJugadoresANotificar) {
+	void notificarActualizacionAJugadores(int cantidadDeJugadoresANotificar) {
 		for (int i = 0; i < cantidadDeJugadoresANotificar; i++) {
 			jugadores.get(i).notificarActualizacionDeSala(this);
 		}
@@ -113,8 +113,6 @@ public class Sala {
 			cantidadDeListos--;
 			jugador.setEstaListo(false);
 		}
-		intentarIniciarElJuego();
-
 	}
 
 	/**

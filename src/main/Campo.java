@@ -14,6 +14,9 @@ import javax.swing.Timer;
 
 public class Campo implements ActionListener, Observado {
 
+	private static final String PUNTAJE = "Puntaje";
+	private static final String SUPERVIVENCIA = "Supervivencia";
+
 	private Timer timer;
 	private int delay = 100;
 	private CountDownLatch finDelJuego;
@@ -90,7 +93,7 @@ public class Campo implements ActionListener, Observado {
     }
 
     private boolean partidaFinalizada(){
-		if(modoDeJuego.equals("Supervivencia")){
+		if(SUPERVIVENCIA.equals(modoDeJuego)){
 			return terminoElTiempo() || !haySerpientesVivas() || hayUnaSerpienteViva();
 		} else {
 			return !haySerpientesVivas() || puntajeMaximoAlcanzado();
@@ -102,10 +105,9 @@ public class Campo implements ActionListener, Observado {
 	 * En caso de que no haya serpientes vivas, devuelve empate.
 	 * @return
 	 */
-
 	private String obtenerSerpienteGanadora() { //TODO CONTEMPLAR DIFERENTES CASOS DE GANADOR. MODIFICAR CUANDO SE MODIFIQUEN LAS COLISIONES.
 
-		if (modoDeJuego.equals("Supervivencia")) {
+		if (SUPERVIVENCIA.equals(modoDeJuego)) {
 			return obtenerGanadoraSupervivencia();
 		} else {
 			return obtenerGanadoraPuntaje();
@@ -117,8 +119,6 @@ public class Campo implements ActionListener, Observado {
 	 * @return
 	 */
 	private String obtenerGanadoraSupervivencia() { //TODO HACER QUE DEVUELVA UNA LISTA CON LOS HOMBRES DE LOS GANADORES
-		if(!haySerpientesVivas()){ return "Empate";}
-
 		for(Serpiente serpiente : serpientes){
 			if(!serpiente.getUbicaciones().isEmpty()){
 				return serpiente.getNombre();
@@ -130,7 +130,7 @@ public class Campo implements ActionListener, Observado {
 				return serpiente.getNombre();
 			}
 		}
-		return "Mensaje default";
+		return "Empate";
 	}
 
 	/**
@@ -139,7 +139,6 @@ public class Campo implements ActionListener, Observado {
 	 * como cuando ya no quedan serpientes en el campo.
 	 * @return
 	 */
-
 	private String obtenerGanadoraPuntaje(){
 		int puntaje = 0;
 		String nombreMayorPuntaje = "nadie. Nadie consiguio puntos.";
@@ -158,9 +157,6 @@ public class Campo implements ActionListener, Observado {
 
 		return nombreMayorPuntaje;
 	}
-
-
-
 
 	/**
      * Genera un dibujable por cada serpiente y comestible en el campo
@@ -186,7 +182,6 @@ public class Campo implements ActionListener, Observado {
 	 * verifica si termino el tiempo de juego. True si termino.
 	 * @return
 	 */
-
 	private boolean	terminoElTiempo(){
     	return ciclos > tiempoDeJuego;
 	}
@@ -195,19 +190,8 @@ public class Campo implements ActionListener, Observado {
 	 * Verifica si quedan serpientes vivas. Devuelve true si hay 1 o más, y false en otro caso
 	 * @return
 	 */
-	private boolean haySerpientesVivas() { //TODO REFACTOR DE ESTO CUANDO SE MERGEE EL NUEVO CÓDIGO DE COLISIONES.
-		int cantidadVivas = 0;
-		for(Serpiente serpiente : serpientes){
-			if(!serpiente.getUbicaciones().isEmpty())
-				cantidadVivas++;
-		}
-
-		for(SerpienteIA serpiente : serpientesIA){
-			if(!serpiente.getUbicaciones().isEmpty()){
-				cantidadVivas++;
-			}
-		}
-		return cantidadVivas > 0;
+	private boolean haySerpientesVivas() {
+		return obtenerCantidadSerpientesVivas() > 0;
 	}
 
 	/**
@@ -215,8 +199,15 @@ public class Campo implements ActionListener, Observado {
 	 *
 	 * @return
 	 */
-
 	private boolean hayUnaSerpienteViva(){
+		return obtenerCantidadSerpientesVivas() == 1;
+	}
+
+	/**
+	 * Devuelve la cantidad de serpientes vivas, tanto IA como humanas.
+	 * @return
+	 */
+	private int obtenerCantidadSerpientesVivas(){
 		int cantidadVivas = 0;
 		for(Serpiente serpiente : serpientes){
 			if(!serpiente.getUbicaciones().isEmpty())
@@ -228,9 +219,8 @@ public class Campo implements ActionListener, Observado {
 				cantidadVivas++;
 			}
 		}
-		return cantidadVivas == 1;
+		return cantidadVivas;
 	}
-
 	/**
 	 *  Verifica si alguna serpiente (tanto humana como IA) alcanzo el puntaje
 	 *  necesario para ganar la partida.

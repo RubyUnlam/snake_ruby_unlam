@@ -13,7 +13,7 @@ public class Serpiente{
 	private List<Ubicacion> ubicaciones = new ArrayList<>();
 
 	protected Direccion direccion;
-	private int puntaje = 0;
+	private int puntaje;
 	private String nombreDeSerpiente;
 	
 	public Serpiente(Color color, String nombre){
