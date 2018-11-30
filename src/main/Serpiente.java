@@ -15,7 +15,8 @@ public class Serpiente{
 	protected Direccion direccion;
 	private int puntaje;
 	private String nombreDeSerpiente;
-	
+	private boolean salir;
+
 	public Serpiente(Color color, String nombre){
 		this.color = color;
 		estado = new Normal();
@@ -27,7 +28,7 @@ public class Serpiente{
 		this.direccion = Direccion.IZQUIERDA;
 		this.nombreDeSerpiente = nombre;
 	}
-	
+
 	public Serpiente(Ubicacion cabeza){
 		estado = new Normal();
 		ubicaciones.add(cabeza);
@@ -40,7 +41,7 @@ public class Serpiente{
 	public void morir() {
 		estado = estado.morir(this);
 	}
-	
+
 	public void moverse() {
 		estado = estado.moverse(this);
 	}
@@ -53,31 +54,31 @@ public class Serpiente{
 		int nuevoY = calcularPosicionAnterior(uCola.getY() ,uAnteUltimo.getY());
 		ubicaciones.add(new Ubicacion(nuevoX, nuevoY));
 	}
-	
+
 	private int calcularPosicionAnterior(int ultimaPos, int anteUltimaPos) {
 		return ultimaPos + (ultimaPos - anteUltimaPos);
 	}
-	
+
 	public void mirar(String mirarA) {
 		this.direccion = direccion.cambiarDireccion(mirarA, this);
-	}	
-	
+	}
+
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
 	}
-	
+
 	public void setUbicaciones( ArrayList<Ubicacion> ubicaciones ) {
 		this.ubicaciones = ubicaciones;
 	}
-	
+
 	public Color obtenerColor() {
 		return this.color;
 	}
-	
+
 	protected Ubicacion getUbicacionCabeza() {
 		return  ubicaciones.get(0);
 	}
-	
+
 	public boolean estaMuerto() {
 		return ubicaciones.isEmpty();
 	}
@@ -93,5 +94,13 @@ public class Serpiente{
 	public void sumarPuntos(int puntos){
 		puntaje+=puntos;
 	}
-	
+
+    public boolean salir() {
+        return salir;
+    }
+
+    public Serpiente setSalir(boolean salir) {
+        this.salir = salir;
+        return this;
+    }
 }

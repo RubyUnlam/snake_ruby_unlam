@@ -143,9 +143,9 @@ public class MenuPrincipal {
                 salaActual.darListo(jugador);
                 salaActual.intentarIniciarElJuego();
                 salaActual.cambiarEstado(true);
-                salaActual.obtenerPartidoTerminado().await();
-                saleDelPartido = true;
+//                salaActual.obtenerPartidoTerminado().await();
                 escuchandoTeclas.await();
+                saleDelPartido = true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

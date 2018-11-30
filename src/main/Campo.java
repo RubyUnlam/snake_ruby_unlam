@@ -21,19 +21,19 @@ public class Campo implements ActionListener, Observado {
 	private int delay = 100;
 	private CountDownLatch finDelJuego;
 	private int tiempoDeJuego;
-	
+
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
 	private Colision colisionador;
-	
+
 	private int ciclos;
 	private ActualizacionDelJuego actualizacionDelJuego;
 	private String modoDeJuego;
 	private int puntajeAAlcanzar;
 
 	private Observador observador;
-	
+
 	Campo(List<Serpiente> jugadores, List<SerpienteIA> serpientesIA, CountDownLatch finDelJuego, int tiempoDeJuego, int puntajeAAlcanzar, String modoDeJuego) {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
@@ -45,7 +45,7 @@ public class Campo implements ActionListener, Observado {
 		this.puntajeAAlcanzar = puntajeAAlcanzar;
 		this.modoDeJuego = modoDeJuego;
 	}
-	
+
 	public void comenzarJuego() {
 		timer.start();
 	}
@@ -64,7 +64,16 @@ public class Campo implements ActionListener, Observado {
 		if (comestibles.isEmpty()) {
 			comestibles.add(new Manzana());
 		}
-		
+
+		for (Serpiente jugador : serpientes){
+			System.out.println("MATAR?");
+		    if (jugador.salir()) {
+				System.out.println("Salir?");
+		        jugador.morir();
+		        observador.removerJugador(jugador.getNombre());
+            }
+        }
+
         for (Serpiente jugador : serpientes) {
             jugador.moverse();
         }
@@ -74,7 +83,7 @@ public class Campo implements ActionListener, Observado {
         }
 
         colisionador.comprobarColisiones(serpientes, serpientesIA, comestibles);
-        
+
         prepararActualizacionDelJuego();
 
         ciclos+=10;

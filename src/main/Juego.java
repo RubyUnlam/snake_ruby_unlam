@@ -25,7 +25,7 @@ public class Juego {
         for (Jugador jugador : sala.getJugadores()) {
             Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre());
             serpientes.add(serpiente);
-            manejadorVisual.agregarJugador(jugador.getManejador());
+            manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
             new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
         }
 
