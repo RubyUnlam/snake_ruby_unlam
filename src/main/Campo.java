@@ -66,9 +66,7 @@ public class Campo implements ActionListener, Observado {
 		}
 
 		for (Serpiente jugador : serpientes){
-			System.out.println("MATAR?");
 		    if (jugador.salir()) {
-				System.out.println("Salir?");
 		        jugador.morir();
 		        observador.removerJugador(jugador.getNombre());
             }

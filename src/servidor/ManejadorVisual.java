@@ -33,7 +33,6 @@ public class ManejadorVisual implements Observador {
     @Override
     public void removerJugador(String jugador) {
         if (manejadores.containsKey(jugador)) {
-            System.out.println("Removiendo jugador");
             ManejadorES manejadorES = manejadores.get(jugador);
             try {
                 manejadorES.enviar(new ActualizacionDelJuego(true));
