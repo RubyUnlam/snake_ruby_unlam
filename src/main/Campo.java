@@ -85,7 +85,7 @@ public class Campo implements ActionListener, Observado {
         List<Dibujable> dibujables = prepararDibujables();
         if (partidaFinalizada()) {
             terminarJuego();
-            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, obtenerSerpienteGanadora()); //TODO LEVANTAR NOMBRE DEL GANADOR
+            actualizacionDelJuego = new ActualizacionDelJuego(true, dibujables, obtenerSerpienteGanadora());
             this.finDelJuego.countDown();
         } else {
             actualizacionDelJuego = new ActualizacionDelJuego(dibujables);
@@ -120,13 +120,13 @@ public class Campo implements ActionListener, Observado {
 	 */
 	private String obtenerGanadoraSupervivencia() { //TODO HACER QUE DEVUELVA UNA LISTA CON LOS HOMBRES DE LOS GANADORES
 		for(Serpiente serpiente : serpientes){
-			if(!serpiente.getUbicaciones().isEmpty()){
+			if(!serpiente.estaMuerto()){
 				return serpiente.getNombre();
 			}
 		}
 
 		for(Serpiente serpiente : serpientesIA){
-			if(!serpiente.getUbicaciones().isEmpty()){
+			if(!serpiente.estaMuerto()){
 				return serpiente.getNombre();
 			}
 		}
@@ -210,12 +210,12 @@ public class Campo implements ActionListener, Observado {
 	private int obtenerCantidadSerpientesVivas(){
 		int cantidadVivas = 0;
 		for(Serpiente serpiente : serpientes){
-			if(!serpiente.getUbicaciones().isEmpty())
+			if(!serpiente.estaMuerto())
 				cantidadVivas++;
 		}
 
 		for(SerpienteIA serpiente : serpientesIA){
-			if(!serpiente.getUbicaciones().isEmpty()){
+			if(!serpiente.estaMuerto()){
 				cantidadVivas++;
 			}
 		}

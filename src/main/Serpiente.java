@@ -89,5 +89,9 @@ public class Serpiente{
 	public String getNombre(){ return nombreDeSerpiente;}
 
 	public int getPuntaje(){ return puntaje;}
+
+	public void sumarPuntos(int puntos){
+		puntaje+=puntos;
+	}
 	
 }

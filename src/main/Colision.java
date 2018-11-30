@@ -13,6 +13,7 @@ public class Colision {
 			if( cabezaSerpiente.equals(comestible.getUbicacion()) ) {
 				serpiente.crecer();
 				comestible.setComida(true);
+				serpiente.sumarPuntos(10); //TODO QUE SUMA UNA CANTIDAD DE PUNTOS DEPENDIENDO DEL COMESTIBLE
 			}
 			
 			if (comestible.fueComida()) {
