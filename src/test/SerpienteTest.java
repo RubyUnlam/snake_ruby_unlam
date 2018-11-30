@@ -85,7 +85,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseSeMueve() {
-		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+		Serpiente serpiente = new Serpiente(new Ubicacion(100, 50));
 		
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Ubicacion hombro = serpiente.getUbicaciones().get(1);
@@ -93,7 +93,7 @@ public class SerpienteTest {
 		
 		serpiente.moverse();
 		
-		Assert.assertEquals(new Ubicacion(cabeza.getX() -20, cabeza.getY()), serpiente.getUbicaciones().get(0));
+		Assert.assertEquals(new Ubicacion(cabeza.getX() - 20, cabeza.getY()), serpiente.getUbicaciones().get(0));
 		Assert.assertEquals(cabeza, serpiente.getUbicaciones().get(1));
 		Assert.assertEquals(hombro, serpiente.getUbicaciones().get(2));
 		Assert.assertEquals(rodilla, serpiente.getUbicaciones().get(3));
@@ -112,8 +112,8 @@ public class SerpienteTest {
 		
 		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
 		
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60), Color.BLUE);
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(160, 60), Color.BLUE);
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60));
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(160, 60));
 		
 		serpientes.add(serpienteUno);
 		serpientes.add(serpienteDos);
@@ -141,8 +141,8 @@ public class SerpienteTest {
 		
 		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
 		
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40), Color.BLUE); 
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60), Color.BLUE);
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40)); 
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60));
 		
 		serpientes.add(serpienteUno);
 		serpientes.add(serpienteDos);
@@ -175,7 +175,7 @@ public class SerpienteTest {
 		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
 		
 		Ubicacion cabeza = new Ubicacion(140, 140);
-		Serpiente serpiente = new Serpiente(cabeza, Color.BLUE);
+		Serpiente serpiente = new Serpiente(cabeza);
 		
 		Comestible manzana = new Manzana(cabeza);
 		
@@ -204,7 +204,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoIzquierda() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, 50), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, 50));
 		
 		serpiente.moverse();
 		
@@ -216,7 +216,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoDerecha() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA-20, 50), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA-20, 50));
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		serpiente.mirar("derecha");
@@ -230,7 +230,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoArriba() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, 0), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, 0));
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		
@@ -241,7 +241,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoAbajo() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA-20), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA-20));
 		serpiente.mirar("abajo");
 		serpiente.moverse();
 		
