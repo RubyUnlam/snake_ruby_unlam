@@ -19,6 +19,7 @@ public class MenuPrincipal {
     public static final String SALIR_DE_SALA = "salir_de_sala";
     public static final String JUGAR = "jugar";
     public static final String CAMBIAR_COLOR = "cambiar_color";
+    public static final String PUNTAJE = "Puntaje";
 
     private Jugador jugador;
     private Sala salaActual;
@@ -109,10 +110,12 @@ public class MenuPrincipal {
      */
     private void salirDeSala() throws IOException {
         salaActual.removerJugador(jugador);
-        salaActual = null;
+        //manejadorES.enviar(salaActual);
         if (!saleDelPartido) {
             jugador.cerrarActualizacionDeSala();
+            salaActual.notificarActualizacionAJugadores(salaActual.getJugadoresEnSala());
         }
+        salaActual = null;
         saleDelPartido = false;
     }
 
@@ -133,7 +136,6 @@ public class MenuPrincipal {
                 salaActual.obtenerPartidoTerminado().await();
                 saleDelPartido = true;
                 escuchandoTeclas.await();
-                sincronizadorDeSalas.eliminarSala(salaActual);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -174,7 +176,6 @@ public class MenuPrincipal {
      * @param mensaje
      * @return
      */
-
     private RespuestaAccionConSala generarRespuestaDeError(String mensaje) {
         return new RespuestaAccionConSala(false, mensaje);
     }
@@ -184,7 +185,6 @@ public class MenuPrincipal {
      * @param sala
      * @return
      */
-
     private boolean hayEspacio(Sala sala) {
         return sala.getCantidadJugadores() - sala.getJugadoresEnSala() > 0;
     }
@@ -224,7 +224,7 @@ public class MenuPrincipal {
     }
 
     private boolean condicionesDeVictoriaValidas(Sala sala){
-        return sala.getModoDeJuego().equals("Puntaje") ? esPuntajeValido(sala) : esTiempoValido(sala);
+        return PUNTAJE.equals(sala.getModoDeJuego()) ? esPuntajeValido(sala) : esTiempoValido(sala);
     } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
 
     /**
@@ -232,7 +232,6 @@ public class MenuPrincipal {
      * @param sala
      * @return
      */
-
     private boolean esPuntajeValido(Sala sala){
         return sala.getPuntajeAAlcanzar() > 0;
     }
