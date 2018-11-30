@@ -25,6 +25,8 @@ public class Campo implements ActionListener, Observado {
 	private List<Serpiente> serpientes;
 	private List<SerpienteIA> serpientesIA;
 	private Queue<Comestible> comestibles;
+	private Colision colisionador;
+	
 	private int ciclos;
 	private ActualizacionDelJuego actualizacionDelJuego;
 	private String modoDeJuego;
@@ -36,6 +38,7 @@ public class Campo implements ActionListener, Observado {
 		this.serpientes = jugadores;
 		this.serpientesIA = serpientesIA;
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
+		this.colisionador = new Colision();
         this.finDelJuego = finDelJuego;
 		timer = new Timer(delay, this);
 		this.tiempoDeJuego = tiempoDeJuego * 100;
@@ -70,9 +73,8 @@ public class Campo implements ActionListener, Observado {
         	jugadorIA.moverse();
         }
 
-		chequearColisiones(serpientes);
-		chequearColisiones(serpientesIA);
-
+        colisionador.comprobarColisiones(serpientes, serpientesIA, comestibles);
+        
         prepararActualizacionDelJuego();
 
         ciclos+=10;
@@ -176,24 +178,6 @@ public class Campo implements ActionListener, Observado {
         return dibujables;
     }
 
-    private void chequearColisiones(List<? extends Serpiente> serpientes) {
-		for (Serpiente jugador : serpientes) {
-			for (Comestible comestible : comestibles) {
-				jugador.checkearColision(comestible);
-				if (comestible.fueComida()) {
-					comestibles.remove(comestible);
-				}
-			}
-
-			for (Serpiente jugador2 : serpientes) {
-				jugador.checkearColision(jugador2);
-			}
-			for (Serpiente jugadorIA : serpientesIA) {
-				jugador.checkearColision(jugadorIA);
-			}
-		}
-	}
-
 	/**
 	 * verifica si termino el tiempo de juego. True si termino.
 	 * @return
@@ -263,8 +247,4 @@ public class Campo implements ActionListener, Observado {
 	public void agregarObservador(Observador observador) {
 		this.observador = observador;
 	}
-
-    public ActualizacionDelJuego obtenerResultadoDelJuego() {
-        return actualizacionDelJuego;
-    }
 }

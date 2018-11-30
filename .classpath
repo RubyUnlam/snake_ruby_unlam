@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-5.0.1.Final.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-core-5.2.11.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-core-5.2.11.Final.jar" sourcepath="lib"/>
 	<classpathentry kind="lib" path="lib/hibernate-entitymanager.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate4-sqlite-dialect-0.1.2.jar"/>

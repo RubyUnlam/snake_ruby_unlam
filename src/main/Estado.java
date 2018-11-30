@@ -2,9 +2,8 @@ package main;
 
 public interface Estado {
 
-	Estado moverse();
-	Estado checkearColision(Serpiente serpiente);
-	Estado checkearColision(Comestible comestible);
-	Estado morir();
+	public Estado moverse(Serpiente serpiente);
+
+	public Estado morir(Serpiente serpiente);
 	
 }
