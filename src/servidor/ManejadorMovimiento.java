@@ -23,8 +23,7 @@ public class ManejadorMovimiento extends Thread {
         try {
             boolean finDelJuego = false;
             while (!finDelJuego) {
-                String mandameMecha = manejadorES.escuchar();
-                System.out.println(mandameMecha);
+                String mandameMecha = manejadorES.escuchar(String.class);
                 if (!FINALIZAR.equals(mandameMecha)) {
                     serpiente.mirar(mandameMecha);
                 } else {

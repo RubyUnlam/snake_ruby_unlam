@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import servidor.ManejadorES;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
@@ -17,8 +18,8 @@ public class MenuPrincipal {
     public static final String UNIRSE_A_SALA = "unirse_a_sala";
     public static final String SALIR_DE_SALA = "salir_de_sala";
     public static final String JUGAR = "jugar";
+    public static final String CAMBIAR_COLOR = "cambiar_color";
 
-    private Gson gson = new Gson();
     private Jugador jugador;
     private Sala salaActual;
     private boolean saleDelPartido = false;
@@ -33,9 +34,9 @@ public class MenuPrincipal {
 
     public void jugar() {
         try {
-            String opcion = manejadorES.escuchar();
+            String opcion = manejadorES.escuchar(String.class);
 
-            while (!SALIR.equals(opcion)) { //TODO CONSTANTE
+            while (!SALIR.equals(opcion)) {
                 switch (opcion) {
                     case VER_SALAS:
                         verSalas();
@@ -52,12 +53,23 @@ public class MenuPrincipal {
                     case JUGAR:
                         iniciarJuego();
                         break;
+                    case CAMBIAR_COLOR:
+                        cambiarColor();
+                        break;
                 }
-                opcion = manejadorES.escuchar();
+                opcion = manejadorES.escuchar(String.class);
             }
         } catch(IOException e) {
-            this.jugar(); //TODO ALTA FLASHEADA ESTA
+            this.jugar(); //TODO ALTA FLASHEADA ESTA. SÍ, ALTA FLASHEADA GON.
         }
+    }
+
+    /**
+     * Se setea en el jugador el color enviado por el cliente
+     * @throws IOException
+     */
+    private void cambiarColor() throws IOException {
+        jugador.setColor(manejadorES.escuchar(Color.class));
     }
 
     /**
@@ -65,7 +77,7 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void verSalas() throws IOException {
-        manejadorES.enviar(gson.toJson(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas())));
+        manejadorES.enviar(new RespuestaAccionConSala(true, sincronizadorDeSalas.obtenerSalas()));
     }
 
     /**
@@ -74,9 +86,9 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void crearSala() throws IOException {
-        Sala salaACrear = gson.fromJson(manejadorES.escuchar(), Sala.class);
+        Sala salaACrear = manejadorES.escuchar(Sala.class);
         RespuestaAccionConSala respuesta = crearSala(salaACrear);
-        manejadorES.enviar(gson.toJson(respuesta));
+        manejadorES.enviar(respuesta);
     }
 
     /**
@@ -85,10 +97,9 @@ public class MenuPrincipal {
      * @throws IOException
      */
     private void unirseASala() throws IOException {
-        Sala salaAUnirse = gson.fromJson(manejadorES.escuchar(), Sala.class);
+        Sala salaAUnirse = manejadorES.escuchar(Sala.class);
         RespuestaAccionConSala respuestaAccionConSala = unirseASala(salaAUnirse);
-        manejadorES.enviar(gson.toJson(respuestaAccionConSala));
-        return;
+        manejadorES.enviar(respuestaAccionConSala);
     }
 
     /**
@@ -169,8 +180,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Dada una sala, verifica si todavía hay espacio para meter a otro jugador
-     *
+     * Dada una sala, verifica si todavía hay espacio para meter a otro jugador     *
      * @param sala
      * @return
      */
@@ -194,14 +204,45 @@ public class MenuPrincipal {
             return new RespuestaAccionConSala(false, "La cantidad total de jugadores debe ser a lo sumo 4");
         }
 
+        if (salaACrear.getTiempo() < 0){
+            return new RespuestaAccionConSala(false, "El tiempo ingresado no es valido");
+        }
+
         if (nombreUsado(salaACrear.getNombreSala())) {
             return new RespuestaAccionConSala(false, "Ya existe una sala con ese nombre");
         }
+
+        if (!condicionesDeVictoriaValidas(salaACrear)){
+            return new RespuestaAccionConSala(false, "Los parametros de victoria ingresados son invalidos");
+        }
+
         this.sincronizadorDeSalas.agregarSala(salaACrear);
         this.salaActual = salaACrear;
         salaACrear.crearPartidoTerminado();
         salaACrear.agregarJugador(jugador);
         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
+    }
+
+    private boolean condicionesDeVictoriaValidas(Sala sala){
+        return sala.getModoDeJuego().equals("Puntaje") ? esPuntajeValido(sala) : esTiempoValido(sala);
+    } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
+
+    /**
+     * Verfica que el puntaje ingresado sea un numero mayor a 0.
+     * @param sala
+     * @return
+     */
+
+    private boolean esPuntajeValido(Sala sala){
+        return sala.getPuntajeAAlcanzar() > 0;
+    }
+
+    /**
+     * Verifica que el tiempo ingresado sea un numero mayor a 0.
+     * @return
+     */
+    private boolean esTiempoValido(Sala sala) {
+       return sala.getTiempo() > 0;
     }
 
     /**

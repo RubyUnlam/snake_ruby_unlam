@@ -24,7 +24,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseNoCrece() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		
 		int tamanioInicial = serpiente.getUbicaciones().size(); 
 		serpiente.moverse();
@@ -40,7 +40,8 @@ public class SerpienteTest {
 	public void testComerManzana() {
 		Colision colision = new Colision();
 		
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		
 		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
@@ -63,7 +64,8 @@ public class SerpienteTest {
 	public void testComerManzanaSinEstarEnPosicion() {
 		Colision colision = new Colision();
 		
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		
 		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
@@ -83,7 +85,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseSeMueve() {
-		Serpiente serpiente = new Serpiente(Color.BLUE);
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
 		
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		Ubicacion hombro = serpiente.getUbicaciones().get(1);
