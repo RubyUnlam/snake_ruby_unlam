@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class Colision {
 	
-	private void comprobarColisionComestible(Serpiente serpiente, Queue<Comestible> comestibles) {
+	public void comprobarColisionComestible(Serpiente serpiente, Queue<Comestible> comestibles) {
 		Ubicacion cabezaSerpiente = serpiente.getUbicacionCabeza();
 		
 		for (Comestible comestible : comestibles) {

@@ -6,10 +6,16 @@ import org.junit.Test;
 import main.Comestible;
 import main.Manzana;
 import main.Serpiente;
+import main.SerpienteIA;
 import main.Ubicacion;
+import main.Colision;
 import static utilidades.Constantes.*;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SerpienteTest {
 	
@@ -32,13 +38,19 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzana() {
+		Colision colision = new Colision();
+		
 		Serpiente serpiente = new Serpiente(Color.BLUE);
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
+		
+		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY())); //spawneo una manzana 20 p�xeles delante de la serpiente
+		comestibles.add(manzana);
 		
 		int tamanioInicial = serpiente.getUbicaciones().size();
 		serpiente.moverse();
-		serpiente.checkearColision(manzana);
+		
+		colision.comprobarColisionComestible(serpiente, comestibles);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(5, serpiente.getUbicaciones().size());
@@ -49,12 +61,18 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testComerManzanaSinEstarEnPosicion() {
+		Colision colision = new Colision();
+		
 		Serpiente serpiente = new Serpiente(Color.BLUE);
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
+		
+		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
 		Comestible manzana = new Manzana(new Ubicacion(cabeza.getX() - 20, cabeza.getY()));
+		comestibles.add(manzana);
 		
 		int tamanioInicial = serpiente.getUbicaciones().size();
-		serpiente.checkearColision(manzana);
+
+		colision.comprobarColisionComestible(serpiente, comestibles);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertEquals(4, serpiente.getUbicaciones().size());
@@ -85,13 +103,24 @@ public class SerpienteTest {
 	 * */
 	@Test
 	public void testChocarContraOtraSerpienteMata() {
-		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60), Color.BLUE);
-		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60), Color.BLUE);
+		Colision colision = new Colision();
 		
+		List<Serpiente> serpientes = new ArrayList<>();
+		List<SerpienteIA> serpientesIA = new ArrayList<>();
+		
+		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
+		
+		Serpiente serpienteUno = new Serpiente(new Ubicacion(200, 60), Color.BLUE);
+		Serpiente serpienteDos = new Serpiente(new Ubicacion(160, 60), Color.BLUE);
+		
+		serpientes.add(serpienteUno);
+		serpientes.add(serpienteDos);
 		
 		int tamanioInicial = serpienteUno.getUbicaciones().size();
+		
 		serpienteUno.moverse();
-		serpienteUno.checkearColision(serpienteDos);
+		
+		colision.comprobarColisiones(serpientes, serpientesIA, comestibles);
 		
 		Assert.assertEquals(4, tamanioInicial);
 		Assert.assertTrue(serpienteUno.getUbicaciones().isEmpty());
@@ -103,16 +132,27 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testChocarContraOtraCabezaMuerenAmbas() {
+		Colision colision = new Colision();
+		
+		List<Serpiente> serpientes = new ArrayList<>();
+		List<SerpienteIA> serpientesIA = new ArrayList<>();
+		
+		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
+		
 		Serpiente serpienteUno = new Serpiente(new Ubicacion(120, 40), Color.BLUE); 
 		Serpiente serpienteDos = new Serpiente(new Ubicacion(120, 60), Color.BLUE);
 		
+		serpientes.add(serpienteUno);
+		serpientes.add(serpienteDos);
 		
 		int tamanioInicialUno = serpienteUno.getUbicaciones().size();
 		int tamanioInicialDos = serpienteDos.getUbicaciones().size();
 		
 		serpienteUno.mirar("abajo");
+		
 		serpienteUno.moverse();
-		serpienteUno.checkearColision(serpienteDos);
+		
+		colision.comprobarColisiones(serpientes, serpientesIA, comestibles);
 		
 		Assert.assertEquals(4, tamanioInicialUno);
 		Assert.assertEquals(4, tamanioInicialDos);
@@ -125,10 +165,24 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testChocarConsigoMisma() {
+		Colision colision = new Colision();
+		
+		List<Serpiente> serpientes = new ArrayList<>();
+		List<SerpienteIA> serpientesIA = new ArrayList<>();
+		
+		Queue<Comestible> comestibles = new ConcurrentLinkedQueue<Comestible>();
+		
 		Ubicacion cabeza = new Ubicacion(140, 140);
 		Serpiente serpiente = new Serpiente(cabeza, Color.BLUE);
 		
-		serpiente.checkearColision(new Manzana(cabeza));
+		Comestible manzana = new Manzana(cabeza);
+		
+		serpientes.add(serpiente);
+		
+		comestibles.add(manzana);
+		
+		colision.comprobarColisiones(serpientes, serpientesIA, comestibles);
+		
 		serpiente.mirar("abajo");
 		serpiente.moverse();
 		serpiente.mirar("derecha");
@@ -136,7 +190,8 @@ public class SerpienteTest {
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		int tamanioAntesDeMorir = serpiente.getUbicaciones().size();
-		serpiente.checkearColision(serpiente);
+		
+		colision.comprobarColisiones(serpientes, serpientesIA, comestibles);
 		
 		Assert.assertEquals(5, tamanioAntesDeMorir);
 		Assert.assertTrue(serpiente.getUbicaciones().isEmpty());
@@ -151,7 +206,7 @@ public class SerpienteTest {
 		
 		serpiente.moverse();
 		
-		Assert.assertEquals(new Ubicacion(ANCHO_VENTANA, 50), serpiente.getUbicaciones().get(0));
+		Assert.assertEquals(new Ubicacion(ANCHO_VENTANA-20, 50), serpiente.getUbicaciones().get(0));
 	}
 	
 	/**
@@ -159,7 +214,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testFueraDeRangoDerecha() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA, 50), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(ANCHO_VENTANA-20, 50), Color.BLUE);
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		serpiente.mirar("derecha");
@@ -177,14 +232,14 @@ public class SerpienteTest {
 		serpiente.mirar("arriba");
 		serpiente.moverse();
 		
-		Assert.assertEquals(new Ubicacion(0, ALTURA_VENTANA), serpiente.getUbicaciones().get(0));
+		Assert.assertEquals(new Ubicacion(0, ALTURA_VENTANA-20), serpiente.getUbicaciones().get(0));
 	}
 	/**
 	 * Se verifica que si la serpiente desaparece por abajo, reaparezca por arriba.
 	 */
 	@Test
 	public void testFueraDeRangoAbajo() {
-		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA), Color.BLUE);
+		Serpiente serpiente = new Serpiente(new Ubicacion(0, ALTURA_VENTANA-20), Color.BLUE);
 		serpiente.mirar("abajo");
 		serpiente.moverse();
 		
