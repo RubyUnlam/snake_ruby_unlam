@@ -3,6 +3,7 @@ package main;
 import com.google.gson.Gson;
 import servidor.ManejadorES;
 import servidor.ManejadorMovimiento;
+import servidor.SincronizadorUsuariosLoggeados;
 
 import java.awt.*;
 import java.io.DataInputStream;
@@ -19,20 +20,24 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
     private SincronizadorDeSalas sincronizadorDeSalas;
     private ManejadorES manejadorES;
     private Socket conexion;
+    private SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados;
 
 
-    public Flujo(Socket conexion, SincronizadorDeSalas sincronizadorDeSalas) {
+    public Flujo(Socket conexion, SincronizadorDeSalas sincronizadorDeSalas, SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados) {
         this.conexion = conexion;
         this.manejadorES = new ManejadorES(conexion);
         this.sincronizadorDeSalas = sincronizadorDeSalas;
+        this.sincronizadorUsuariosLoggeados = sincronizadorUsuariosLoggeados;
     }
 
     @Override
     public void run() {
         try {
-            Usuario usuario = new IngresoAlJuego(manejadorES).ingresar();
+            Usuario usuario = new IngresoAlJuego(manejadorES, sincronizadorUsuariosLoggeados).ingresar();
 
             new MenuPrincipal(usuario, manejadorES, sincronizadorDeSalas).jugar();
+
+            sincronizadorUsuariosLoggeados.eliminarJugador(usuario.getNombreUsuario());
 
             conexion.close();
 
