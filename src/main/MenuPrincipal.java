@@ -64,6 +64,11 @@ public class MenuPrincipal {
         } catch(IOException e) {
             this.jugar(); //TODO ALTA FLASHEADA ESTA. SÍ, ALTA FLASHEADA GON.
         }
+
+        if(nonNull(salaActual)){
+            salaActual.removerJugador(jugador);
+        }
+
     }
 
     /**
