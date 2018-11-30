@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
-    public static void iniciar(Sala sala, CountDownLatch partidoTerminado) { //TODO VER SI LO SEPARAMOS EN METODOS
+    public static void iniciar(Sala sala) { //TODO VER SI LO SEPARAMOS EN METODOS
 
         List<Serpiente> serpientes = new ArrayList<>();
         List<SerpienteIA> serpientesIA = new ArrayList<>();
@@ -37,7 +37,6 @@ public class Juego {
 
         try {
             finDelJuego.await();
-            partidoTerminado.countDown();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

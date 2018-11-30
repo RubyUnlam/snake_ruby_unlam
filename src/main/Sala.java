@@ -30,8 +30,6 @@ public class Sala {
 
 	private int puntajeAAlcanzar;
 
-	private transient CountDownLatch partidoTerminado; //TODO CAMBIARLE EL NOMBRE POR ALGO TAL VEZ MAS DESCRIPTIVO
-
 	public Sala(String nombreSala, String contrasenia, int cantidadJugadores, int cantidadIA, String nombreCreador,
 			int dificultadIA, String modoDeJuego, int tiempo, int puntaje) {
 		this.nombreSala = nombreSala;
@@ -131,25 +129,13 @@ public class Sala {
 				for (int i = 0; i < jugadores.size(); i++) {
 					jugadores.get(i).cerrarActualizacionDeSala();
 				}
-				Juego.iniciar(Sala.this, partidoTerminado);
+				Juego.iniciar(Sala.this);
 			}
 		}.start();
 	}
 
 	public List<Jugador> getJugadores() {
 		return jugadores;
-	}
-
-	public CountDownLatch obtenerPartidoTerminado() {
-		return partidoTerminado;
-	}
-
-	/**
-	 * Inicializa un {@link CountDownLatch} que servira para marcar a los jugadores
-	 * cuando el partido ha terminado
-	 */
-	public void crearPartidoTerminado() {
-		this.partidoTerminado = new CountDownLatch(1);
 	}
 
 	/**

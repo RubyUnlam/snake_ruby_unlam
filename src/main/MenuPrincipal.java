@@ -143,7 +143,6 @@ public class MenuPrincipal {
                 salaActual.darListo(jugador);
                 salaActual.intentarIniciarElJuego();
                 salaActual.cambiarEstado(true);
-//                salaActual.obtenerPartidoTerminado().await();
                 escuchandoTeclas.await();
                 saleDelPartido = true;
             } catch (InterruptedException e) {
@@ -232,7 +231,6 @@ public class MenuPrincipal {
 
         this.sincronizadorDeSalas.agregarSala(salaACrear);
         this.salaActual = salaACrear;
-        salaACrear.crearPartidoTerminado();
         salaACrear.agregarJugador(jugador);
         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
     }
