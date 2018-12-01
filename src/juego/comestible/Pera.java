@@ -1,7 +1,5 @@
 package juego.comestible;
 
-import juego.Ubicacion;
-
 import java.awt.*;
 
 public class Pera extends Comestible {
@@ -12,10 +10,6 @@ public class Pera extends Comestible {
 
 	public Pera(){
 		super(COLOR, PUNTAJE, POWER_UP);
-	}
-
-	public Pera(Ubicacion ubicacion) {
-		super(ubicacion, COLOR);
 	}
 
 }
