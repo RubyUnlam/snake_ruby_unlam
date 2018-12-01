@@ -10,11 +10,10 @@ import java.util.concurrent.CountDownLatch;
 
 public class Juego {
 
-    public static void iniciar(Sala sala) { //TODO VER SI LO SEPARAMOS EN METODOS
+    public static void iniciar(Sala sala) {
 
         List<Serpiente> serpientes = new ArrayList<>();
         List<SerpienteIA> serpientesIA = new ArrayList<>();
-
         ManejadorVisual manejadorVisual = new ManejadorVisual();
 
         CountDownLatch finDelJuego = new CountDownLatch(1);
@@ -29,8 +28,8 @@ public class Juego {
             new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
         }
 
-        for (Integer i = 0; i < sala.getCantidadIA(); i++) {
-            serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK, "IA " + i.toString()));
+        for (int i = 0; i < sala.getCantidadIA(); i++) {
+            serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), Color.BLACK, "IA " + i));
         }
 
         campo.comenzarJuego();
