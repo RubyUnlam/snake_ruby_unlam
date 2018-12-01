@@ -24,5 +24,4 @@ public class GestorDeEstado extends Thread {
         serpiente.setEstado(anterior);
     }
 
-
 }
