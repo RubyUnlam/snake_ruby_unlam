@@ -1,5 +1,6 @@
 package main;
 
+import juego.Jugador;
 import servidor.ManejadorES;
 
 import java.awt.Color;

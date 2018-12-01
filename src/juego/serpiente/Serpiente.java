@@ -1,4 +1,8 @@
-package main;
+package juego.serpiente;
+
+import juego.Ubicacion;
+import juego.comestible.Comestible;
+import juego.serpiente.Estado;
 
 import static utilidades.Constantes.VELOCIDAD;
 
@@ -46,7 +50,24 @@ public class Serpiente implements Comparable<Serpiente>{
 		estado = estado.moverse(this);
 	}
 
-	protected void crecer() {
+	public void comer(Comestible comestible) {
+		sumarPuntos(comestible.obtenerPuntaje());
+		crecer();
+		powerUp(comestible);
+	}
+
+	private void powerUp(Comestible comestible) {
+		switch (comestible.getPowerUp()) {
+			case "congelado":
+				new GestorDeEstado(this, new Congelado(), 1000).start();
+				break;
+			case "inmortal":
+				new GestorDeEstado(this, new Inmortal(), 200).start();
+				break;
+		}
+	}
+
+	private void crecer() {
 		int cola = ubicaciones.size() - 1;
 		Ubicacion uCola = ubicaciones.get(cola);
 		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
@@ -60,7 +81,7 @@ public class Serpiente implements Comparable<Serpiente>{
 	}
 
 	public void mirar(String mirarA) {
-		this.direccion = direccion.cambiarDireccion(mirarA, this);
+		this.direccion = estado.mirarA(this, mirarA);
 	}
 
 	public List<Ubicacion> getUbicaciones() {
@@ -91,8 +112,8 @@ public class Serpiente implements Comparable<Serpiente>{
 
 	public Integer getPuntaje(){ return puntaje;}
 
-	public void sumarPuntos(int puntos){
-		puntaje+=puntos;
+	private void sumarPuntos(int puntos){
+		puntaje += puntos;
 	}
 
     public boolean salir() {
@@ -107,5 +128,9 @@ public class Serpiente implements Comparable<Serpiente>{
 	@Override
 	public int compareTo(Serpiente o) {
 		return o.getPuntaje() - this.getPuntaje();
+	}
+
+	protected void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 }

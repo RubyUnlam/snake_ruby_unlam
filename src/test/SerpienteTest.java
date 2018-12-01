@@ -3,12 +3,12 @@ package test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.Comestible;
-import main.Manzana;
-import main.Serpiente;
-import main.SerpienteIA;
-import main.Ubicacion;
-import main.Colision;
+import juego.comestible.Comestible;
+import juego.comestible.Manzana;
+import juego.serpiente.Serpiente;
+import juego.serpiente.SerpienteIA;
+import juego.Ubicacion;
+import juego.serpiente.Colision;
 import static utilidades.Constantes.*;
 
 import java.awt.Color;

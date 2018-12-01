@@ -1,4 +1,4 @@
-package main;
+package juego;
 
 import java.io.Serializable;
 import java.util.Objects;

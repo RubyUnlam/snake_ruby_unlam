@@ -1,4 +1,6 @@
-package main;
+package juego.comestible;
+
+import juego.Ubicacion;
 
 import java.awt.Color;
 
@@ -7,10 +9,14 @@ public abstract class Comestible {
 	private Color color;
 	private Ubicacion ubicacion;
 	private boolean comida = false;
+	private int puntaje;
+	private String powerUp;
 	
-	Comestible(Color color){
+	Comestible(Color color, int puntaje, String powerUp){
 		this.ubicacion = new Ubicacion();
 		this.color = color;
+		this.puntaje = puntaje;
+		this.powerUp = powerUp;
 	}
 	
 	Comestible(Ubicacion ubicacion, Color color) {
@@ -33,5 +39,12 @@ public abstract class Comestible {
 	public Color obtenerColor() {
 		return this.color;
 	}
-	
+
+	public int obtenerPuntaje() {
+		return puntaje;
+	}
+
+	public String getPowerUp() {
+		return powerUp;
+	}
 }
