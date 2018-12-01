@@ -1,20 +1,15 @@
 package servidor;
+import main.Flujo;
+import main.SincronizadorDeSalas;
+
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.channels.Channels;
-import java.util.ArrayList;
-import java.util.List;
-
-import main.Flujo;
-import main.Sala;
-import main.Serpiente;
-import main.SincronizadorDeSalas;
 
 public class Servidor extends Thread {
 	
 	private ServerSocket serverSocket;
 	private SincronizadorDeSalas sincronizadorDeSalas = new SincronizadorDeSalas();
+	private SincronizadorUsuariosLoggeados sincrozadorDeUsuariosLoggeados = new SincronizadorUsuariosLoggeados();
 
     public Servidor(int puerto) {
         try {
@@ -28,7 +23,7 @@ public class Servidor extends Thread {
     public void run() {
         try {
             while (true) {
-            new Flujo(serverSocket.accept(), sincronizadorDeSalas).start();
+            new Flujo(serverSocket.accept(), sincronizadorDeSalas, sincrozadorDeUsuariosLoggeados).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
