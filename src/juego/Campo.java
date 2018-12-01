@@ -1,9 +1,6 @@
 package juego;
 
-import juego.comestible.Ciruela;
-import juego.comestible.Coco;
 import juego.comestible.Comestible;
-import juego.comestible.Manzana;
 import juego.serpiente.Colision;
 import juego.serpiente.Serpiente;
 import juego.serpiente.SerpienteIA;
@@ -27,7 +24,6 @@ import static utilidades.Constantes.CICLO_DE_JUEGO;
 
 public class Campo implements ActionListener, Observado {
 
-    private static final String PUNTAJE = "Puntaje";
     private static final String SUPERVIVENCIA = "Supervivencia";
     private static final String MENSAJE_EMPATE = "La partida fue un empate";
     private static final String EL_GANADOR_ES = "El ganador es ";
@@ -65,7 +61,7 @@ public class Campo implements ActionListener, Observado {
 
     public void comenzarJuego() {
         timer.start();
-        generador.iniciar();
+        generador.start();
     }
 
     public void terminarJuego() {
@@ -80,20 +76,15 @@ public class Campo implements ActionListener, Observado {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (comestibles.isEmpty()) {
-            comestibles.add(new Manzana());
-        }
-
         for (Serpiente jugador : serpientes) {
             if (jugador.salir()) {
                 jugador.morir();
                 observador.removerJugador(jugador.getNombre());
+            } else {
+                jugador.moverse();
             }
         }
 
-        for (Serpiente jugador : serpientes) {
-            jugador.moverse();
-        }
         for (SerpienteIA jugadorIA : serpientesIA) {
             jugadorIA.cambiarMirada(comestibles.peek());
             jugadorIA.moverse();

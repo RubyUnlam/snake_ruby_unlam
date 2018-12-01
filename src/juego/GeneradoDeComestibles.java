@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 import static utilidades.Constantes.CICLO_DE_JUEGO;
 
-public class GeneradoDeComestibles {
+public class GeneradoDeComestibles extends Thread {
 
     private Timer timer;
 
@@ -37,7 +37,12 @@ public class GeneradoDeComestibles {
         });
     }
 
-    public void iniciar() {
+    public void run() {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.timer.start();
     }
 
