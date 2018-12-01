@@ -19,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
+import static java.util.Objects.nonNull;
 import static utilidades.Constantes.CICLO_DE_JUEGO;
 import static utilidades.Constantes.PUNTAJE;
 import static utilidades.Constantes.SUPERVIVENCIA;
@@ -87,7 +88,10 @@ public class Campo implements ActionListener, Observado {
         }
 
         for (SerpienteIA jugadorIA : serpientesIA) {
-            jugadorIA.cambiarMirada(comestibles.peek());
+            Comestible comestible = comestibles.peek();
+            if (nonNull(comestible)) {
+                jugadorIA.cambiarMirada(comestible);
+            }
             jugadorIA.moverse();
         }
 
