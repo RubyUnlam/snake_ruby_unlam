@@ -50,7 +50,7 @@ public class Serpiente {
 	}
 
 	public void comer(Comestible comestible) {
-		puntaje += comestible.obtenerPuntaje();
+		sumarPuntos(comestible.obtenerPuntaje());
 		crecer();
 		powerUp(comestible);
 	}
@@ -111,8 +111,8 @@ public class Serpiente {
 
 	public int getPuntaje(){ return puntaje;}
 
-	public void sumarPuntos(int puntos){
-		puntaje+=puntos;
+	private void sumarPuntos(int puntos){
+		puntaje += puntos;
 	}
 
     public boolean salir() {
