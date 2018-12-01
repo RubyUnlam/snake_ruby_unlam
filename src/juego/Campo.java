@@ -42,7 +42,7 @@ public class Campo implements ActionListener, Observado {
     private ActualizacionDelJuego actualizacionDelJuego;
     private String modoDeJuego;
     private int puntajeAAlcanzar;
-    private GeneradoDeComestibles generador;
+    private GeneradorDeComestibles generador;
 
     private Observador observador;
 
@@ -56,7 +56,7 @@ public class Campo implements ActionListener, Observado {
         this.tiempoDeJuego = tiempoDeJuego * 100;
         this.puntajeAAlcanzar = puntajeAAlcanzar;
         this.modoDeJuego = modoDeJuego;
-        this.generador = new GeneradoDeComestibles(comestibles, jugadores.size() + serpientesIA.size());
+        this.generador = new GeneradorDeComestibles(comestibles, jugadores.size() + serpientesIA.size());
     }
 
     public void comenzarJuego() {
