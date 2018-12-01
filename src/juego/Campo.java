@@ -190,7 +190,7 @@ public class Campo implements ActionListener, Observado {
 
 		Serpiente serpientePrincipal = listaSerpientes.get(0);
 
-		return listaSerpientes.size() == 1 ? mensajeGanador(serpientePrincipal) : ganadorDesempate(serpientePrincipal, listaSerpientes.get(2));
+		return listaSerpientes.size() == 1 ? mensajeGanador(serpientePrincipal) : ganadorDesempate(serpientePrincipal, listaSerpientes.get(1));
 	}
 
     private String ganadorDesempate(Serpiente serpientePrincipal, Serpiente serpienteSecundaria) {
