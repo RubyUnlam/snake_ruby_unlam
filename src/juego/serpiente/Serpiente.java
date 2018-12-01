@@ -2,6 +2,7 @@ package juego.serpiente;
 
 import juego.Ubicacion;
 import juego.comestible.Comestible;
+import juego.serpiente.Estado;
 
 import static utilidades.Constantes.VELOCIDAD;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Serpiente {
+public class Serpiente implements Comparable<Serpiente>{
 
 	private Estado estado;
 	private Color color;
@@ -124,7 +125,7 @@ public class Serpiente {
 
 	public String getNombre(){ return nombreDeSerpiente;}
 
-	public int getPuntaje(){ return puntaje;}
+	public Integer getPuntaje(){ return puntaje;}
 
 	private void sumarPuntos(int puntos){
 		puntaje += puntos;
@@ -138,6 +139,11 @@ public class Serpiente {
         this.salir = salir;
         return this;
     }
+
+	@Override
+	public int compareTo(Serpiente o) {
+		return o.getPuntaje() - this.getPuntaje();
+	}
 
 	protected void setEstado(Estado estado) {
 		this.estado = estado;
