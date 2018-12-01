@@ -132,20 +132,28 @@ public class Campo implements ActionListener, Observado {
 		setSerpientesSupervivientes(serpientesSupervivientes);
 
 		if(serpientesSupervivientes.size() == 1){
-			return "El ganador es " + serpientesSupervivientes.get(0).getNombre();
+			return ganador(serpientesSupervivientes.get(0).getNombre());
 		}
 
 		Collections.sort(serpientesSupervivientes);
 
-		if(!serpientesSupervivientes.isEmpty() && serpientesSupervivientes.get(0).getPuntaje() == serpientesSupervivientes.get(1).getPuntaje()){
+		if(esEmpate(serpientesSupervivientes)){
 			return "La partida fue un empate";
 		}
 
 		if(!serpientesSupervivientes.isEmpty()){
-			return "El ganador es " + serpientesSupervivientes.get(0).getNombre();
+			return ganador(serpientesSupervivientes.get(0).getNombre());
 		}
 
 		return "La partida fue un empate";
+	}
+
+	public String ganador(String nombre){
+		return "El ganador es " + nombre;
+	}
+
+	public boolean esEmpate(List<Serpiente> serpientesSupervivientes){
+		return !serpientesSupervivientes.isEmpty() && serpientesSupervivientes.get(0).getPuntaje() == serpientesSupervivientes.get(1).getPuntaje();
 	}
 
 	/**
