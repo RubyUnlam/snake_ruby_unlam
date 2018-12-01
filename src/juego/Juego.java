@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import static utilidades.Constantes.CARNICERIA;
+
 public class Juego {
 
     private static Logger logger = Logger.getLogger(Juego.class);
@@ -26,12 +28,18 @@ public class Juego {
 
         CountDownLatch finDelJuego = new CountDownLatch(1);
 
-
-        for (Jugador jugador : sala.getJugadores()) {
-            Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre());
-            serpientes.add(serpiente);
-            manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
-            new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
+        if (CARNICERIA.equals(sala.getModoDeJuego())) {
+            for (Jugador jugador : sala.getJugadores()) {
+                manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
+                new ManejadorMovimiento(jugador.getManejador(), new Serpiente(jugador.getColor(), jugador.getNombre()), jugador.obtenerEscuchandoTeclas()).start();
+            }
+        } else {
+            for (Jugador jugador : sala.getJugadores()) {
+                Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre());
+                serpientes.add(serpiente);
+                manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
+                new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
+            }
         }
 
         List<String> nombresIAUsados = new ArrayList<>();
