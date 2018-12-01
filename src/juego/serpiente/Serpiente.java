@@ -1,4 +1,6 @@
-package main;
+package juego.serpiente;
+
+import juego.Ubicacion;
 
 import static utilidades.Constantes.VELOCIDAD;
 
@@ -103,4 +105,8 @@ public class Serpiente{
         this.salir = salir;
         return this;
     }
+
+	protected void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 }

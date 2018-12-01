@@ -1,5 +1,6 @@
-package main;
+package juego;
 
+import main.Sala;
 import servidor.ManejadorES;
 
 import java.awt.*;

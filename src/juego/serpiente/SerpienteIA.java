@@ -1,4 +1,7 @@
-package main;
+package juego.serpiente;
+
+import juego.comestible.Comestible;
+import juego.Ubicacion;
 
 import java.awt.Color;
 

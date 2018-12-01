@@ -1,4 +1,4 @@
-package main;
+package juego.serpiente;
 
 public interface Estado {
 

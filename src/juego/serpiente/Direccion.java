@@ -1,4 +1,4 @@
-package main;
+package juego.serpiente;
 
 import static utilidades.Constantes.*;
 import static java.util.Objects.nonNull;

@@ -1,4 +1,8 @@
-package main;
+package juego;
+
+import juego.comestible.Comestible;
+import juego.serpiente.Serpiente;
+import juego.serpiente.SerpienteIA;
 
 import java.util.ArrayList;
 import java.util.List;

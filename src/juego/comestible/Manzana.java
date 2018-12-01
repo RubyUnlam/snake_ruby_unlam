@@ -1,4 +1,6 @@
-package main;
+package juego.comestible;
+
+import juego.Ubicacion;
 
 import java.awt.Color;
 
