@@ -1,6 +1,7 @@
 package juego;
 
 import main.Sala;
+import org.apache.log4j.Logger;
 import servidor.ManejadorES;
 
 import java.awt.*;
@@ -10,10 +11,11 @@ import java.util.concurrent.CountDownLatch;
 public class Jugador {
 
     private String nombre;
-    private transient ManejadorES manejadorES;
     private Color color = Color.BLUE;
+    private transient ManejadorES manejadorES;
     private transient boolean estaListo;
     private transient CountDownLatch escuchandoTeclas;
+    private transient final Logger logger = Logger.getLogger(Jugador.class);
 
     public Jugador(String nombre, ManejadorES manejadorES) {
         this.nombre = nombre;
@@ -40,7 +42,7 @@ public class Jugador {
         try {
             manejadorES.enviar(sala);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -56,7 +58,7 @@ public class Jugador {
         try {
             manejadorES.enviarString("");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

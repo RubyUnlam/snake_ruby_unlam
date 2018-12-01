@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 import juego.serpiente.Serpiente;
+import org.apache.log4j.Logger;
 
 public class ManejadorMovimiento extends Thread {
 
@@ -11,6 +12,7 @@ public class ManejadorMovimiento extends Thread {
     private ManejadorES manejadorES;
     private Serpiente serpiente;
     private CountDownLatch countDownLatch;
+    private final Logger logger = Logger.getLogger(ManejadorMovimiento.class);
 
     public ManejadorMovimiento(ManejadorES manejadorES, Serpiente serpiente, CountDownLatch countDownLatch) {
         this.manejadorES = manejadorES;
@@ -34,7 +36,7 @@ public class ManejadorMovimiento extends Thread {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         countDownLatch.countDown();
     }

@@ -9,11 +9,14 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import main.ActualizacionDelJuego;
+import main.Flujo;
 import main.Observador;
+import org.apache.log4j.Logger;
 
 public class ManejadorVisual implements Observador {
 
     private Map<String, ManejadorES> manejadores = new HashMap<>();
+    private final Logger logger = Logger.getLogger(ManejadorVisual.class);
 
     public void dibujar(ActualizacionDelJuego actualizacion) {
         try {
@@ -21,7 +24,7 @@ public class ManejadorVisual implements Observador {
                 manejadorES.enviar(actualizacion);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -37,7 +40,7 @@ public class ManejadorVisual implements Observador {
             try {
                 manejadorES.enviar(new ActualizacionDelJuego(true));
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
             manejadores.remove(jugador);
         }

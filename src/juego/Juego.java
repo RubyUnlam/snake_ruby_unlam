@@ -3,6 +3,7 @@ package juego;
 import juego.serpiente.Serpiente;
 import juego.serpiente.SerpienteIA;
 import main.Sala;
+import org.apache.log4j.Logger;
 import servidor.ManejadorMovimiento;
 import servidor.ManejadorVisual;
 import utilidades.Constantes;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class Juego {
+
+    private static Logger logger = Logger.getLogger(Juego.class);
 
     public static void iniciar(Sala sala) {
 
@@ -55,7 +58,7 @@ public class Juego {
         try {
             finDelJuego.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

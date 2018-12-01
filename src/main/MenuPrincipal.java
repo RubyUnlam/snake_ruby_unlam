@@ -1,6 +1,7 @@
 package main;
 
 import juego.Jugador;
+import org.apache.log4j.Logger;
 import servidor.ManejadorES;
 
 import java.awt.Color;
@@ -25,6 +26,7 @@ public class MenuPrincipal {
 
     private Jugador jugador;
     private Sala salaActual;
+    private final Logger logger = Logger.getLogger(MenuPrincipal.class);
     private boolean saleDelPartido = false;
     private SincronizadorDeSalas sincronizadorDeSalas;
     private ManejadorES manejadorES;
@@ -59,11 +61,14 @@ public class MenuPrincipal {
                     case CAMBIAR_COLOR:
                         cambiarColor();
                         break;
+                    default:
+                        logger.error(opcion);
+                        break;
                 }
                 opcion = manejadorES.escuchar(String.class);
             }
         } catch(IOException e) {
-            this.jugar(); //TODO ALTA FLASHEADA ESTA. SÍ, ALTA FLASHEADA GON.
+            logger.error(e.getMessage());
         }
 
         if(nonNull(salaActual)){
@@ -152,7 +157,7 @@ public class MenuPrincipal {
                 escuchandoTeclas.await();
                 saleDelPartido = true;
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }
     }
