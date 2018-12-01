@@ -92,9 +92,7 @@ public class MenuPrincipal {
     private void verSalas() throws IOException {
         List<Sala> salasAAgregar = new ArrayList<Sala>();
         for(Sala sala : sincronizadorDeSalas.obtenerSalas()){
-            if(!sala.estaInactiva()){
                 salasAAgregar.add(sala);
-            }
         }
         manejadorES.enviar(new RespuestaAccionConSala(true, salasAAgregar));
     }
@@ -248,7 +246,7 @@ public class MenuPrincipal {
 
     private boolean condicionesDeVictoriaValidas(Sala sala){
             return PUNTAJE.equals(sala.getModoDeJuego()) ? esPuntajeValido(sala) : esTiempoValido(sala);
-    } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
+    }
 
     /**
      * Verfica que el puntaje ingresado sea un numero mayor a 0.
