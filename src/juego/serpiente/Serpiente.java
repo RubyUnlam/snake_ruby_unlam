@@ -1,6 +1,7 @@
 package juego.serpiente;
 
 import juego.Ubicacion;
+import juego.comestible.Comestible;
 
 import static utilidades.Constantes.VELOCIDAD;
 
@@ -8,7 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serpiente{
+public class Serpiente {
 
 	private Estado estado;
 	private Color color;
@@ -48,7 +49,24 @@ public class Serpiente{
 		estado = estado.moverse(this);
 	}
 
-	protected void crecer() {
+	public void comer(Comestible comestible) {
+		puntaje += comestible.obtenerPuntaje();
+		crecer();
+		powerUp(comestible);
+	}
+
+	private void powerUp(Comestible comestible) {
+		switch (comestible.getPowerUp()) {
+			case "congelado":
+				new GestorDeEstado(this, new Congelado(), 1000).start();
+				break;
+			case "inmortal":
+				new GestorDeEstado(this, new Inmortal(), 200).start();
+				break;
+		}
+	}
+
+	private void crecer() {
 		int cola = ubicaciones.size() - 1;
 		Ubicacion uCola = ubicaciones.get(cola);
 		Ubicacion uAnteUltimo = ubicaciones.get(cola - 1);
@@ -62,7 +80,7 @@ public class Serpiente{
 	}
 
 	public void mirar(String mirarA) {
-		this.direccion = direccion.cambiarDireccion(mirarA, this);
+		this.direccion = estado.mirarA(this, mirarA);
 	}
 
 	public List<Ubicacion> getUbicaciones() {

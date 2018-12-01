@@ -8,7 +8,7 @@ import juego.comestible.Manzana;
 import juego.serpiente.Serpiente;
 import juego.serpiente.SerpienteIA;
 import juego.Ubicacion;
-import juego.Colision;
+import juego.serpiente.Colision;
 import static utilidades.Constantes.*;
 
 import java.awt.Color;
