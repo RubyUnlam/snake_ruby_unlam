@@ -17,7 +17,7 @@ public class GeneradoDeComestibles {
         this.timer = new Timer(CICLO_DE_JUEGO * 10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (comestibles.size() < jugadoresEnCampo * 2) {
+                if (comestibles.size() < jugadoresEnCampo * 3) {
                     int proba = (int) (Math.random() * 101);
                     if (proba <= 60) {
                         comestibles.add(new Manzana());
