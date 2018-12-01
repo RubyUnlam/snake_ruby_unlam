@@ -1,5 +1,6 @@
 package juego.serpiente;
 
+import juego.Cuadrante;
 import juego.comestible.Comestible;
 import juego.Ubicacion;
 
@@ -9,8 +10,8 @@ public class SerpienteIA extends Serpiente {
 	
 	private int dificultad; //por ciento
 	
-	public SerpienteIA(int dificultad, Color color, String nombre) {
-		super(color, nombre);
+	public SerpienteIA(int dificultad, Color color, String nombre, Cuadrante cuadrante) {
+		super(color, nombre, cuadrante);
 		this.dificultad = dificultad;
 		this.direccion = Direccion.IZQUIERDA;
 	}

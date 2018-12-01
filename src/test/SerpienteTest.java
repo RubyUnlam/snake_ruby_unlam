@@ -1,5 +1,6 @@
 package test;
 
+import juego.Cuadrante;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class SerpienteTest {
 	 */
 	@Test
 	public void testMoverseNoCrece() {
-		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa", Cuadrante.CUARTO);
 		
 		int tamanioInicial = serpiente.getUbicaciones().size(); 
 		serpiente.moverse();
@@ -40,7 +41,7 @@ public class SerpienteTest {
 	public void testComerManzana() {
 		Colision colision = new Colision();
 		
-		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa", Cuadrante.CUARTO);
 
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		
@@ -64,7 +65,7 @@ public class SerpienteTest {
 	public void testComerManzanaSinEstarEnPosicion() {
 		Colision colision = new Colision();
 		
-		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa");
+		Serpiente serpiente = new Serpiente(Color.BLUE, "sarasa", Cuadrante.CUARTO);
 
 		Ubicacion cabeza = serpiente.getUbicaciones().get(0);
 		

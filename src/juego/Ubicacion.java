@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Observable;
 
+import static utilidades.Constantes.ALTURA_VENTANA;
+import static utilidades.Constantes.ANCHO_VENTANA;
+
 public class Ubicacion extends Observable implements Serializable {
 
 	/**
@@ -15,6 +18,10 @@ public class Ubicacion extends Observable implements Serializable {
 	
 	public Ubicacion() {
 		this.generarUbicacionAleatoria();
+	}
+
+	public Ubicacion(Cuadrante cuadrante) {
+		this.generarUbicacionAleatoria(cuadrante.getX(), cuadrante.getY());
 	}
 
 	public Ubicacion(int x, int y) {
@@ -30,19 +37,21 @@ public class Ubicacion extends Observable implements Serializable {
 		return y;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-	
 	public void generarUbicacionAleatoria() {
 		double randomX = Math.random() * 770;
 		double randomY = Math.random() * 550;
 		this.x = (int) (randomX - (randomX % 20));
 		this.y = (int) (randomY - (randomY % 20));
+	}
+
+	public void generarUbicacionAleatoria(int cuadranteX, int cuadranteY) {
+		double maxX = ANCHO_VENTANA / 2.;
+		double maxY = ALTURA_VENTANA / 2.;
+
+		double randomX = Math.random() * maxX;
+		double randomY = Math.random() * maxY;
+		this.x = (int) ((randomX - (randomX % 20)) + (maxX * cuadranteX));
+		this.y = (int) ((randomY - (randomY % 20)) + (maxY * cuadranteY));
 	}
 
 	@Override

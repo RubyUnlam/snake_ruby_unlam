@@ -9,11 +9,11 @@ import java.awt.event.ActionListener;
 
 import static utilidades.Constantes.CICLO_DE_JUEGO;
 
-public class GeneradoDeComestibles {
+public class GeneradorDeComestibles extends Thread {
 
     private Timer timer;
 
-    public GeneradoDeComestibles(Queue<Comestible> comestibles, int jugadoresEnCampo) {
+    public GeneradorDeComestibles(Queue<Comestible> comestibles, int jugadoresEnCampo) {
         this.timer = new Timer(CICLO_DE_JUEGO * 10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,7 +37,12 @@ public class GeneradoDeComestibles {
         });
     }
 
-    public void iniciar() {
+    public void run() {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.timer.start();
     }
 

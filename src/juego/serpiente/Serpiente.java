@@ -1,5 +1,6 @@
 package juego.serpiente;
 
+import juego.Cuadrante;
 import juego.Ubicacion;
 import juego.comestible.Comestible;
 import juego.serpiente.Estado;
@@ -22,10 +23,10 @@ public class Serpiente implements Comparable<Serpiente>{
 	private String nombreDeSerpiente;
 	private boolean salir;
 
-	public Serpiente(Color color, String nombre){
+	public Serpiente(Color color, String nombre, Cuadrante cuadrante){
 		this.color = color;
 		estado = new Normal();
-		Ubicacion cabeza = new Ubicacion();
+		Ubicacion cabeza = new Ubicacion(cuadrante);
 		ubicaciones.add(cabeza);
 		ubicaciones.add(new Ubicacion(cabeza.getX() + VELOCIDAD, cabeza.getY()));
 		crecer();

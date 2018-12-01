@@ -1,7 +1,6 @@
 package juego;
 
 import juego.comestible.Comestible;
-import juego.comestible.Manzana;
 import juego.serpiente.Colision;
 import juego.serpiente.Serpiente;
 import juego.serpiente.SerpienteIA;
@@ -20,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
+import static java.util.Objects.nonNull;
 import static utilidades.Constantes.CICLO_DE_JUEGO;
 import static utilidades.Constantes.PUNTAJE;
 import static utilidades.Constantes.SUPERVIVENCIA;
@@ -44,7 +44,7 @@ public class Campo implements ActionListener, Observado {
     private ActualizacionDelJuego actualizacionDelJuego;
     private String modoDeJuego;
     private int puntajeAAlcanzar;
-    private GeneradoDeComestibles generador;
+    private GeneradorDeComestibles generador;
 
     private Observador observador;
 
@@ -58,12 +58,12 @@ public class Campo implements ActionListener, Observado {
         this.tiempoDeJuego = tiempoDeJuego * 100;
         this.puntajeAAlcanzar = puntajeAAlcanzar;
         this.modoDeJuego = modoDeJuego;
-        this.generador = new GeneradoDeComestibles(comestibles, jugadores.size() + serpientesIA.size());
+        this.generador = new GeneradorDeComestibles(comestibles, jugadores.size() + serpientesIA.size());
     }
 
     public void comenzarJuego() {
         timer.start();
-        generador.iniciar();
+        generador.start();
     }
 
     public void terminarJuego() {
@@ -78,22 +78,20 @@ public class Campo implements ActionListener, Observado {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (comestibles.isEmpty()) {
-            comestibles.add(new Manzana());
-        }
-
         for (Serpiente jugador : serpientes) {
             if (jugador.salir()) {
                 jugador.morir();
                 observador.removerJugador(jugador.getNombre());
+            } else {
+                jugador.moverse();
             }
         }
 
-        for (Serpiente jugador : serpientes) {
-            jugador.moverse();
-        }
         for (SerpienteIA jugadorIA : serpientesIA) {
-            jugadorIA.cambiarMirada(comestibles.peek());
+            Comestible comestible = comestibles.peek();
+            if (nonNull(comestible)) {
+                jugadorIA.cambiarMirada(comestible);
+            }
             jugadorIA.moverse();
         }
 
