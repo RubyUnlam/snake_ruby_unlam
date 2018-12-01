@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serpiente{
+public class Serpiente implements Comparable<Serpiente>{
 
 	private Estado estado;
 	private Color color;
@@ -89,7 +89,7 @@ public class Serpiente{
 
 	public String getNombre(){ return nombreDeSerpiente;}
 
-	public int getPuntaje(){ return puntaje;}
+	public Integer getPuntaje(){ return puntaje;}
 
 	public void sumarPuntos(int puntos){
 		puntaje+=puntos;
@@ -103,4 +103,9 @@ public class Serpiente{
         this.salir = salir;
         return this;
     }
+
+	@Override
+	public int compareTo(Serpiente o) {
+		return o.getPuntaje() - this.getPuntaje();
+	}
 }
