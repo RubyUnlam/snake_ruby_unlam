@@ -242,7 +242,7 @@ public class MenuPrincipal {
     }
 
     private boolean condicionesDeVictoriaValidas(Sala sala){
-        return PUNTAJE.equals(sala.getModoDeJuego()) ? esPuntajeValido(sala) : esTiempoValido(sala);
+            return PUNTAJE.equals(sala.getModoDeJuego()) ? esPuntajeValido(sala) : esTiempoValido(sala);
     } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
 
     /**
