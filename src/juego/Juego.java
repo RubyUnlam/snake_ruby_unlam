@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import static utilidades.Constantes.CARNICERIA;
+
 public class Juego {
 
     private static Logger logger = Logger.getLogger(Juego.class);
@@ -27,12 +29,18 @@ public class Juego {
         CountDownLatch finDelJuego = new CountDownLatch(1);
 
         int nroDeCuandrante = 0;
-        for (Jugador jugador : sala.getJugadores()) {
-            Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre(), Cuadrante.obtenerCuadrante(nroDeCuandrante));
-            serpientes.add(serpiente);
-            manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
-            new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
-            nroDeCuandrante++;
+        if (CARNICERIA.equals(sala.getModoDeJuego())) {
+            for (Jugador jugador : sala.getJugadores()) {
+                manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
+                new ManejadorMovimiento(jugador.getManejador(), new Serpiente(jugador.getColor(), jugador.getNombre(), Cuadrante.obtenerCuadrante(nroDeCuandrante++)), jugador.obtenerEscuchandoTeclas()).start();
+            }
+        } else {
+            for (Jugador jugador : sala.getJugadores()) {
+                Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre(), Cuadrante.obtenerCuadrante(nroDeCuandrante++));
+                serpientes.add(serpiente);
+                manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
+                new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
+            }
         }
 
         List<String> nombresIAUsados = new ArrayList<>();
@@ -48,8 +56,7 @@ public class Juego {
             } while (nombresIAUsados.contains(nombreActual));
             nombresIAUsados.add(nombreActual);
             serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), colorActual,
-                    nombreActual + Constantes.NOMBRE_IA, Cuadrante.obtenerCuadrante(nroDeCuandrante)));
-            nroDeCuandrante++;
+                    nombreActual + Constantes.NOMBRE_IA, Cuadrante.obtenerCuadrante(nroDeCuandrante++)));
         }
 
         Campo campo = new Campo(serpientes, serpientesIA, finDelJuego, sala.getTiempo(), sala.getPuntajeAAlcanzar(), sala.getModoDeJuego());

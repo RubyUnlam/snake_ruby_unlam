@@ -12,6 +12,8 @@ import java.util.concurrent.CountDownLatch;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static utilidades.Constantes.CARNICERIA;
+import static utilidades.Constantes.PUNTAJE;
 
 public class MenuPrincipal {
 
@@ -22,7 +24,6 @@ public class MenuPrincipal {
     public static final String SALIR_DE_SALA = "salir_de_sala";
     public static final String JUGAR = "jugar";
     public static final String CAMBIAR_COLOR = "cambiar_color";
-    public static final String PUNTAJE = "Puntaje";
 
     private Jugador jugador;
     private Sala salaActual;
@@ -92,9 +93,7 @@ public class MenuPrincipal {
     private void verSalas() throws IOException {
         List<Sala> salasAAgregar = new ArrayList<Sala>();
         for(Sala sala : sincronizadorDeSalas.obtenerSalas()){
-            if(!sala.estaInactiva()){
                 salasAAgregar.add(sala);
-            }
         }
         manejadorES.enviar(new RespuestaAccionConSala(true, salasAAgregar));
     }
@@ -247,8 +246,12 @@ public class MenuPrincipal {
     }
 
     private boolean condicionesDeVictoriaValidas(Sala sala){
-            return PUNTAJE.equals(sala.getModoDeJuego()) ? esPuntajeValido(sala) : esTiempoValido(sala);
-    } //TODO CAMBIAR POR UN SWITCH SI AGREGAMOS MÁS MODOS DE JUEGO
+        String modoDeJuego = sala.getModoDeJuego();
+        if (CARNICERIA.equals(modoDeJuego)) {
+            return true;
+        }
+        return PUNTAJE.equals(modoDeJuego) ? esPuntajeValido(sala) : esTiempoValido(sala);
+    }
 
     /**
      * Verfica que el puntaje ingresado sea un numero mayor a 0.
