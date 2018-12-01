@@ -1,7 +1,5 @@
 package juego;
 
-import juego.comestible.Ciruela;
-import juego.comestible.Coco;
 import juego.comestible.Comestible;
 import juego.comestible.Manzana;
 import juego.serpiente.Colision;
@@ -23,12 +21,12 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.Timer;
 
 import static utilidades.Constantes.CICLO_DE_JUEGO;
+import static utilidades.Constantes.PUNTAJE;
+import static utilidades.Constantes.SUPERVIVENCIA;
 
 
 public class Campo implements ActionListener, Observado {
 
-    private static final String PUNTAJE = "Puntaje";
-    private static final String SUPERVIVENCIA = "Supervivencia";
     private static final String MENSAJE_EMPATE = "La partida fue un empate";
     private static final String EL_GANADOR_ES = "El ganador es ";
     public static final String CON = " con ";
@@ -119,10 +117,10 @@ public class Campo implements ActionListener, Observado {
     }
 
     private boolean partidaFinalizada() {
-        if (SUPERVIVENCIA.equals(modoDeJuego)) {
-            return terminoElTiempo() || !haySerpientesVivas() || hayUnaSerpienteViva();
-        } else {
+        if (PUNTAJE.equals(modoDeJuego)) {
             return !haySerpientesVivas() || puntajeMaximoAlcanzado();
+        } else {
+            return terminoElTiempo() || !haySerpientesVivas() || hayUnaSerpienteViva();
         }
     }
 
