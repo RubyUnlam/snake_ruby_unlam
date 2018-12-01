@@ -1,4 +1,4 @@
-package main;
+package juego.serpiente;
 
 public class Muerto implements Estado{
 	public Estado moverse(Serpiente serpiente) {

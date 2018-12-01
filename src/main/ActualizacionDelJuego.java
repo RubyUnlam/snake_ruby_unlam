@@ -1,5 +1,7 @@
 package main;
 
+import juego.Dibujable;
+
 import java.util.List;
 
 public class ActualizacionDelJuego {

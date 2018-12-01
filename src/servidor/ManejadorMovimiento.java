@@ -3,7 +3,7 @@ package servidor;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-import main.Serpiente;
+import juego.serpiente.Serpiente;
 
 public class ManejadorMovimiento extends Thread {
 

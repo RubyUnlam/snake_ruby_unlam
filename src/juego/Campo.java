@@ -1,9 +1,16 @@
-package main;
+package juego;
+
+import juego.comestible.Comestible;
+import juego.comestible.Manzana;
+import juego.serpiente.Serpiente;
+import juego.serpiente.SerpienteIA;
+import main.ActualizacionDelJuego;
+import main.Observado;
+import main.Observador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

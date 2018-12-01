@@ -1,4 +1,6 @@
-package main;
+package juego.serpiente;
+
+import juego.Ubicacion;
 
 import static utilidades.Constantes.VELOCIDAD;
 

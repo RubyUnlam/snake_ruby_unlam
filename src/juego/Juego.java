@@ -1,5 +1,8 @@
-package main;
+package juego;
 
+import juego.serpiente.Serpiente;
+import juego.serpiente.SerpienteIA;
+import main.Sala;
 import servidor.ManejadorMovimiento;
 import servidor.ManejadorVisual;
 
