@@ -12,6 +12,7 @@ public class IngresoAlJuego {
 
     private ManejadorES manejadorES;
     private SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados;
+    private final String SALIR = "salir";
 
     public IngresoAlJuego(ManejadorES manejadorES, SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados) {
         this.manejadorES = manejadorES;
@@ -23,8 +24,13 @@ public class IngresoAlJuego {
         boolean sesionIniciada = false;
 
         Usuario usuario;
+        String mensaje;
         do {
             RegistroUsuario registroUsuario;
+            mensaje = manejadorES.escuchar(String.class);
+            if(SALIR.equals(mensaje)){
+                return null;
+            }
             usuario = manejadorES.escuchar(Usuario.class);
             if (sincronizadorUsuariosLoggeados.estaLoggeado(usuario.getNombreUsuario())) {
                 registroUsuario = new RegistroUsuario("Usuario loggeado", false);
