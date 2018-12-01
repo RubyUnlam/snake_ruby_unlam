@@ -216,12 +216,14 @@ public class Campo implements ActionListener, Observado {
      */
     private List<Dibujable> prepararDibujables() {
         List<Dibujable> dibujables = new ArrayList<>();
-        for (Serpiente serpientes : serpientes) {
-            dibujables.add(new Dibujable(serpientes));
-        }
 
-        for (Serpiente serpientesIA : serpientesIA) {
-            dibujables.add(new Dibujable(serpientesIA));
+        List<Serpiente> todas = new ArrayList<>();
+        todas.addAll(serpientes);
+        todas.addAll(serpientesIA);
+        Collections.sort(todas);
+
+        for (Serpiente serpientes : todas) {
+            dibujables.add(new Dibujable(serpientes));
         }
 
         for (Comestible comestible : comestibles) {
