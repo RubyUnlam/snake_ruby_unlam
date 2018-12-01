@@ -78,7 +78,11 @@ public class Serpiente implements Comparable<Serpiente>{
 					}
 				}
 				break;
-
+			case "dividir":
+				if(ubicaciones.size() > 3){
+					ubicaciones = ubicaciones.subList(0,ubicaciones.size()/2);
+				}
+				break;
 		}
 	}
 

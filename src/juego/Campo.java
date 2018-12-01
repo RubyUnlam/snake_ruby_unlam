@@ -1,5 +1,6 @@
 package juego;
 
+import juego.comestible.Ciruela;
 import juego.comestible.Coco;
 import juego.comestible.Comestible;
 import juego.comestible.Manzana;

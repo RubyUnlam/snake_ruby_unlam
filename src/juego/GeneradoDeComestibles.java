@@ -18,7 +18,7 @@ public class GeneradoDeComestibles {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (comestibles.size() < jugadoresEnCampo * 3) {
-                    int proba = (int) (Math.random() * 101);
+                    int proba = (int) (Math.random() * 111);
                     if (proba <= 60) {
                         comestibles.add(new Manzana());
                     } else if (proba <= 70) {
@@ -27,8 +27,10 @@ public class GeneradoDeComestibles {
                         comestibles.add(new Coco());
                     } else if (proba <= 90) {
                         comestibles.add(new Limon());
-                    } else {
+                    } else if (proba <= 100){
                         comestibles.add(new Durazno());
+                    } else {
+                        comestibles.add(new Ciruela());
                     }
                 }
             }
