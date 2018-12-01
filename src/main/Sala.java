@@ -32,6 +32,8 @@ public class Sala {
 
 	private int puntajeAAlcanzar;
 
+	private String mapa;
+
 	public Sala(String nombreSala, String contrasenia, int cantidadJugadores, int cantidadIA, String nombreCreador,
 			int dificultadIA, String modoDeJuego, int tiempo, int puntaje) {
 		this.nombreSala = nombreSala;
@@ -175,9 +177,6 @@ public class Sala {
 			return false;
 		return true;
 	}
-
-	// TODO: Cuando haya distintos tipos de mapa y tiempo, agregar lo siguiente
-	// private int mapa;
 
 	public int getTiempo() {
 		return tiempo;
