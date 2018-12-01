@@ -8,6 +8,7 @@ import static utilidades.Constantes.VELOCIDAD;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Serpiente implements Comparable<Serpiente>{
@@ -59,11 +60,25 @@ public class Serpiente implements Comparable<Serpiente>{
 	private void powerUp(Comestible comestible) {
 		switch (comestible.getPowerUp()) {
 			case "congelado":
-				new GestorDeEstado(this, new Congelado(), 1000).start();
+				new GestorDeEstado(this, new Congelado(), 2000).start();
 				break;
 			case "inmortal":
-				new GestorDeEstado(this, new Inmortal(), 200).start();
+				new GestorDeEstado(this, new Inmortal(), 3000).start();
 				break;
+			case "confundido":
+				new GestorDeEstado(this, new Confundido(), 2500).start();
+				break;
+			case "invertir":
+				Collections.reverse(this.ubicaciones);
+				for (Direccion direccion : Direccion.values()){
+					Direccion nueva = this.direccion.cambiarDireccion(direccion.name(), this);
+					if (!this.direccion.equals(nueva)) {
+						this.direccion = nueva;
+						break;
+					}
+				}
+				break;
+
 		}
 	}
 

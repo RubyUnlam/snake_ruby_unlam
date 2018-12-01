@@ -1,5 +1,6 @@
 package juego;
 
+import juego.comestible.Coco;
 import juego.comestible.Comestible;
 import juego.comestible.Manzana;
 import juego.serpiente.Colision;
@@ -20,6 +21,8 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
+import static utilidades.Constantes.CICLO_DE_JUEGO;
+
 
 public class Campo implements ActionListener, Observado {
 
@@ -27,7 +30,6 @@ public class Campo implements ActionListener, Observado {
 	private static final String SUPERVIVENCIA = "Supervivencia";
 
 	private Timer timer;
-	private int delay = 100;
 	private CountDownLatch finDelJuego;
 	private int tiempoDeJuego;
 
@@ -40,6 +42,7 @@ public class Campo implements ActionListener, Observado {
 	private ActualizacionDelJuego actualizacionDelJuego;
 	private String modoDeJuego;
 	private int puntajeAAlcanzar;
+	private GeneradoDeComestibles generador;
 
 	private Observador observador;
 
@@ -49,18 +52,21 @@ public class Campo implements ActionListener, Observado {
 		this.comestibles = new ConcurrentLinkedQueue<Comestible>();
 		this.colisionador = new Colision();
         this.finDelJuego = finDelJuego;
-		timer = new Timer(delay, this);
+		timer = new Timer(CICLO_DE_JUEGO, this);
 		this.tiempoDeJuego = tiempoDeJuego * 100;
 		this.puntajeAAlcanzar = puntajeAAlcanzar;
 		this.modoDeJuego = modoDeJuego;
+		this.generador = new GeneradoDeComestibles(comestibles, jugadores.size() + serpientesIA.size());
 	}
 
 	public void comenzarJuego() {
 		timer.start();
+		generador.iniciar();
 	}
 
 	public void terminarJuego() {
 	    timer.stop();
+	    generador.parar();
     }
 
 

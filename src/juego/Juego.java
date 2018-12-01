@@ -23,9 +23,6 @@ public class Juego {
 
         CountDownLatch finDelJuego = new CountDownLatch(1);
 
-        Campo campo = new Campo(serpientes, serpientesIA, finDelJuego, sala.getTiempo(), sala.getPuntajeAAlcanzar(),
-                sala.getModoDeJuego());
-        campo.agregarObservador(manejadorVisual);
 
         for (Jugador jugador : sala.getJugadores()) {
             Serpiente serpiente = new Serpiente(jugador.getColor(), jugador.getNombre());
@@ -33,10 +30,12 @@ public class Juego {
             manejadorVisual.agregarJugador(jugador.getManejador(), jugador.getNombre());
             new ManejadorMovimiento(jugador.getManejador(), serpiente, jugador.obtenerEscuchandoTeclas()).start();
         }
+
         List<String> nombresIAUsados = new ArrayList<>();
         int randomNameIndex;
         String nombreActual;
         Color colorActual;
+
         for (int i = 0; i < sala.getCantidadIA(); i++) {
             do {
                 randomNameIndex = (int) (Math.random() * NombreIA.values().length);
@@ -47,6 +46,9 @@ public class Juego {
             serpientesIA.add(new SerpienteIA(sala.getDificultadIA(), colorActual,
                     nombreActual + Constantes.NOMBRE_IA));
         }
+
+        Campo campo = new Campo(serpientes, serpientesIA, finDelJuego, sala.getTiempo(), sala.getPuntajeAAlcanzar(), sala.getModoDeJuego());
+        campo.agregarObservador(manejadorVisual);
 
         campo.comenzarJuego();
 
