@@ -1,9 +1,8 @@
 package main;
 
+import org.apache.log4j.Logger;
 import servidor.ManejadorES;
 import servidor.SincronizadorUsuariosLoggeados;
-import org.slf4j.Logger;
-import org.slf4j.impl.SimpleLoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,10 +12,10 @@ import static java.util.Objects.nonNull;
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
     private SincronizadorDeSalas sincronizadorDeSalas;
-    private Logger logger =  new SimpleLoggerFactory().getLogger("Flujo");
     private ManejadorES manejadorES;
     private Socket conexion;
     private SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados;
+    private final Logger logger = Logger.getLogger(Flujo.class);
 
 
     public Flujo(Socket conexion, SincronizadorDeSalas sincronizadorDeSalas, SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados) {

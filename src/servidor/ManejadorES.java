@@ -1,6 +1,7 @@
 package servidor;
 
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,13 +13,14 @@ public class ManejadorES {
     private DataInputStream entrada;
     private DataOutputStream salida;
     private Gson gson = new Gson();
+    private final Logger logger = Logger.getLogger(ManejadorES.class);
 
     public ManejadorES(Socket socket) {
         try {
             this.entrada = new DataInputStream(socket.getInputStream());
             this.salida = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
