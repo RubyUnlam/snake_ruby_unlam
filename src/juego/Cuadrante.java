@@ -26,7 +26,7 @@ public enum Cuadrante {
     }
 
     public static Cuadrante obtenerCuadrante(int nroDeCuadrante) {
-        for(Cuadrante cuadrante : values()) {
+        for (Cuadrante cuadrante : values()) {
             if (cuadrante.numeroDeCuadrante == nroDeCuadrante) {
                 return cuadrante;
             }

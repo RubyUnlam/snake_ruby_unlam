@@ -6,45 +6,45 @@ import java.awt.Color;
 
 public abstract class Comestible {
 
-	private Color color;
-	private Ubicacion ubicacion;
-	private boolean comida = false;
-	private int puntaje;
-	private String powerUp;
-	
-	Comestible(Color color, int puntaje, String powerUp){
-		this.ubicacion = new Ubicacion();
-		this.color = color;
-		this.puntaje = puntaje;
-		this.powerUp = powerUp;
-	}
-	
-	Comestible(Ubicacion ubicacion, Color color) {
-		this.ubicacion = ubicacion;
-		this.color = color;
-	}
+    private Color color;
+    private Ubicacion ubicacion;
+    private boolean comida = false;
+    private int puntaje;
+    private String powerUp;
 
-	public Ubicacion getUbicacion() {
-		return ubicacion;
-	}
+    Comestible(Color color, int puntaje, String powerUp) {
+        this.ubicacion = new Ubicacion();
+        this.color = color;
+        this.puntaje = puntaje;
+        this.powerUp = powerUp;
+    }
 
-	public boolean fueComida() {
-		return comida;
-	}
+    Comestible(Ubicacion ubicacion, Color color) {
+        this.ubicacion = ubicacion;
+        this.color = color;
+    }
 
-	public void setComida(boolean comida) {
-		this.comida = comida;
-	}
-	
-	public Color obtenerColor() {
-		return this.color;
-	}
+    public Ubicacion getUbicacion() {
+        return ubicacion;
+    }
 
-	public int obtenerPuntaje() {
-		return puntaje;
-	}
+    public boolean fueComida() {
+        return comida;
+    }
 
-	public String getPowerUp() {
-		return powerUp;
-	}
+    public void setComida(boolean comida) {
+        this.comida = comida;
+    }
+
+    public Color obtenerColor() {
+        return this.color;
+    }
+
+    public int obtenerPuntaje() {
+        return puntaje;
+    }
+
+    public String getPowerUp() {
+        return powerUp;
+    }
 }

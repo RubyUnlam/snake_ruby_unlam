@@ -2,7 +2,7 @@ package juego.serpiente;
 
 import org.apache.log4j.Logger;
 
-public class GestorDeEstado extends Thread  {
+public class GestorDeEstado extends Thread {
 
     private Serpiente serpiente;
     private Estado estadoNuevo;
