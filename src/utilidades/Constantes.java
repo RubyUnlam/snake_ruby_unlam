@@ -1,5 +1,8 @@
 package utilidades;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Constantes {
 	public static final int MIRAR_ARRIBA = -1;
 	public static final int MIRAR_IZQUIERDA = -1;
@@ -9,5 +12,6 @@ public class Constantes {
 	public static final int ALTURA_VENTANA = 600;
 	public static final int ANCHO_VENTANA = 800;
 	public static final int VELOCIDAD = 20;
+	public static final String NOMBRE_IA = "IA";
 	public static final int CICLO_DE_JUEGO = 100;
 }
