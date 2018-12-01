@@ -19,6 +19,9 @@
 *.zip
 *.tar.gz
 *.rar
+.idea/*
+snake_ruby_unlam.iml
+!lib/log4j-1.2.17.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
