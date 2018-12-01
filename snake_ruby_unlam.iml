@@ -185,7 +185,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="log4j-1.2-api-2.11.1" level="project" />
+    <orderEntry type="library" exported="" name="log4j-1.2-api-2.11.1" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

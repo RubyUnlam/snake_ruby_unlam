@@ -108,8 +108,9 @@ public class Sala {
 			jugador.setEstaListo(false);
 		}
 
-		salaInactiva = getJugadoresEnSala() == 0;
-		if(salaInactiva){ nombreSala = "";}
+		if(getJugadoresEnSala() == 0){
+			nombreSala = "";
+		}
 	}
 
 	/**
@@ -118,6 +119,7 @@ public class Sala {
 	public void intentarIniciarElJuego() {
 		if (esValidoIniciarElJuego()) {
 			generarJuego();
+			salaInactiva = true;
 		}
 	}
 
