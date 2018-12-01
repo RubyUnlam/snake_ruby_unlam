@@ -2,6 +2,8 @@ package main;
 
 import servidor.ManejadorES;
 import servidor.SincronizadorUsuariosLoggeados;
+import org.slf4j.Logger;
+import org.slf4j.impl.SimpleLoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -9,6 +11,7 @@ import java.net.Socket;
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 
     private SincronizadorDeSalas sincronizadorDeSalas;
+    private Logger logger =  new SimpleLoggerFactory().getLogger("Flujo");
     private ManejadorES manejadorES;
     private Socket conexion;
     private SincronizadorUsuariosLoggeados sincronizadorUsuariosLoggeados;
@@ -33,7 +36,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
             conexion.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
