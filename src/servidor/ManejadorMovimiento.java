@@ -29,6 +29,7 @@ public class ManejadorMovimiento extends Thread {
                         serpiente.mirar(mandameMecha);
                     }
                 } else {
+                    serpiente.setSalir(true);
                     finDelJuego = true;
                 }
             }

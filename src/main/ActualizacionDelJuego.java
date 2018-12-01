@@ -7,6 +7,7 @@ public class ActualizacionDelJuego {
     private boolean terminado;
     List<Dibujable> dibujables;
     private String ganador;
+    private boolean salir;
 
     public ActualizacionDelJuego(boolean terminado, List<Dibujable> dibujables, String ganador) {
         this.dibujables = dibujables;
@@ -18,5 +19,9 @@ public class ActualizacionDelJuego {
         this.dibujables = dibujables;
         this.terminado = false;
         this.ganador = "";
+    }
+
+    public ActualizacionDelJuego(boolean salir){
+        this.salir = salir;
     }
 }

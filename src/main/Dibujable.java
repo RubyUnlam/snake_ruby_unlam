@@ -28,20 +28,4 @@ public class Dibujable {
 		this.zonaDeDibujo = Collections.singletonList(comestible.getUbicacion());
 	}
 
-	public Color obtenerColor() {
-		return color;
-	}
-
-	public List<Ubicacion> obtenerZonaDeDibujo() {
-		return zonaDeDibujo;
-	}
-
-	public String getNombreJugador() {
-		return nombreJugador;
-	}
-
-	public int getPuntaje() {
-		return puntaje;
-	}
-
 }
