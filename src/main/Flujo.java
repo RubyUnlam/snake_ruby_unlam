@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import static java.util.Objects.nonNull;
 
-public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
+public class Flujo extends Thread {
 
     private SincronizadorDeSalas sincronizadorDeSalas;
     private ManejadorES manejadorES;
@@ -30,7 +30,7 @@ public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
         try {
             Usuario usuario = new IngresoAlJuego(manejadorES, sincronizadorUsuariosLoggeados).ingresar();
 
-            if(nonNull(usuario)){
+            if (nonNull(usuario)) {
                 new MenuPrincipal(usuario, manejadorES, sincronizadorDeSalas).jugar();
                 sincronizadorUsuariosLoggeados.eliminarJugador(usuario.getNombreUsuario());
             }

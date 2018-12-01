@@ -27,7 +27,7 @@ public class GeneradorDeComestibles extends Thread {
                         comestibles.add(new Coco());
                     } else if (proba <= 90) {
                         comestibles.add(new Limon());
-                    } else if (proba <= 100){
+                    } else if (proba <= 100) {
                         comestibles.add(new Durazno());
                     } else {
                         comestibles.add(new Ciruela());

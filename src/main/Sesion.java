@@ -9,133 +9,132 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class Sesion {
 
-	private static Session session;
-	private static Transaction tx;
+    private static Session session;
+    private static Transaction tx;
 
-	/**
-	 * Verifica que el usuario y mail no esten en uso, y que este ultimo sea valido.
-	 * Si alguno no cumpliera con esas condiciones, devuelve una cadena con el
-	 * mensaje de error.
-	 * 
-	 * @param nombreUsuario
-	 * @param contrasenia
-	 * @param email
-	 * @return
-	 */
-	public static RegistroUsuario registrarUsuario(String nombreUsuario, String contrasenia, String email) {
-		session = SesionSingleton.getSessionFactory().openSession();
-		Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
-		RegistroUsuario registroMail = mailUsuarioValido(email);
-		
-		if (!registroMail.esRegistroEfectivo()) {
-			return registroMail;
-		}
-		
-		RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
+    /**
+     * Verifica que el usuario y mail no esten en uso, y que este ultimo sea valido.
+     * Si alguno no cumpliera con esas condiciones, devuelve una cadena con el
+     * mensaje de error.
+     *
+     * @param nombreUsuario
+     * @param contrasenia
+     * @param email
+     * @return
+     */
+    public static RegistroUsuario registrarUsuario(String nombreUsuario, String contrasenia, String email) {
+        session = SesionSingleton.getSessionFactory().openSession();
+        Usuario usuario = new Usuario(nombreUsuario, contrasenia, email);
+        RegistroUsuario registroMail = mailUsuarioValido(email);
 
-		if (!registroUsername.esRegistroEfectivo()) {
-			return registroUsername;
-		}
+        if (!registroMail.esRegistroEfectivo()) {
+            return registroMail;
+        }
 
-		registrarUsuario(usuario);
-		session.close();
-		return registroUsername;
-	}
+        RegistroUsuario registroUsername = nombreUsuarioValido(nombreUsuario);
 
-	/**
-	 * Verifica que el mail no se encuentre en la base de datos, y que contenga al
-	 * menos un punto y un arroba.
-	 * 
-	 * @param email
-	 * @return RegistroUsuario
-	 */
-	private static RegistroUsuario mailUsuarioValido(String email) {
+        if (!registroUsername.esRegistroEfectivo()) {
+            return registroUsername;
+        }
 
-		RegistroUsuario registro = new RegistroUsuario("", false);
+        registrarUsuario(usuario);
+        session.close();
+        return registroUsername;
+    }
 
-		if (!email.contains("@") || !email.contains(".")) {
-			registro.setMensaje("El mail debe contener al menos un punto y un arroba");
-			return registro;
-		}
+    /**
+     * Verifica que el mail no se encuentre en la base de datos, y que contenga al
+     * menos un punto y un arroba.
+     *
+     * @param email
+     * @return RegistroUsuario
+     */
+    private static RegistroUsuario mailUsuarioValido(String email) {
 
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
-		cq.from(Usuario.class);
-		Root<Usuario> ru = cq.from(Usuario.class);
-		cq.select(ru).where(cb.like(ru.get("email"), email));
+        RegistroUsuario registro = new RegistroUsuario("", false);
 
-		try {
-			session.createQuery(cq).getSingleResult();
-		} catch (NoResultException e) {
-			registro.setRegistroEfectivo(true);
-			return registro;
-		}
-		registro.setMensaje("El mail se encuentra en uso");
-		return registro;
-	}
+        if (!email.contains("@") || !email.contains(".")) {
+            registro.setMensaje("El mail debe contener al menos un punto y un arroba");
+            return registro;
+        }
 
-	public static boolean iniciarSesion(Usuario usuario) {
-		session = SesionSingleton.getSessionFactory().openSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
+        cq.from(Usuario.class);
+        Root<Usuario> ru = cq.from(Usuario.class);
+        cq.select(ru).where(cb.like(ru.get("email"), email));
 
-		boolean existeCuenta = true;
+        try {
+            session.createQuery(cq).getSingleResult();
+        } catch (NoResultException e) {
+            registro.setRegistroEfectivo(true);
+            return registro;
+        }
+        registro.setMensaje("El mail se encuentra en uso");
+        return registro;
+    }
 
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
-		cq.from(Usuario.class);
-		Root<Usuario> ru = cq.from(Usuario.class);
-		List<Predicate> predicates = new ArrayList<Predicate>();
+    public static boolean iniciarSesion(Usuario usuario) {
+        session = SesionSingleton.getSessionFactory().openSession();
 
-		if (usuario.getNombreUsuario() == null || !usuario.getNombreUsuario().isEmpty()) {
-			predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
-		}
+        boolean existeCuenta = true;
 
-		if (usuario.getContrasenia() == null || !usuario.getContrasenia().isEmpty()) {
-			predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));
-		}
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
+        cq.from(Usuario.class);
+        Root<Usuario> ru = cq.from(Usuario.class);
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
-		cq.select(ru).where(predicates.toArray(new Predicate[] {}));
+        if (usuario.getNombreUsuario() == null || !usuario.getNombreUsuario().isEmpty()) {
+            predicates.add(cb.like(ru.get("nombreUsuario"), usuario.getNombreUsuario()));
+        }
 
-		try {
-			session.createQuery(cq).getSingleResult();
-		} catch (NoResultException e) {
-			existeCuenta = false;
-		}
+        if (usuario.getContrasenia() == null || !usuario.getContrasenia().isEmpty()) {
+            predicates.add(cb.like(ru.get("contrasenia"), usuario.getContrasenia()));
+        }
 
-		return existeCuenta;
+        cq.select(ru).where(predicates.toArray(new Predicate[]{}));
 
-	}
+        try {
+            session.createQuery(cq).getSingleResult();
+        } catch (NoResultException e) {
+            existeCuenta = false;
+        }
 
-	public static RegistroUsuario nombreUsuarioValido(String nombreUsuario) {
+        return existeCuenta;
 
-		RegistroUsuario registro = new RegistroUsuario("", false);
+    }
 
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
-		cq.from(Usuario.class);
-		Root<Usuario> ru = cq.from(Usuario.class);
-		cq.select(ru).where(cb.like(ru.get("nombreUsuario"), nombreUsuario));
+    public static RegistroUsuario nombreUsuarioValido(String nombreUsuario) {
 
-		try {
-			session.createQuery(cq).getSingleResult();
-		} catch (NoResultException e) {
-			registro.setRegistroEfectivo(true);
-			return registro;
-		}
-		registro.setMensaje("Nombre de usuario en uso.");
-		return registro;
-	}
+        RegistroUsuario registro = new RegistroUsuario("", false);
 
-	public static boolean registrarUsuario(Usuario usuario) {
-		tx = session.beginTransaction();
-		session.saveOrUpdate(usuario);
-		tx.commit();
-		return true;
-	}
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> cq = cb.createQuery(Usuario.class);
+        cq.from(Usuario.class);
+        Root<Usuario> ru = cq.from(Usuario.class);
+        cq.select(ru).where(cb.like(ru.get("nombreUsuario"), nombreUsuario));
+
+        try {
+            session.createQuery(cq).getSingleResult();
+        } catch (NoResultException e) {
+            registro.setRegistroEfectivo(true);
+            return registro;
+        }
+        registro.setMensaje("Nombre de usuario en uso.");
+        return registro;
+    }
+
+    public static boolean registrarUsuario(Usuario usuario) {
+        tx = session.beginTransaction();
+        session.saveOrUpdate(usuario);
+        tx.commit();
+        return true;
+    }
 
 }

@@ -8,7 +8,7 @@ public class Ciruela extends Comestible {
     private final static String POWER_UP = "dividir";
     private final static int PUNTAJE = 5;
 
-    public Ciruela(){
+    public Ciruela() {
         super(COLOR, PUNTAJE, POWER_UP);
     }
 }

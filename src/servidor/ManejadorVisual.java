@@ -1,15 +1,10 @@
 package servidor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-
 import main.ActualizacionDelJuego;
-import main.Flujo;
 import main.Observador;
 import org.apache.log4j.Logger;
 

@@ -23,7 +23,7 @@ public class ActualizacionDelJuego {
         this.ganador = "";
     }
 
-    public ActualizacionDelJuego(boolean salir){
+    public ActualizacionDelJuego(boolean salir) {
         this.salir = salir;
     }
 }

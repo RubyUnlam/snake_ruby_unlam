@@ -1,6 +1,5 @@
 package main;
 
-import com.google.gson.Gson;
 import servidor.ManejadorES;
 import servidor.SincronizadorUsuariosLoggeados;
 
@@ -28,7 +27,7 @@ public class IngresoAlJuego {
         do {
             RegistroUsuario registroUsuario;
             mensaje = manejadorES.escuchar(String.class);
-            if(SALIR.equals(mensaje)){
+            if (SALIR.equals(mensaje)) {
                 return null;
             }
             usuario = manejadorES.escuchar(Usuario.class);

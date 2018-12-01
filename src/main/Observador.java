@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface Observador {
 
-	void dibujar(ActualizacionDelJuego actualizacion);
-	void agregarJugador(ManejadorES manejadorDelJugador, String jugador);
-	void removerJugador(String jugador);
+    void dibujar(ActualizacionDelJuego actualizacion);
+
+    void agregarJugador(ManejadorES manejadorDelJugador, String jugador);
+
+    void removerJugador(String jugador);
 
 }

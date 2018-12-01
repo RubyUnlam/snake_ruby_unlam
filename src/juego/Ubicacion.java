@@ -9,55 +9,55 @@ import static utilidades.Constantes.ANCHO_VENTANA;
 
 public class Ubicacion extends Observable implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int x;
-	private int y;
-	
-	public Ubicacion() {
-		this.generarUbicacionAleatoria();
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private int x;
+    private int y;
 
-	public Ubicacion(Cuadrante cuadrante) {
-		this.generarUbicacionAleatoria(cuadrante.getX(), cuadrante.getY());
-	}
+    public Ubicacion() {
+        this.generarUbicacionAleatoria();
+    }
 
-	public Ubicacion(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
+    public Ubicacion(Cuadrante cuadrante) {
+        this.generarUbicacionAleatoria(cuadrante.getX(), cuadrante.getY());
+    }
 
-	public int getX() {
-		return x;
-	}
+    public Ubicacion(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public void generarUbicacionAleatoria() {
-		double randomX = Math.random() * 770;
-		double randomY = Math.random() * 550;
-		this.x = (int) (randomX - (randomX % 20));
-		this.y = (int) (randomY - (randomY % 20));
-	}
+    public int getY() {
+        return y;
+    }
 
-	public void generarUbicacionAleatoria(int cuadranteX, int cuadranteY) {
-		double maxX = ANCHO_VENTANA / 2.;
-		double maxY = ALTURA_VENTANA / 2.;
+    public void generarUbicacionAleatoria() {
+        double randomX = Math.random() * 770;
+        double randomY = Math.random() * 550;
+        this.x = (int) (randomX - (randomX % 20));
+        this.y = (int) (randomY - (randomY % 20));
+    }
 
-		double randomX = Math.random() * maxX;
-		double randomY = Math.random() * maxY;
-		this.x = (int) ((randomX - (randomX % 20)) + (maxX * cuadranteX));
-		this.y = (int) ((randomY - (randomY % 20)) + (maxY * cuadranteY));
-	}
+    public void generarUbicacionAleatoria(int cuadranteX, int cuadranteY) {
+        double maxX = ANCHO_VENTANA / 2.;
+        double maxY = ALTURA_VENTANA / 2.;
 
-	@Override
-	public String toString() {
-		return "Ubicacion [x=" + x + ", y=" + y + "]";
-	}
+        double randomX = Math.random() * maxX;
+        double randomY = Math.random() * maxY;
+        this.x = (int) ((randomX - (randomX % 20)) + (maxX * cuadranteX));
+        this.y = (int) ((randomY - (randomY % 20)) + (maxY * cuadranteY));
+    }
+
+    @Override
+    public String toString() {
+        return "Ubicacion [x=" + x + ", y=" + y + "]";
+    }
 
     @Override
     public boolean equals(Object o) {

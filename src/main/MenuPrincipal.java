@@ -68,11 +68,11 @@ public class MenuPrincipal {
                 }
                 opcion = manejadorES.escuchar(String.class);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        if(nonNull(salaActual)){
+        if (nonNull(salaActual)) {
             salaActual.removerJugador(jugador);
         }
 
@@ -80,6 +80,7 @@ public class MenuPrincipal {
 
     /**
      * Se setea en el jugador el color enviado por el cliente
+     *
      * @throws IOException
      */
     private void cambiarColor() throws IOException {
@@ -88,12 +89,13 @@ public class MenuPrincipal {
 
     /**
      * Le envia al cliente las salas disponibles en el sincronizador
+     *
      * @throws IOException
      */
     private void verSalas() throws IOException {
         List<Sala> salasAAgregar = new ArrayList<Sala>();
-        for(Sala sala : sincronizadorDeSalas.obtenerSalas()){
-                salasAAgregar.add(sala);
+        for (Sala sala : sincronizadorDeSalas.obtenerSalas()) {
+            salasAAgregar.add(sala);
         }
         manejadorES.enviar(new RespuestaAccionConSala(true, salasAAgregar));
     }
@@ -101,6 +103,7 @@ public class MenuPrincipal {
     /**
      * Recibe una sala a crear del cliente, llama al metodo {@link #crearSala(Sala)} y devuelve al cliente
      * la respuesta
+     *
      * @throws IOException
      */
     private void crearSala() throws IOException {
@@ -112,6 +115,7 @@ public class MenuPrincipal {
     /**
      * Recibe la sala a la cual quiere unirse el cliente, llama al metodo {@link #unirseASala(Sala)}
      * y devuelve al cliente la respuesta
+     *
      * @throws IOException
      */
     private void unirseASala() throws IOException {
@@ -123,6 +127,7 @@ public class MenuPrincipal {
     /**
      * Remueve al jugador de la sala, limpia la sala actual y si no acaba de salir
      * de un partido le envia un mensaje vacio para darle de baja las actualizaciones de salas
+     *
      * @throws IOException
      */
     private void salirDeSala() throws IOException {
@@ -174,7 +179,7 @@ public class MenuPrincipal {
             if (sala.getNombreSala().equals(salaAUnirse.getNombreSala())) {
                 if (isNull(sala.getContrasenia()) || sala.getContrasenia().equals(salaAUnirse.getContrasenia())) {
                     if (hayEspacio(sala)) {
-                        if(!sala.estaInactiva()){
+                        if (!sala.estaInactiva()) {
                             sala.agregarJugador(jugador);
                             this.salaActual = sala;
                         } else {
@@ -205,6 +210,7 @@ public class MenuPrincipal {
 
     /**
      * Dada una sala, verifica si todavía hay espacio para meter a otro jugador     *
+     *
      * @param sala
      * @return
      */
@@ -227,7 +233,7 @@ public class MenuPrincipal {
             return new RespuestaAccionConSala(false, "La cantidad total de jugadores debe ser a lo sumo 4");
         }
 
-        if (salaACrear.getTiempo() < 0){
+        if (salaACrear.getTiempo() < 0) {
             return new RespuestaAccionConSala(false, "El tiempo ingresado no es valido");
         }
 
@@ -235,7 +241,7 @@ public class MenuPrincipal {
             return new RespuestaAccionConSala(false, "Ya existe una sala con ese nombre");
         }
 
-        if (!condicionesDeVictoriaValidas(salaACrear)){
+        if (!condicionesDeVictoriaValidas(salaACrear)) {
             return new RespuestaAccionConSala(false, "Los parametros de victoria ingresados son invalidos");
         }
 
@@ -245,7 +251,7 @@ public class MenuPrincipal {
         return new RespuestaAccionConSala(true, this.sincronizadorDeSalas.obtenerSalas());
     }
 
-    private boolean condicionesDeVictoriaValidas(Sala sala){
+    private boolean condicionesDeVictoriaValidas(Sala sala) {
         String modoDeJuego = sala.getModoDeJuego();
         if (CARNICERIA.equals(modoDeJuego)) {
             return true;
@@ -255,19 +261,21 @@ public class MenuPrincipal {
 
     /**
      * Verfica que el puntaje ingresado sea un numero mayor a 0.
+     *
      * @param sala
      * @return
      */
-    private boolean esPuntajeValido(Sala sala){
+    private boolean esPuntajeValido(Sala sala) {
         return sala.getPuntajeAAlcanzar() > 0;
     }
 
     /**
      * Verifica que el tiempo ingresado sea un numero mayor a 0.
+     *
      * @return
      */
     private boolean esTiempoValido(Sala sala) {
-       return sala.getTiempo() > 0;
+        return sala.getTiempo() > 0;
     }
 
     /**
