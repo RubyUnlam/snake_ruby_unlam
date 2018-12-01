@@ -12,6 +12,7 @@ import main.Observador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -115,37 +116,71 @@ public class Campo implements ActionListener, Observado {
 		}
 	}
 
+
 	/**
 	 * Obtiene el nombre de la serpiente ganadora.
 	 * En caso de que no haya serpientes vivas, devuelve empate.
 	 * @return
 	 */
-	private String obtenerSerpienteGanadora() { //TODO CONTEMPLAR DIFERENTES CASOS DE GANADOR. MODIFICAR CUANDO SE MODIFIQUEN LAS COLISIONES.
-
+	private String obtenerSerpienteGanadora() {
 		if (SUPERVIVENCIA.equals(modoDeJuego)) {
-			return obtenerGanadoraSupervivencia();
+			return obtenerSerpienteGanadoraSupervivencia();
 		} else {
 			return obtenerGanadoraPuntaje();
 		}
 	}
 
+
 	/**
-	 * Devuelve el nombre de la serpiente ganadora del modo supervivencia
+	 * Devuelve el nombre de la serpiente ganadora del modo supervivencia o, en su defecto, empate
 	 * @return
 	 */
-	private String obtenerGanadoraSupervivencia() { //TODO HACER QUE DEVUELVA UNA LISTA CON LOS HOMBRES DE LOS GANADORES
-		for(Serpiente serpiente : serpientes){
-			if(!serpiente.estaMuerto()){
-				return serpiente.getNombre();
+	private String obtenerSerpienteGanadoraSupervivencia() {
+		List<Serpiente> serpientesSupervivientes = new ArrayList<Serpiente>();
+
+		setSerpientesSupervivientes(serpientesSupervivientes);
+
+		if(serpientesSupervivientes.size() == 1){
+			return ganador(serpientesSupervivientes.get(0).getNombre());
+		}
+
+		Collections.sort(serpientesSupervivientes);
+
+		if(esEmpate(serpientesSupervivientes)){
+			return "La partida fue un empate";
+		}
+
+		if(!serpientesSupervivientes.isEmpty()){
+			return ganador(serpientesSupervivientes.get(0).getNombre());
+		}
+
+		return "La partida fue un empate";
+	}
+
+	public String ganador(String nombre){
+		return "El ganador es " + nombre;
+	}
+
+	public boolean esEmpate(List<Serpiente> serpientesSupervivientes){
+		return !serpientesSupervivientes.isEmpty() && serpientesSupervivientes.get(0).getPuntaje() == serpientesSupervivientes.get(1).getPuntaje();
+	}
+
+	/**
+	 * Modifica por referencia una lista donde mete todas las serpientes que no han muerto.
+	 * @param serpientesSupervivientes
+	 */
+	private void setSerpientesSupervivientes(List<Serpiente> serpientesSupervivientes){
+		for(Serpiente actual : serpientes){
+			if(!actual.estaMuerto()){
+				serpientesSupervivientes.add(actual);
 			}
 		}
 
-		for(Serpiente serpiente : serpientesIA){
-			if(!serpiente.estaMuerto()){
-				return serpiente.getNombre();
+		for(SerpienteIA actual : serpientesIA){
+			if(!actual.estaMuerto()){
+				serpientesSupervivientes.add(actual);
 			}
 		}
-		return "Empate";
 	}
 
 	/**
@@ -155,23 +190,27 @@ public class Campo implements ActionListener, Observado {
 	 * @return
 	 */
 	private String obtenerGanadoraPuntaje(){
-		int puntaje = 0;
-		String nombreMayorPuntaje = "nadie. Nadie consiguio puntos.";
-		for(Serpiente serpiente : serpientes){
-			if(serpiente.getPuntaje() > puntaje){
-				puntaje = serpiente.getPuntaje();
-				nombreMayorPuntaje = serpiente.getNombre();
-			}
+		List<Serpiente> listaSerpientes = new ArrayList<Serpiente>();
+
+		listaSerpientes.addAll(serpientes);
+		listaSerpientes.addAll(serpientesIA);
+
+		Collections.sort(listaSerpientes);
+
+		Serpiente serpientePrincipal = listaSerpientes.get(0);
+
+		if(listaSerpientes.size() == 1){
+			return "El ganador es " + serpientePrincipal.getNombre();
 		}
 
-		for(SerpienteIA serpiente : serpientesIA)
-			if(serpiente.getPuntaje() > puntaje){
-				puntaje = serpiente.getPuntaje();
-				nombreMayorPuntaje = serpiente.getNombre();
-			}
 
-		return nombreMayorPuntaje;
+		if(serpientePrincipal.getPuntaje() == listaSerpientes.get(1).getPuntaje()){
+			return "La partida finalizo en empate";
+		}
+
+		return "El ganador es " + serpientePrincipal.getNombre() + " con " + serpientePrincipal.getPuntaje();
 	}
+
 
 	/**
      * Genera un dibujable por cada serpiente y comestible en el campo
