@@ -23,10 +23,13 @@ import javax.swing.Timer;
 
 public class Campo implements ActionListener, Observado {
 
-	private static final String PUNTAJE = "Puntaje";
+    private static final String PUNTAJE = "Puntaje";
 	private static final String SUPERVIVENCIA = "Supervivencia";
+	private static final String MENSAJE_EMPATE = "La partida fue un empate";
+	private static final String EL_GANADOR_ES = "El ganador es ";
+    public static final String CON = " con ";
 
-	private Timer timer;
+    private Timer timer;
 	private int delay = 100;
 	private CountDownLatch finDelJuego;
 	private int tiempoDeJuego;
@@ -140,29 +143,17 @@ public class Campo implements ActionListener, Observado {
 
 		setSerpientesSupervivientes(serpientesSupervivientes);
 
-		if(serpientesSupervivientes.size() == 1){
-			return ganador(serpientesSupervivientes.get(0).getNombre());
-		}
-
 		Collections.sort(serpientesSupervivientes);
 
-		if(esEmpate(serpientesSupervivientes)){
-			return "La partida fue un empate";
+		if(serpientesSupervivientes.isEmpty() || serpientesSupervivientes.size() > 1 && esEmpate(serpientesSupervivientes)){
+			return MENSAJE_EMPATE;
 		}
 
-		if(!serpientesSupervivientes.isEmpty()){
-			return ganador(serpientesSupervivientes.get(0).getNombre());
-		}
-
-		return "La partida fue un empate";
-	}
-
-	public String ganador(String nombre){
-		return "El ganador es " + nombre;
+		return mensajeGanador(serpientesSupervivientes.get(0));
 	}
 
 	public boolean esEmpate(List<Serpiente> serpientesSupervivientes){
-		return !serpientesSupervivientes.isEmpty() && serpientesSupervivientes.get(0).getPuntaje() == serpientesSupervivientes.get(1).getPuntaje();
+		return serpientesSupervivientes.get(0).getPuntaje().equals(serpientesSupervivientes.get(1).getPuntaje());
 	}
 
 	/**
@@ -199,17 +190,16 @@ public class Campo implements ActionListener, Observado {
 
 		Serpiente serpientePrincipal = listaSerpientes.get(0);
 
-		if(listaSerpientes.size() == 1){
-			return "El ganador es " + serpientePrincipal.getNombre();
-		}
-
-
-		if(serpientePrincipal.getPuntaje() == listaSerpientes.get(1).getPuntaje()){
-			return "La partida finalizo en empate";
-		}
-
-		return "El ganador es " + serpientePrincipal.getNombre() + " con " + serpientePrincipal.getPuntaje();
+		return listaSerpientes.size() == 1 ? mensajeGanador(serpientePrincipal) : ganadorDesempate(serpientePrincipal, listaSerpientes.get(2));
 	}
+
+    private String ganadorDesempate(Serpiente serpientePrincipal, Serpiente serpienteSecundaria) {
+	    return serpientePrincipal.getPuntaje().equals(serpienteSecundaria.getPuntaje()) ? MENSAJE_EMPATE : mensajeGanador(serpientePrincipal);
+    }
+
+    private String mensajeGanador(Serpiente serpientePrincipal) {
+        return EL_GANADOR_ES + serpientePrincipal.getNombre() + CON + serpientePrincipal.getPuntaje();
+    }
 
 
 	/**
