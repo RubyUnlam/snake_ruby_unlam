@@ -1,19 +1,10 @@
 package main;
 
-import com.google.gson.Gson;
 import servidor.ManejadorES;
-import servidor.ManejadorMovimiento;
 import servidor.SincronizadorUsuariosLoggeados;
 
-import java.awt.*;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
-
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public class Flujo extends Thread { //TODO PENSAR EL NOMBRE PARA ESTO
 

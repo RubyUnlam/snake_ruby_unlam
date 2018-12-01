@@ -1,16 +1,9 @@
 package servidor;
+import main.Flujo;
+import main.SincronizadorDeSalas;
+
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.channels.Channels;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.org.apache.xpath.internal.operations.String;
-import main.Flujo;
-import main.Sala;
-import main.Serpiente;
-import main.SincronizadorDeSalas;
 
 public class Servidor extends Thread {
 	
